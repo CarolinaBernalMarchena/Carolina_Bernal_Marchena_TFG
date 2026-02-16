@@ -1,0 +1,31 @@
+<div class="login-container">
+    <div class="logo">
+        <div class="logo-box"></div>
+        <h1>TrinketBox</h1>
+  </div>
+    <form class="login-form">
+    
+        <div class="input-group">
+        <input 
+            type="email" 
+            placeholder="Email"
+            formControlName="email"
+        />
+        </div>
+
+        <div class="input-group">
+        <input 
+            type="password" 
+            placeholder="Contraseña"
+            formControlName="password"
+        />
+        </div>
+
+        <button type="button" (click)="goHome()">
+        Iniciar sesión
+        </button>
+    </form>
+
+    <a class="register-link" href="#">¿No tienes cuenta? Regístrate aquí</a>
+
+</div>
