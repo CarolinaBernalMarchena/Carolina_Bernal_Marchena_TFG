@@ -1,22 +1,21 @@
 :host {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  display: block;
+  min-height: 100vh;
   background: #e7d9e7;
   font-family: 'Poppins', sans-serif;
 }
 
 .home-container {
-  width: 500px;
+  max-width: 500px;
+  margin: 0 auto 0 auto;
+  padding-top: 10%;
   text-align: center;
-  position: relative;
 }
 
 .logout {
-  position: absolute;
-  top: -40px;
-  right: 0;
+  position: fixed;
+  top: 20px;
+  right: 20px;
   background: #c94c4c;
   color: white;
   border: none;
@@ -24,6 +23,7 @@
   padding: 6px 14px;
   cursor: pointer;
   transition: 0.3s;
+  z-index: 1000;
 }
 
 .logout:hover {
@@ -32,6 +32,7 @@
 
 .title {
   color: #8a6c9d;
+  margin: 0 0 40px 0;
   margin-bottom: 40px;
 }
 

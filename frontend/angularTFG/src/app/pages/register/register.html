@@ -1,0 +1,45 @@
+<div class="register-container">
+
+    <div class="logo">
+        <div class="logo-box"></div>
+        <h1>TrinketBox</h1>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+
+        <div class="input-group">
+        <input type="text" placeholder="Nombre de usuario" formControlName="username" />
+        <span *ngIf="registerForm.controls.username.touched && registerForm.controls.username.invalid">
+            Mínimo 3 caracteres
+        </span>
+        </div>
+
+        <div class="input-group">
+        <input type="email" placeholder="Email" formControlName="email" />
+        <span *ngIf="registerForm.controls.email.touched && registerForm.controls.email.invalid">
+            Email inválido
+        </span>
+        </div>
+
+        <div class="input-group">
+        <input type="password" placeholder="Contraseña" formControlName="password" />
+        <span *ngIf="registerForm.controls.password.touched && registerForm.controls.password.invalid">
+            Mínimo 6 caracteres
+        </span>
+        </div>
+
+        <div class="input-group">
+        <input type="password" placeholder="Confirmar contraseña" formControlName="confirmPassword" />
+        </div>
+
+        <button type="submit" [disabled]="registerForm.invalid">
+        Crear cuenta
+        </button>
+
+    </form>
+
+    <a class="login-link" (click)="navigateToLogin()">
+        ¿Ya tienes cuenta? Inicia sesión
+    </a>
+
+</div>

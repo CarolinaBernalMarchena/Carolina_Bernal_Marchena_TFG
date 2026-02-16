@@ -14,15 +14,47 @@ export class Api {
   }
 
   loginMock(body: any) {
-    const usuario = {
+      const user = this.mockUsers.find(
+        u => u.email === body?.email && u.password === body?.password
+      );
+    return of(user ?? null);
+  }
+
+  private mockUsers = [
+    {
       id: 1,
       nombre: 'prueba',
-      email: body?.email ?? 'test@example.com',
-      password: body?.password ?? 'test-password',
+      email: 'test1@example.com',
+      password: '123456',
       roles: ['user'],
-      token: 'mock-token-123'
-    };
-    return of(usuario);
-  }
+      token: 'mock-token-1',
+      boxesOpened: [
+        { id: 1, hasSpecial: false },
+        { id: 2, hasSpecial: true },
+        { id: 3, hasSpecial: false }
+      ],
+      trades: [
+        { id: 1, date: '2025-01-01' }
+      ]
+    },
+    {
+      id: 2,
+      nombre: 'collector',
+      email: 'test2@example.com',
+      password: '123456',
+      roles: ['user'],
+      token: 'mock-token-2',
+      boxesOpened: [
+        { id: 1, hasSpecial: true },
+        { id: 2, hasSpecial: true },
+        { id: 3, hasSpecial: true },
+        { id: 4, hasSpecial: false }
+      ],
+      trades: [
+        { id: 1, date: '2025-01-01' },
+        { id: 2, date: '2025-01-05' }
+      ]
+    }
+  ];
 
 }

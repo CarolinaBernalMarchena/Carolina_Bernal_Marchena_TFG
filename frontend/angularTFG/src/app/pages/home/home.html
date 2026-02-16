@@ -1,28 +1,28 @@
-<div class="home-container">
+<body style="margin-top: 0%;">
+    <button class="logout" (click)="logout()">
+        Cerrar sesión ✕
+    </button>
 
-  <button class="logout" (click)="logout()">
-    Cerrar sesión ✕
-  </button>
+    <div class="home-container">
+        <h1 class="title">TrinketBox</h1>
 
-  <h1 class="title">TrinketBox</h1>
+        <div class="welcome-card">
+            <div class="avatar"></div>
+            <div class="welcome-text">
+            <h2>{{ username }}</h2>
+            <p>Bienvenid@ de nuevo!</p>
+            </div>
+        </div>
 
-  <div class="welcome-card">
-    <div class="avatar"></div>
-    <div class="welcome-text">
-      <h2>{{ username }}</h2>
-      <p>Bienvenid@ de nuevo!</p>
+        <div class="intercambios">
+            Intercambios
+        </div>
+
+        <div class="actions">
+            <div class="card tienda">Tienda</div>
+            <div class="card coleccion">Mi colección</div>
+            <div class="card perfil" (click)="goToProfile()">Mi perfil</div>
+        </div>
+
     </div>
-  </div>
-
-  <div class="intercambios">
-    Intercambios
-  </div>
-
-  <div class="actions">
-    <div class="card tienda">Tienda</div>
-    <div class="card coleccion">Mi colección</div>
-    <div class="card perfil">Mi perfil</div>
-  </div>
-
-</div>
-
+</body>

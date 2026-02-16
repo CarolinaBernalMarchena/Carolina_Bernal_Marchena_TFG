@@ -1,33 +1,47 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.scss',
 })
 export class Login {
+  email: string = '';
+  password: string = '';
 
   constructor(private api: Api, private router: Router) {}
 
-  login(username: string, password: string) {
-    console.log('Username:', username);
-    console.log('Password:', password);
-
-    this.api.loginMock({ username, password }).subscribe({
+  login(email: string, password: string) {
+    this.api.loginMock({ email, password }).subscribe({
       next: (response) => {
-        console.log('Login successful:', response);
+        if (response) {
+          this.setLocalStorage('currentUser', response);
+          this.router.navigate(['/home']);
+          console.log('Login successful:', response);
+        } else {
+          console.log('Usuario o contraseña incorrectos');
+          alert('Usuario o contraseña incorrectos');
+        }
       },
       error: (error) => {
         console.error('Login failed:', error);
       },
     });
-
   }
 
-  goHome() {
-    this.router.navigate(['/home']);
+  private setLocalStorage(key: string, value: any) {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(key, JSON.stringify(value));
+    } else {
+      console.warn('localStorage no disponible en este contexto');
+    }
+  }
+  navigateToRegister() {
+    this.router.navigate(['/register']);
   }
 }
