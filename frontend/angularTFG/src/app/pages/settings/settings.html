@@ -1,0 +1,30 @@
+<div class="settings-container">
+
+    <button class="back-btn" routerLink="/profile" (click)="goBackToProfile()">←</button>
+
+    <h1 class="title">Ajustes</h1>
+
+    <div class="avatar"></div>
+    <p class="change-avatar">Cambiar avatar del perfil</p>
+
+    <form (ngSubmit)="saveChanges()">
+
+        <input type="text" [(ngModel)]="username" name="username" placeholder="Cambiar nombre de usuario" class="input"/>
+
+        <input type="password" [(ngModel)]="password" name="password" placeholder="Cambiar contraseña" class="input"/>
+
+        <div class="toggle-container">
+            <label class="switch">
+                <input type="checkbox" [(ngModel)]="notifications" name="notifications">
+                <span class="slider"></span>
+            </label>
+            <span>Notificaciones activas</span>
+        </div>
+
+        <button type="submit" class="save-btn">
+            Aceptar Cambios
+        </button>
+
+    </form>
+
+</div>

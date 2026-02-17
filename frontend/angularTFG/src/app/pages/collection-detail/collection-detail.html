@@ -1,0 +1,22 @@
+<div class="detail-container" *ngIf="collectible">
+
+    <button class="back-btn" (click)="goBack()">←</button>
+
+    <h2 class="title">Mi colección</h2>
+
+    <div class="badge">
+        Coleccionable Nº {{ collectible.id }}
+    </div>
+
+    <div class="image-container">
+        <img src="https://i.imgur.com/JuFQ3XX.jpeg" alt="collectible" />
+    </div>
+
+    <div *ngFor="let item of collectibles">
+        <img [src]="item.imageUrl">
+        <p>{{ item.descripcion }}</p>
+        <p>{{ item.date }}</p>
+        <p>Repetidos: {{ item.repetido }}</p>
+    </div>
+
+</div>

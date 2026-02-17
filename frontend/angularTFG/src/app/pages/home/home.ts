@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Api } from '../../services/api';
 
 @Component({
   selector: 'app-home',
@@ -10,8 +11,14 @@ import { Router } from '@angular/router';
 })
 export class Home {
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private api: Api) {}
   username: string = 'username';
+
+    ngOnInit() {
+    const user = this.api.getCurrentUser();
+    
+    this.username = user.nombre;
+  }
 
     logout() {
     this.router.navigate(['/login']);
@@ -19,5 +26,9 @@ export class Home {
 
   goToProfile() {
     this.router.navigate(['/profile']);
+  }
+
+  goToCollection() {
+    this.router.navigate(['/collection']);
   }
 }

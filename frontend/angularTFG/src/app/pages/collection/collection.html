@@ -1,0 +1,27 @@
+<div class="collection-container">
+
+    <button class="back-btn" routerLink="/profile" (click)="goBackHome()">←</button>
+
+    <h2 class="title">Mi colección</h2>
+
+    <div class="badge-counter">
+        Tienes {{ collectibles.length }} coleccionables
+    </div>
+
+    <div *ngIf="collectibles.length === 0" class="empty-state">
+        Aún no tienes coleccionables 🥺
+    </div>
+
+    <div *ngIf="collectibles.length > 0" class="grid">
+
+        <div class="collectible" *ngFor="let item of collectibles" (click)="onCollectibleClick(item)">
+
+            <img src="https://i.imgur.com/JuFQ3XX.jpeg" alt="collectible"/>
+            
+            <div *ngIf="item.hasSpecial" class="special-badge">⭐</div>
+
+        </div>
+
+    </div>
+
+</div>

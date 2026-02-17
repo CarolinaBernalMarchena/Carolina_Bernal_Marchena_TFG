@@ -17,8 +17,8 @@ export class Login {
   constructor(private api: Api, private router: Router) {}
 
   login(email: string, password: string) {
-    this.api.loginMock({ email, password }).subscribe({
-      next: (response) => {
+    (this.api.login({ email, password }) as any).subscribe({
+      next: (response: any) => {
         if (response) {
           this.setLocalStorage('currentUser', response);
           this.router.navigate(['/home']);
@@ -28,7 +28,7 @@ export class Login {
           alert('Usuario o contraseña incorrectos');
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Login failed:', error);
       },
     });
