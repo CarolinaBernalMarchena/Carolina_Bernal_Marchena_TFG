@@ -31,4 +31,8 @@ export class Home {
   goToCollection() {
     this.router.navigate(['/collection']);
   }
+
+  goToShop() {
+    this.router.navigate(['/shop']);
+  }
 }

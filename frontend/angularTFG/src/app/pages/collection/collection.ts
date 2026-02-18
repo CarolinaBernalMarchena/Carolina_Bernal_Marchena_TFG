@@ -12,18 +12,31 @@ import { CommonModule } from '@angular/common';
 })
 export class Collection implements OnInit {
 
-  collectibles: BoxOpened[] = [];
+  boxes: BoxOpened[] = [];
+  uniqueBoxes: BoxOpened[] = [];
 
   constructor(private api: Api, private router: Router) {}
 
   ngOnInit(): void {
     const user = this.api.getCurrentUser();
-    this.collectibles = user.boxesOpened;
+    this.boxes = user.boxesOpened;
+    this.buildUniqueCollection(this.boxes);
   }
 
-  onCollectibleClick(item: BoxOpened): void {
-    this.router.navigate(['/collection', item.id]);
-    console.log(item);
+  private buildUniqueCollection(boxes: BoxOpened[]): void {
+    const map: { [type: string]: BoxOpened } = {};
+
+    boxes.forEach(box => {
+      if (!map[box.type]) {
+        map[box.type] = box;
+      }
+    });
+
+    this.uniqueBoxes = Object.values(map);
+  }
+
+  onCollectibleClick(box: BoxOpened): void {
+    this.router.navigate(['/collection', box.id]);
   }
 
   goBackHome(): void {

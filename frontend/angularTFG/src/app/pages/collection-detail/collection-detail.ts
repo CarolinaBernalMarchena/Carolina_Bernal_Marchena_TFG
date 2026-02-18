@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Api, BoxOpened } from '../../services/api';
+
+interface CollectionItem extends BoxOpened {
+  total: number;
+}
 
 @Component({
   selector: 'app-collection-detail',
@@ -12,23 +16,39 @@ import { Api, BoxOpened } from '../../services/api';
 })
 export class CollectionDetail implements OnInit {
 
-  collectible?: BoxOpened;
+  collection: CollectionItem[] = [];
 
   constructor(
-    private route: ActivatedRoute,
     private router: Router,
     private api: Api
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
     const user = this.api.getCurrentUser();
+    this.buildCollection(user.boxesOpened);
+  }
 
-    this.collectible = user.boxesOpened.find(b => b.id === id);
+  private buildCollection(boxes: BoxOpened[]): void {
+    const map: { [type: string]: CollectionItem } = {};
+
+    boxes.forEach(box => {
+      if (!map[box.type]) {
+        map[box.type] = {
+          ...box,
+          total: 0
+        };
+      }
+
+      map[box.type].total++;
+    });
+
+    this.collection = Object.values(map).map(box => ({
+      ...box,
+      repetido: box.total - 1
+    }));
   }
 
   goBack(): void {
     this.router.navigate(['/collection']);
   }
-
 }

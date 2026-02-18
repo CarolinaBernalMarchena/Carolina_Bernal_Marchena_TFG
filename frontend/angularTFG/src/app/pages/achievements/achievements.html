@@ -1,0 +1,24 @@
+<div class="achievements-container">
+
+  <button class="back-btn" (click)="goBack()">←</button>
+
+  <div class="profile-section">
+    <div class="avatar"></div>
+    <h3>{{ username }}</h3>
+  </div>
+
+  <p class="subtitle">
+    Tienes un total de {{ totalUnlocked }} logros, ¡sigue así!
+  </p>
+
+  <div class="grid">
+    <div 
+      *ngFor="let achievement of achievements"
+      class="achievement"
+      [class.locked]="!achievement.unlocked"
+    >
+      <span *ngIf="!achievement.unlocked">🔒</span>
+    </div>
+  </div>
+
+</div>

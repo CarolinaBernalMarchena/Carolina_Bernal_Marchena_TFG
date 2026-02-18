@@ -50,4 +50,8 @@ export class Profile {
     this.router.navigate(['/collection']);
   }
 
+  goToAchievements() {
+    this.router.navigate(['/achievements']);
+  }
+
 }

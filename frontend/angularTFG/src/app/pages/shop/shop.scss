@@ -1,0 +1,103 @@
+.shop-container {
+  min-height: 100vh;
+  background: #e6d6e6;
+  text-align: center;
+  position: relative;
+  padding-top: 110px;
+}
+
+/* Back button */
+.back-btn {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #ff7aa2;
+}
+
+/* Toldo superior */
+.awning {
+  width: 100%;
+  height: 90px;
+  background-image: url('/images/toldo.png');
+  background-repeat: repeat-x;
+  background-position: top center;
+  background-size: auto 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Título */
+.title {
+  margin-top: 20px;
+  font-size: 32px;
+  color: #7c5a9e;
+}
+
+/* Timer */
+.timer-box {
+  margin: 30px auto;
+  padding: 20px;
+  width: 300px;
+  background: #e6e2b3;
+  border: 2px solid #89b4e4;
+  border-radius: 6px;
+
+  p {
+    margin: 0;
+    font-size: 18px;
+  }
+
+  h2 {
+    margin-top: 10px;
+    font-size: 32px;
+    color: #7c5a9e;
+  }
+}
+
+/* Mascota */
+.mascot {
+  width: 100px;
+  height: 100px;
+  margin: 20px auto;
+  border-radius: 50%;
+  background: #f0e5d8;
+  border: 2px solid #89b4a0;
+}
+
+/* Separador */
+.separator {
+  height: 10px;
+  background: #d89b5b;
+  margin: 30px 0;
+}
+
+/* Cajas */
+.boxes-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.box {
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.box-image {
+  width: 90px;
+  height: 90px;
+  background: #cfd8dc;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}

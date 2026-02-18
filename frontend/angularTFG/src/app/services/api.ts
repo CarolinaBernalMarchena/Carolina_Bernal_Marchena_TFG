@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 
 export interface BoxOpened {
   id: number;
+  type: string;
   hasSpecial: boolean;
   descripcion: string;
   date: string;
@@ -26,30 +27,35 @@ export interface User {
   boxesOpened: BoxOpened[];
   trades: Trade[];
   notifications: boolean;
+  achievements: Achievement[];
 }
 
-export const MOCK_BOXES_OPENED: BoxOpened[] = [
+export interface Achievement {
+  id: number;
+  unlocked: boolean;
+}
+
+export const MOCK_BOXES_OPENED: Omit<BoxOpened, 'repetido' | 'date'>[] = [
   {
     id: 1,
     hasSpecial: true,
+    type: 'dragon',
     descripcion: 'Dragón legendario',
-    date: '2026-02-15',
-    repetido: 2,
-    imageUrl: 'assets/img/dragon.png'
+    imageUrl: 'https://i.imgur.com/JuFQ3XX.jpeg'
   },
   {
     id: 2,
     hasSpecial: false,
+    type: 'knight',
     descripcion: 'Caballero oscuro',
-    date: '2026-02-10',
-    repetido: 1,
-    imageUrl: 'assets/img/knight.png'
+    imageUrl: 'https://i.imgur.com/JuFQ3XX.jpeg'
   }
 ];
 
 @Injectable({
   providedIn: 'root',
 })
+
 export class Api {
 
   constructor(private http: HttpClient) {}
@@ -62,11 +68,17 @@ export class Api {
       password: '123456',
       roles: ['user'],
       token: 'mock-token-1',
-      boxesOpened: MOCK_BOXES_OPENED,
-      trades: [
-        { id: 1, date: '2025-01-01' }
-      ],
-      notifications: true
+      boxesOpened: this.generateRandomBoxes(5),
+      trades: [{ id: 1, date: '2025-01-01' }],
+      notifications: true,
+      achievements: [
+      { id: 1, unlocked: true },
+      { id: 2, unlocked: true },
+      { id: 3, unlocked: true },
+      { id: 4, unlocked: false },
+      { id: 5, unlocked: false },
+      { id: 6, unlocked: false }
+      ]
     },
     {
       id: 2,
@@ -75,16 +87,57 @@ export class Api {
       password: '123456',
       roles: ['user'],
       token: 'mock-token-2',
-      boxesOpened: MOCK_BOXES_OPENED,
+      boxesOpened: this.generateRandomBoxes(3),
       trades: [
         { id: 1, date: '2025-01-01' },
         { id: 2, date: '2025-01-05' }
       ],
-      notifications: false
+      notifications: false,
+      achievements: [
+      { id: 1, unlocked: true },
+      { id: 2, unlocked: false },
+      { id: 3, unlocked: false },
+      { id: 4, unlocked: false },
+      { id: 5, unlocked: false },
+      { id: 6, unlocked: false }
+      ]
     }
   ];
 
+
   private currentUser: User = this.mockUsers[0];
+
+  private generateRandomBoxes(count: number): BoxOpened[] {
+    const result: BoxOpened[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const random =
+        MOCK_BOXES_OPENED[Math.floor(Math.random() * MOCK_BOXES_OPENED.length)];
+
+      result.push({
+        ...random,
+        date: new Date().toISOString().split('T')[0],
+        repetido: 0
+      });
+    }
+
+    return this.calculateDuplicates(result);
+  }
+
+  private calculateDuplicates(boxes: BoxOpened[]): BoxOpened[] {
+    const counter: { [type: string]: number } = {};
+
+    boxes.forEach(box => {
+      counter[box.type] = (counter[box.type] || 0) + 1;
+    });
+
+    return boxes.map(box => ({
+      ...box,
+      repetido: counter[box.type] - 1
+    }));
+  }
+
+
 
   login(body: any) {
     const found =
