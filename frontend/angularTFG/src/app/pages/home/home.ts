@@ -35,4 +35,8 @@ export class Home {
   goToShop() {
     this.router.navigate(['/shop']);
   }
+
+  goToTrades() {
+    this.router.navigate(['/trades']);
+  }
 }

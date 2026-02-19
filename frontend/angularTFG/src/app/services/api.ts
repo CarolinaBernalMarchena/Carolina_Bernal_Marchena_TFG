@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 export interface BoxOpened {
   id: number;
@@ -10,11 +10,6 @@ export interface BoxOpened {
   date: string;
   repetido: number;
   imageUrl: string;
-}
-
-export interface Trade {
-  id: number;
-  date: string;
 }
 
 export interface User {
@@ -35,6 +30,16 @@ export interface Achievement {
   unlocked: boolean;
 }
 
+export interface Trade {
+  id: number;
+  date: string;
+  ownerId: number;
+  offeredBoxId: number;
+  requestedBoxId: number;
+  status: 'open' | 'closed';
+  acceptedBy?: number;
+}
+
 export const MOCK_BOXES_OPENED: Omit<BoxOpened, 'repetido' | 'date'>[] = [
   {
     id: 1,
@@ -51,6 +56,16 @@ export const MOCK_BOXES_OPENED: Omit<BoxOpened, 'repetido' | 'date'>[] = [
     imageUrl: 'https://i.imgur.com/JuFQ3XX.jpeg'
   }
 ];
+
+export interface Trade {
+  id: number;
+  date: string;
+  ownerId: number;
+  offeredBoxId: number;
+  requestedBoxId: number;
+  status: 'open' | 'closed';
+  acceptedBy?: number;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -69,7 +84,17 @@ export class Api {
       roles: ['user'],
       token: 'mock-token-1',
       boxesOpened: this.generateRandomBoxes(5),
-      trades: [{ id: 1, date: '2025-01-01' }],
+      trades: [
+        {
+          id: 1,
+          date: '2025-01-01',
+          ownerId: 1,
+          offeredBoxId: 1,
+          requestedBoxId: 2,
+          status: 'closed',
+          acceptedBy: 2
+        }
+      ],
       notifications: true,
       achievements: [
       { id: 1, unlocked: true },
@@ -89,8 +114,15 @@ export class Api {
       token: 'mock-token-2',
       boxesOpened: this.generateRandomBoxes(3),
       trades: [
-        { id: 1, date: '2025-01-01' },
-        { id: 2, date: '2025-01-05' }
+        {
+          id: 1,
+          date: '2025-01-01',
+          ownerId: 2,
+          offeredBoxId: 2,
+          requestedBoxId: 1,
+          status: 'closed',
+          acceptedBy: 1
+        }
       ],
       notifications: false,
       achievements: [
@@ -103,7 +135,6 @@ export class Api {
       ]
     }
   ];
-
 
   private currentUser: User = this.mockUsers[0];
 
@@ -137,7 +168,16 @@ export class Api {
     }));
   }
 
-
+  private trades: Trade[] = [
+    {
+      id: 1,
+      date: '2025-01-10',
+      ownerId: 2,
+      offeredBoxId: 1,
+      requestedBoxId: 2,
+      status: 'open'
+    }
+  ];
 
   login(body: any) {
     const found =
@@ -160,7 +200,7 @@ export class Api {
     nombre?: string;
     password?: string;
     notifications?: boolean;
-  }) {
+  }){
 
     if (data.nombre !== undefined) {
       this.currentUser.nombre = data.nombre;
@@ -175,6 +215,42 @@ export class Api {
     }
 
     return of(this.currentUser);
+  }
+
+  getOpenTrades() {
+    return of(this.trades.filter(t => t.status === 'open'));
+  }
+
+  createTrade(data: {
+    offeredBoxId: number;
+    requestedBoxId: number;
+  }){
+    const newTrade: Trade = {
+      id: Date.now(),
+      date: new Date().toISOString().split('T')[0],
+      ownerId: this.currentUser.id,
+      offeredBoxId: data.offeredBoxId,
+      requestedBoxId: data.requestedBoxId,
+      status: 'open'
+    };
+
+    this.trades.push(newTrade);
+
+    return of(newTrade);
+  }
+
+  acceptTrade(tradeId: number): Observable<Trade | null> {
+    const trade = this.trades.find(t => t.id === tradeId);
+    if (!trade) return of(null);
+
+    trade.status = 'closed';
+    trade.acceptedBy = this.currentUser.id;
+
+    return of(trade);
+  }
+
+  getUserById(id: number) {
+    return this.mockUsers.find(u => u.id === id);
   }
 
 }

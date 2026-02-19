@@ -1,0 +1,22 @@
+market-wrapper {
+  padding: 20px;
+  background: #f4edf7;
+  min-height: 100vh;
+}
+
+.trade-card {
+  background: white;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+button {
+  margin-top: 10px;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 8px;
+  background: #6ecb63;
+  cursor: pointer;
+}

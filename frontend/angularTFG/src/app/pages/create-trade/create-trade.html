@@ -1,0 +1,32 @@
+<div class="wrapper">
+
+  <h1>Crear intercambio</h1>
+
+  <h3>Tu coleccionable (oferta)</h3>
+
+  <div class="grid">
+    <div 
+      class="card" 
+      *ngFor="let box of duplicatedBoxes" 
+      (click)="selectedMyBoxId = box.id" 
+      [class.selected]="selectedMyBoxId === box.id"
+    >
+      <img [src]="box.imageUrl" />
+    </div>
+  </div>
+
+  <h3>ID del coleccionable que quieres</h3>
+  <input 
+    type="number" 
+    [value]="requestedBoxId" 
+    (input)="requestedBoxId = $any($event.target).valueAsNumber"
+  />
+
+  <button 
+    [disabled]="!selectedMyBoxId || !requestedBoxId" 
+    (click)="proposeTrade()"
+  >
+    Publicar intercambio
+  </button>
+
+</div>

@@ -1,0 +1,21 @@
+<div class="market-wrapper">
+
+  <h1>Mercado de intercambios</h1>
+
+  <div *ngIf="trades.length === 0">
+    No hay intercambios disponibles.
+  </div>
+
+  <div class="trade-card" *ngFor="let trade of trades">
+
+    <p><strong>Publicado por:</strong> {{ getUserName(trade.ownerId) }}</p>
+    <p><strong>Ofrece:</strong> Box #{{ trade.offeredBoxId }}</p>
+    <p><strong>Busca:</strong> Box #{{ trade.requestedBoxId }}</p>
+
+    <button (click)="acceptTrade(trade)">
+      Aceptar intercambio
+    </button>
+
+  </div>
+
+</div>

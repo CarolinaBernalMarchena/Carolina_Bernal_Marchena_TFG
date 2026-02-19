@@ -7,6 +7,7 @@ import { Settings } from './pages/settings/settings';
 import { Collection } from './pages/collection/collection';
 import { Achievements } from './pages/achievements/achievements';
 import { Shop } from './pages/shop/shop';
+import { Trades } from './pages/trades/trades';
 
 export const routes: Routes = [
     { path: 'login', component: Login },
@@ -19,4 +20,6 @@ export const routes: Routes = [
     { path: 'collection/:id', loadComponent: () => import('./pages/collection-detail/collection-detail').then(m => m.CollectionDetail) },
     { path: 'achievements', component: Achievements },
     { path: 'shop', component: Shop },
+    { path: 'trades', component: Trades },
+    { path: 'trades/:id', loadComponent: () => import('./pages/create-trade/create-trade').then(m => m.CreateTrade) },
 ];

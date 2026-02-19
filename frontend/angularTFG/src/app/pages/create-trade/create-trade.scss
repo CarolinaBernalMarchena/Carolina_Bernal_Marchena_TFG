@@ -1,0 +1,64 @@
+.trade-wrapper {
+  padding: 20px;
+  text-align: center;
+  background: #e6d5e8;
+  min-height: 100vh;
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+  background: #d8c2dc;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.card {
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: 0.2s ease;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card.selected {
+  border-color: #6ecb63;
+  transform: scale(1.05);
+}
+
+.trade-button {
+  margin-top: 30px;
+  padding: 12px 30px;
+  font-size: 18px;
+  background: #6ecb63;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.trade-button:disabled {
+  background: #a5d6a7;
+  cursor: not-allowed;
+}
