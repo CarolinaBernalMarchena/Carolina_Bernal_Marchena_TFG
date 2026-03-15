@@ -35,8 +35,8 @@ export class Collection implements OnInit {
     this.uniqueBoxes = Object.values(map);
   }
 
-  onCollectibleClick(box: BoxOpened): void {
-    this.router.navigate(['/collection', box.id]);
+  onCollectibleClick(box: any) {
+    this.router.navigate(['/collection-detail', box.type]);
   }
 
   goBackHome(): void {

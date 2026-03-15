@@ -34,10 +34,6 @@ export class Shop implements OnInit, OnDestroy {
     this.router.navigate(['/home']);
   }
 
-  // ============================
-  // TIMER LOGIC
-  // ============================
-
   private getSpainTime(): Date {
     return new Date(
       new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })

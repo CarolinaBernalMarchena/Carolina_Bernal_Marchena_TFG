@@ -1,31 +1,25 @@
 <div class="shop-container">
 
-  <!-- Back button -->
-  <button class="back-btn" (click)="goBack()">←</button>
-
-  <!-- Toldo superior -->
   <div class="awning"></div>
-
+  <button class="back-btn" (click)="goBack()">←</button>
   <h1 class="title">Tienda</h1>
 
-  <!-- Timer -->
   <div class="timer-box">
     <p>Próximo cambio en:</p>
     <h2>{{ countdown }}</h2>
   </div>
 
-  <!-- Personaje decorativo -->
   <div class="mascot"></div>
 
-  <!-- Separador -->
   <div class="separator"></div>
 
-  <!-- Cajas -->
   <div class="boxes-container">
-    <div class="box" *ngFor="let box of boxes">
-      <div class="box-image"></div>
-      <p>{{ box.name }}</p>
-    </div>
+    @for (box of boxes; track $index) {
+      <div class="box">
+        <div class="box-image"></div>
+        <p>{{ box.name }}</p>
+      </div>
+    }
   </div>
 
 </div>

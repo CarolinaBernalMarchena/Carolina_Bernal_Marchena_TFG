@@ -1,0 +1,31 @@
+.special-trade-card {
+  background: #f0a56c;
+  border: 2px solid #e88a4c;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 20px auto;
+  max-width: 700px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.trade-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin: 20px 0;
+}
+
+.user {
+  font-size: 14px;
+  color: #6a4d86;
+}
+
+.box {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #a8b6c2;
+}

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Api, BoxOpened, User } from '../../services/api';
+import { Api, BoxOpened, User, MOCK_BOXES_OPENED } from '../../services/api';
 import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-create-trade',
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './create-trade.html',
   styleUrl: './create-trade.scss',
 })
@@ -14,6 +16,7 @@ export class CreateTrade implements OnInit {
   requestedBoxId?: number;
 
   duplicatedBoxes: BoxOpened[] = [];
+  availableBoxes = MOCK_BOXES_OPENED;
 
   constructor(private api: Api, private router: Router) {}
 

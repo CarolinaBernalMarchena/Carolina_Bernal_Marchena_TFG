@@ -4,20 +4,30 @@
 
   <h2 class="title">Mi colección</h2>
 
-  <div *ngFor="let box of collection" class="info-box">
+  @if (selectedBox) {
 
-    <div class="image-container">
-      <img [src]="box.imageUrl" [alt]="box.descripcion" />
+    <div class="info-box">
+
+      <div class="image-container">
+        <img [src]="selectedBox.imageUrl" [alt]="selectedBox.descripcion" />
+      </div>
+
+      <p>{{ selectedBox.descripcion }}</p>
+
+      <p>Total: {{ selectedBox.total }}</p>
+
+      <p>Repetidos: {{ selectedBox.repetido }}</p>
+
+      @if (selectedBox.hasSpecial) {
+        <p>⭐ Especial</p>
+      }
+
     </div>
 
-    <p>{{ box.descripcion }}</p>
+  } @else {
 
-    <p>Total: {{ box.total }}</p>
+    <p class="empty">No se encontró el coleccionable.</p>
 
-    <p>Repetidos: {{ box.repetido }}</p>
-
-    <p *ngIf="box.hasSpecial">⭐ Especial</p>
-
-  </div>
+  }
 
 </div>

@@ -54,4 +54,8 @@ export class Profile {
     this.router.navigate(['/achievements']);
   }
 
+  goToShop() {
+    this.router.navigate(['/shop']);
+  }
+
 }

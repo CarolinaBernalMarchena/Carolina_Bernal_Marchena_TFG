@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 
 export interface BoxOpened {
   id: number;
+  collection: string;
   type: string;
   hasSpecial: boolean;
   descripcion: string;
@@ -34,46 +35,80 @@ export interface Trade {
   id: number;
   date: string;
   ownerId: number;
-  offeredBoxId: number;
+  ownerName: string;
   requestedBoxId: number;
+  offeredBoxId: number;
+  requestedBoxName: string;
+  offeredBoxName: string;
   status: 'open' | 'closed';
   acceptedBy?: number;
 }
+
+export const MOCK_TRADES: Trade[] = [
+  {
+    id: 1,
+    date: '2023-01-01',
+    ownerId: 0,
+    ownerName: 'prueba',
+    offeredBoxId: 1,
+    requestedBoxName: 'Creeper',
+    offeredBoxName: 'Dragón legendario',
+    requestedBoxId: 3,
+    status: 'open'
+  }
+];
 
 export const MOCK_BOXES_OPENED: Omit<BoxOpened, 'repetido' | 'date'>[] = [
   {
     id: 1,
     hasSpecial: true,
+    collection: 'medieval creatures',
     type: 'dragon',
     descripcion: 'Dragón legendario',
-    imageUrl: 'https://i.imgur.com/JuFQ3XX.jpeg'
+    imageUrl: 'https://i.imgur.com/AxZ8Mma.jpeg'
   },
   {
     id: 2,
     hasSpecial: false,
+    collection: 'medieval creatures',
     type: 'knight',
     descripcion: 'Caballero oscuro',
-    imageUrl: 'https://i.imgur.com/JuFQ3XX.jpeg'
+    imageUrl: 'https://i.imgur.com/Wo0dI1A.jpeg'
+  },
+  {
+    id: 3,
+    hasSpecial: false,
+    collection: 'minecraft',
+    type: 'monster',
+    descripcion: 'Creeper',
+    imageUrl: 'https://i.imgur.com/FNkPbIz.jpeg'
+  },
+  {
+    id: 4,
+    hasSpecial: false,
+    collection: 'minecraft',
+    type: 'player',
+    descripcion: 'Steve',
+    imageUrl: 'https://i.imgur.com/4nOFTSS.jpeg'
   }
 ];
-
-export interface Trade {
-  id: number;
-  date: string;
-  ownerId: number;
-  offeredBoxId: number;
-  requestedBoxId: number;
-  status: 'open' | 'closed';
-  acceptedBy?: number;
-}
 
 @Injectable({
   providedIn: 'root',
 })
-
 export class Api {
 
-  constructor(private http: HttpClient) {}
+  private apiUrl = 'http://localhost:3000/api';
+  private STORAGE_KEY_TRADES = 'mock_trades';
+  trades: Trade[] = [];
+  constructor(private http: HttpClient) {
+      this.trades = this.loadTrades();
+      this.trades = [...MOCK_TRADES, ...this.trades];
+  }
+
+  // =========================
+  // MOCK USERS
+  // =========================
 
   private mockUsers: User[] = [
     {
@@ -84,100 +119,37 @@ export class Api {
       roles: ['user'],
       token: 'mock-token-1',
       boxesOpened: this.generateRandomBoxes(5),
-      trades: [
-        {
-          id: 1,
-          date: '2025-01-01',
-          ownerId: 1,
-          offeredBoxId: 1,
-          requestedBoxId: 2,
-          status: 'closed',
-          acceptedBy: 2
-        }
-      ],
+      trades: [],
       notifications: true,
       achievements: [
-      { id: 1, unlocked: true },
-      { id: 2, unlocked: true },
-      { id: 3, unlocked: true },
-      { id: 4, unlocked: false },
-      { id: 5, unlocked: false },
-      { id: 6, unlocked: false }
-      ]
-    },
-    {
-      id: 2,
-      nombre: 'collector',
-      email: 'test2@example.com',
-      password: '123456',
-      roles: ['user'],
-      token: 'mock-token-2',
-      boxesOpened: this.generateRandomBoxes(3),
-      trades: [
-        {
-          id: 1,
-          date: '2025-01-01',
-          ownerId: 2,
-          offeredBoxId: 2,
-          requestedBoxId: 1,
-          status: 'closed',
-          acceptedBy: 1
-        }
-      ],
-      notifications: false,
-      achievements: [
-      { id: 1, unlocked: true },
-      { id: 2, unlocked: false },
-      { id: 3, unlocked: false },
-      { id: 4, unlocked: false },
-      { id: 5, unlocked: false },
-      { id: 6, unlocked: false }
+        { id: 1, unlocked: true },
+        { id: 2, unlocked: true },
+        { id: 3, unlocked: true },
+        { id: 4, unlocked: false },
+        { id: 5, unlocked: false },
+        { id: 6, unlocked: false }
       ]
     }
   ];
 
   private currentUser: User = this.mockUsers[0];
 
-  private generateRandomBoxes(count: number): BoxOpened[] {
-    const result: BoxOpened[] = [];
+  // =========================
+  // LOCALSTORAGE TRADES
+  // =========================
 
-    for (let i = 0; i < count; i++) {
-      const random =
-        MOCK_BOXES_OPENED[Math.floor(Math.random() * MOCK_BOXES_OPENED.length)];
-
-      result.push({
-        ...random,
-        date: new Date().toISOString().split('T')[0],
-        repetido: 0
-      });
-    }
-
-    return this.calculateDuplicates(result);
+  private loadTrades(): Trade[] {
+    const data = localStorage.getItem(this.STORAGE_KEY_TRADES);
+    return data ? JSON.parse(data) : [];
   }
 
-  private calculateDuplicates(boxes: BoxOpened[]): BoxOpened[] {
-    const counter: { [type: string]: number } = {};
-
-    boxes.forEach(box => {
-      counter[box.type] = (counter[box.type] || 0) + 1;
-    });
-
-    return boxes.map(box => ({
-      ...box,
-      repetido: counter[box.type] - 1
-    }));
+  private saveTrades(trades: Trade[]): void {
+    localStorage.setItem(this.STORAGE_KEY_TRADES, JSON.stringify(trades));
   }
 
-  private trades: Trade[] = [
-    {
-      id: 1,
-      date: '2025-01-10',
-      ownerId: 2,
-      offeredBoxId: 1,
-      requestedBoxId: 2,
-      status: 'open'
-    }
-  ];
+  // =========================
+  // AUTH
+  // =========================
 
   login(body: any) {
     const found =
@@ -200,7 +172,7 @@ export class Api {
     nombre?: string;
     password?: string;
     notifications?: boolean;
-  }){
+  }) {
 
     if (data.nombre !== undefined) {
       this.currentUser.nombre = data.nombre;
@@ -217,40 +189,124 @@ export class Api {
     return of(this.currentUser);
   }
 
-  getOpenTrades() {
+  // =========================
+  // TRADES
+  // =========================
+
+  getOpenTrades(): Observable<Trade[]> {
     return of(this.trades.filter(t => t.status === 'open'));
   }
 
   createTrade(data: {
     offeredBoxId: number;
     requestedBoxId: number;
-  }){
+  }) {
+
+    const trades = this.trades;
+
     const newTrade: Trade = {
       id: Date.now(),
       date: new Date().toISOString().split('T')[0],
       ownerId: this.currentUser.id,
+      ownerName: this.currentUser.nombre,
       offeredBoxId: data.offeredBoxId,
+      offeredBoxName: "coleccion 1",
       requestedBoxId: data.requestedBoxId,
+      requestedBoxName: "coleccion 1",
       status: 'open'
     };
 
-    this.trades.push(newTrade);
+    trades.push(newTrade);
+    this.saveTrades(trades);
 
     return of(newTrade);
   }
 
   acceptTrade(tradeId: number): Observable<Trade | null> {
-    const trade = this.trades.find(t => t.id === tradeId);
+
+    const trades = this.trades;
+    const trade = trades.find(t => t.id === tradeId);
+
     if (!trade) return of(null);
 
     trade.status = 'closed';
     trade.acceptedBy = this.currentUser.id;
 
+    this.saveTrades(trades);
+
     return of(trade);
   }
+
+  deleteTrade(tradeId: number): Observable<boolean> {
+
+    const trades = this.trades;
+    const index = trades.findIndex(t => t.id === tradeId);
+
+    if (index === -1) return of(false);
+
+    trades.splice(index, 1);
+    this.saveTrades(trades);
+
+    return of(true);
+  }
+
+  // =========================
+  // BOXES
+  // =========================
+
+  private generateRandomBoxes(count: number): BoxOpened[] {
+    const result: BoxOpened[] = [];
+
+    for (let i = 0; i < count; i++) {
+      const random =
+        MOCK_BOXES_OPENED[Math.floor(Math.random() * MOCK_BOXES_OPENED.length)];
+
+      result.push({
+        ...random,
+        id: Date.now() + i,
+        date: new Date().toISOString().split('T')[0],
+        repetido: 0
+      });
+    }
+
+    return this.calculateDuplicates(result);
+  }
+
+  private calculateDuplicates(boxes: BoxOpened[]): BoxOpened[] {
+    const counter: { [type: string]: number } = {};
+
+    boxes.forEach(box => {
+      counter[box.type] = (counter[box.type] || 0) + 1;
+    });
+
+    return boxes.map(box => ({
+      ...box,
+      repetido: counter[box.type] - 1
+    }));
+  }
+
+  // =========================
+  // USERS
+  // =========================
 
   getUserById(id: number) {
     return this.mockUsers.find(u => u.id === id);
   }
 
+  // =========================
+  // FUTURE BACKEND
+  // =========================
+
+  addCollectibleToUser(collectibleId: number, userId: number): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/users/${userId}/collectibles/${collectibleId}`,
+      {}
+    );
+  }
+
+  removeCollectibleFromUser(collectibleId: number, userId: number): Observable<any> {
+    return this.http.delete(
+      `${this.apiUrl}/users/${userId}/collectibles/${collectibleId}`
+    );
+  }
 }

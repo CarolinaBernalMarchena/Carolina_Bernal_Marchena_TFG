@@ -1,21 +1,25 @@
 <div class="market-wrapper">
 
+  <button class="back-btn" (click)="goBackHome()">←</button>
   <h1>Mercado de intercambios</h1>
 
-  <div *ngIf="trades.length === 0">
-    No hay intercambios disponibles.
-  </div>
+  @if (trades.length === 0) {
+    <div>
+      No hay intercambios disponibles.
+    </div>
+  }
 
-  <div class="trade-card" *ngFor="let trade of trades">
+  <button (click)="createTrade()" class="create-trade">
+    Crear nuevo intercambio
+  </button>
 
-    <p><strong>Publicado por:</strong> {{ getUserName(trade.ownerId) }}</p>
-    <p><strong>Ofrece:</strong> Box #{{ trade.offeredBoxId }}</p>
-    <p><strong>Busca:</strong> Box #{{ trade.requestedBoxId }}</p>
-
-    <button (click)="acceptTrade(trade)">
-      Aceptar intercambio
-    </button>
-
-  </div>
+  @for (trade of trades; track trade.id) {
+    @if (trade.ownerId == 0){
+      <app-special-trade-card [trade]="trade" (tradeEnded)="tradeEnded()"></app-special-trade-card>
+    }@else {
+      <app-trade-card [trade]="trade" (tradeEnded)="tradeEnded()"></app-trade-card>
+    }
+    
+  }
 
 </div>

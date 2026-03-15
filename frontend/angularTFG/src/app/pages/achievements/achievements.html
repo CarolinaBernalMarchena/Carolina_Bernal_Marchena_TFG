@@ -12,13 +12,18 @@
   </p>
 
   <div class="grid">
-    <div 
-      *ngFor="let achievement of achievements"
-      class="achievement"
-      [class.locked]="!achievement.unlocked"
-    >
-      <span *ngIf="!achievement.unlocked">🔒</span>
-    </div>
+    
+    @for (achievement of achievements; track achievement.id) {
+      <div 
+        class="achievement"
+        [class.locked]="!achievement.unlocked"
+      >
+        @if (!achievement.unlocked) {
+          <span>🔒</span>
+        }
+      </div>
+    }
+
   </div>
 
 </div>

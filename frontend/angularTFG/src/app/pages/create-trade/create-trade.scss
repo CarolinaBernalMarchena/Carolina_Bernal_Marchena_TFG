@@ -1,64 +1,163 @@
 .trade-wrapper {
-  padding: 20px;
-  text-align: center;
-  background: #e6d5e8;
   min-height: 100vh;
+  background: #e6d6e6;
+  padding: 40px;
+  text-align: center;
+  position: relative;
 }
+
+/* botón volver */
+
+.back-btn {
+  position: absolute;
+  left: 25px;
+  top: 25px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #7c5a9e;
+}
+
+/* título */
+
+h1 {
+  color: #7c5a9e;
+  margin-bottom: 30px;
+}
+
+/* columnas */
 
 .columns {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 30px;
   margin-top: 30px;
-  gap: 20px;
+  flex-wrap: wrap;
 }
 
 .column {
   flex: 1;
-  background: #d8c2dc;
-  padding: 20px;
+  max-width: 450px;
+  background: #d9c4dd;
   border-radius: 12px;
+  padding: 25px;
+  border: 2px solid #c4a8cb;
 }
+
+/* grid de coleccionables */
 
 .grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
   justify-content: center;
 }
 
+/* tarjeta */
+
 .card {
-  width: 100px;
-  height: 100px;
+  width: 110px;
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   border: 3px solid transparent;
-  transition: 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  background: white;
+  padding-bottom: 5px;
+  position: relative;
 }
 
 .card img {
   width: 100%;
-  height: 100%;
+  height: 90px;
   object-fit: cover;
+}
+
+.card p {
+  font-size: 12px;
+  padding: 4px;
+}
+
+.card:hover:not(.selected) {
+  transform: translateY(-3px);
+}
+
+.card:active {
+  transform: scale(0.97);
 }
 
 .card.selected {
   border-color: #6ecb63;
   transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
 }
 
-.trade-button {
-  margin-top: 30px;
-  padding: 12px 30px;
-  font-size: 18px;
+.card.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+
+  width: 22px;
+  height: 22px;
+
   background: #6ecb63;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  pointer-events: none;
+}
+
+/* input */
+
+input {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #c4a8cb;
+  font-size: 16px;
+  width: 120px;
+  text-align: center;
+}
+
+/* botón */
+
+.trade-button {
+  margin-top: 35px;
+  padding: 12px 28px;
+  font-size: 16px;
+  background: #9fd48f;
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: 0.2s;
+}
+
+.trade-button:hover {
+  background: #8bc97a;
 }
 
 .trade-button:disabled {
-  background: #a5d6a7;
+  background: #b9e1b0;
   cursor: not-allowed;
+}
+
+/* textos */
+
+.empty {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.hint {
+  font-size: 13px;
+  margin-bottom: 10px;
 }

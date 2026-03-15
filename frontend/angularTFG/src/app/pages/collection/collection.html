@@ -8,24 +8,31 @@
         Tienes {{ boxes.length }} coleccionables
     </div>
 
-    <div *ngIf="boxes.length === 0" class="empty-state">
-        Aún no tienes coleccionables 🥺
-    </div>
+    @if (boxes.length === 0) {
+        <div class="empty-state">
+            Aún no tienes coleccionables 🥺
+        </div>
+    }
 
-    <div *ngIf="uniqueBoxes.length > 0" class="grid">
+    @if (uniqueBoxes.length > 0) {
+        <div class="grid">
 
-        <div 
-            class="collectible" 
-            *ngFor="let box of uniqueBoxes"
-            (click)="onCollectibleClick(box)"
-        >
+            @for (box of uniqueBoxes; track box.id) {
+                <div 
+                    class="collectible" 
+                    (click)="onCollectibleClick(box)"
+                >
 
-            <img [src]="box.imageUrl" [alt]="box.descripcion"/>
+                    <img [src]="box.imageUrl" [alt]="box.descripcion"/>
 
-            <div *ngIf="box.hasSpecial" class="special-badge">⭐</div>
+                    @if (box.hasSpecial) {
+                        <div class="special-badge">⭐</div>
+                    }
+
+                </div>
+            }
 
         </div>
-
-    </div>
+    }
 
 </div>

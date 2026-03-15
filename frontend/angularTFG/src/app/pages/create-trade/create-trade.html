@@ -1,29 +1,68 @@
-<div class="wrapper">
+<div class="trade-wrapper">
+
+  <button class="back-btn" (click)="goBack()">←</button>
 
   <h1>Crear intercambio</h1>
 
-  <h3>Tu coleccionable (oferta)</h3>
+  <div class="columns">
 
-  <div class="grid">
-    <div 
-      class="card" 
-      *ngFor="let box of duplicatedBoxes" 
-      (click)="selectedMyBoxId = box.id" 
-      [class.selected]="selectedMyBoxId === box.id"
-    >
-      <img [src]="box.imageUrl" />
+    <div class="column">
+
+      <h3>Tu coleccionable (oferta)</h3>
+
+      <div class="grid">
+
+        @for (box of duplicatedBoxes; track box.id) {
+          <div 
+            class="card"
+            (click)="selectedMyBoxId = box.id"
+            [class.selected]="selectedMyBoxId === box.id"
+          >
+            <img [src]="box.imageUrl" />
+            <p>{{ box.descripcion }}</p>
+          </div>
+        } 
+        @empty {
+          <div class="empty">
+            No tienes coleccionables repetidos
+          </div>
+        }
+
+      </div>
+
     </div>
+
+    <div class="column">
+
+      <h3>Coleccionable que buscas</h3>
+
+      <select [(ngModel)]="requestedBoxId">
+
+        <option [ngValue]="undefined">
+          Selecciona un coleccionable
+        </option>
+
+        @for (box of availableBoxes; track box.id) {
+          <option [ngValue]="box.id">
+            {{ box.descripcion }}
+          </option>
+        }
+
+      </select>
+
+    </div>
+
   </div>
 
-  <h3>ID del coleccionable que quieres</h3>
-  <input 
-    type="number" 
-    [value]="requestedBoxId" 
-    (input)="requestedBoxId = $any($event.target).valueAsNumber"
-  />
+  @if (selectedMyBoxId && requestedBoxId) {
+    <p class="preview">
+      Estás proponiendo un intercambio con los coleccionables seleccionados.
+    </p>
+  }
 
   <button 
-    [disabled]="!selectedMyBoxId || !requestedBoxId" 
+    class="trade-button"
+    [disabled]="!selectedMyBoxId || !requestedBoxId"
     (click)="proposeTrade()"
   >
     Publicar intercambio

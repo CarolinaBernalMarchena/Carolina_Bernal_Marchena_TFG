@@ -1,0 +1,31 @@
+<div>
+
+    <div class="trade-card">
+
+        <p class="user">
+            Publicado por: <strong>{{trade.ownerName}}</strong>
+        </p>
+
+        <div class="trade-row">
+
+            <div>
+                <p>Ofrece</p>
+                <img class="box" [src]="getBoxImage(trade.offeredBoxId)" alt="ofrecido"/>
+                <p> {{ trade.offeredBoxName }} </p>
+            </div>
+
+            <div class="arrow">⇄</div>
+
+            <div>
+                <p>Busca</p>
+                <img class="box" [src]="getBoxImage(trade.requestedBoxId)" alt="buscado"/>
+                <p> {{ trade.requestedBoxName }} </p>
+            </div>
+        </div>
+    </div>
+
+    <button (click)="acceptTrade(trade)">
+        Aceptar intercambio
+    </button>
+
+</div>
