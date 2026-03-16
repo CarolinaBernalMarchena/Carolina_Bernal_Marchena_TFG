@@ -8,8 +8,8 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
 
         <div class="input-group">
-            <input type="text" placeholder="Nombre de usuario" formControlName="username" />
-            @if (registerForm.controls['username'].touched && registerForm.controls['username'].invalid) {
+            <input type="text" placeholder="Nombre de usuario" formControlName="name" />
+            @if (registerForm.controls['name'].touched && registerForm.controls['name'].invalid) {
                 <span>
                     Mínimo 3 caracteres
                 </span>
@@ -34,17 +34,13 @@
             }
         </div>
 
-        <div class="input-group">
-            <input type="password" placeholder="Confirmar contraseña" formControlName="confirmPassword" />
-        </div>
-
         <button type="submit" [disabled]="registerForm.invalid">
             Crear cuenta
         </button>
 
     </form>
 
-    <a class="login-link" (click)="navigateToLogin()">
+    <a class="login-link" (click)="navigateToHome()">
         ¿Ya tienes cuenta? Inicia sesión
     </a>
 
