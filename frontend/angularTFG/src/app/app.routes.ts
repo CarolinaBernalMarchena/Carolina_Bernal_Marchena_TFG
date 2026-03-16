@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './guards/auth-guard';
+import { guestGuard } from './guards/guest-guard';
 import { Login } from './pages/login/login';
 import { Home } from './pages/home/home';
 import { Register } from './pages/register/register';
@@ -12,16 +14,20 @@ import { Trades } from './pages/trades/trades';
 import { CreateTrade } from './pages/create-trade/create-trade';
 
 export const routes: Routes = [
-    { path: 'login', component: Login },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
-    { path: 'home', component: Home },
-    { path: 'register', component: Register },
-    { path: 'profile', component: Profile },
-    { path: 'settings', component: Settings },
-    { path: 'collection', component: Collection },
-    { path: 'collection-detail/:type', component: CollectionDetail },
-    { path: 'achievements', component: Achievements },
-    { path: 'shop', component: Shop },
-    { path: 'trades', component: Trades },
-    { path: 'create-trade', component: CreateTrade },
+
+    //Usuarios no logueados
+    { path: 'login', component: Login, canActivate: [guestGuard] },
+    { path: 'register', component: Register, canActivate: [guestGuard] },
+
+    //Usuarios logueados
+    { path: 'home', component: Home, canActivate: [authGuard] },
+    { path: 'profile', component: Profile, canActivate: [authGuard] },
+    { path: 'settings', component: Settings, canActivate: [authGuard] },
+    { path: 'collection', component: Collection, canActivate: [authGuard] },
+    { path: 'collection-detail/:type', component: CollectionDetail, canActivate: [authGuard] },
+    { path: 'achievements', component: Achievements, canActivate: [authGuard] },
+    { path: 'shop', component: Shop, canActivate: [authGuard] },
+    { path: 'trades', component: Trades, canActivate: [authGuard] },
+    { path: 'create-trade', component: CreateTrade, canActivate: [authGuard] },
 ];

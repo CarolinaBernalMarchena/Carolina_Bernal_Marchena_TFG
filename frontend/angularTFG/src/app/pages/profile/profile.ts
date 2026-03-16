@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-profile',
@@ -10,20 +11,19 @@ import { Api } from '../../services/api';
   styleUrl: './profile.scss',
 })
 export class Profile {
-  username: string = '';
+
+  constructor(private router: Router, private api: Api, private authService: AuthService) {}
+  username: string = 'username';
   boxesCount: number = 0;
   specialCount: number = 0;
   tradesCount: number = 0;
 
-  constructor(private router: Router, private api: Api) {}
-
   ngOnInit() {
-    const user = this.api.getCurrentUser();
-    
-    this.username = user.nombre;
-    this.boxesCount = this.countBoxes(user.boxesOpened);
-    this.specialCount = this.countSpecials(user.boxesOpened);
-    this.tradesCount = this.countTrades(user.trades);
+    const user = this.authService.getUser();
+    this.username = user?.name || 'username';
+    this.boxesCount = this.countBoxes(user?.boxesOpened || []);
+    this.specialCount = this.countSpecials(user?.boxesOpened || []);
+    this.tradesCount = this.countTrades(user?.trades || []);
   }
 
   countBoxes(boxes: any[]): number {

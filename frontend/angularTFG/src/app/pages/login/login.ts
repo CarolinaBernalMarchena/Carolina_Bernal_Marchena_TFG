@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -14,13 +15,14 @@ export class Login {
   email: string = '';
   password: string = '';
 
-  constructor(private api: Api, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   login(email: string, password: string) {
-    (this.api.login({ email, password }) as any).subscribe({
+    (this.authService.login({ email, password }) as any).subscribe({
       next: (response: any) => {
-        if (response) {
-          this.setLocalStorage('currentUser', response);
+        if (response?.token) {
+          this.authService.setToken(response.token);
+          this.authService.setUser(response.user);
           this.router.navigate(['/home']);
           console.log('Login successful:', response);
         } else {
@@ -44,4 +46,5 @@ export class Login {
   navigateToRegister() {
     this.router.navigate(['/register']);
   }
+
 }

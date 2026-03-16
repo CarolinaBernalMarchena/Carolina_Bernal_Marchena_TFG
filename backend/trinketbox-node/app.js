@@ -37,6 +37,28 @@ const User = sequelize.define('User', {
   },
 }, {});
 
+function authenticateToken(req, res, next) {
+
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Token requerido" });
+  }
+
+  jwt.verify(token, SECRET_KEY, (err, user) => {
+
+    if (err) {
+      return res.status(403).json({ message: "Token inválido" });
+    }
+
+    req.user = user;
+    next();
+
+  });
+
+}
+
 sequelize.sync();
 
 app.post('/register', async (req, res) => {
@@ -68,9 +90,40 @@ app.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' }); //Generamos un token
-    res.json({ token });
+    res.json({ user, token });
   } catch (error) {
     res.status(500).json({ message: "Error al iniciar sesión" });
+  }
+});
+
+app.put("/user", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const { name, email, password, currentPassword } = req.body;
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ message: "Usuario no encontrado" });
+    }
+    if (name){
+      user.name = name;
+    }
+    if (email){
+      user.email = email;
+    }
+    if (password){
+      if (!currentPassword) {
+        return res.status(400).json({ message: "Es necesaria la contraseña actual" });
+      }
+      const validPassword = await bcrypt.compare(currentPassword, user.password);
+      if (!validPassword) {
+        return res.status(400).json({ message: "Contraseña actual incorrecta" });
+      }
+      user.password = await bcrypt.hash(password, 10);
+    }
+    await user.save();
+    res.json({message: "Usuario actualizado correctamente", user});
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar el usuario" });
   }
 });
 

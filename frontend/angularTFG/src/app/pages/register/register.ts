@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-register',
@@ -13,12 +13,11 @@ import { HttpClient } from '@angular/common/http';
 export class Register {
 
   registerForm: FormGroup;
-  apiUrl = 'http://localhost:3001';
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient
+    private authService: AuthService
   ) {
 
     this.registerForm = this.fb.group({
@@ -40,11 +39,15 @@ export class Register {
       role: 'user'
     };
 
-    this.http.post(`${this.apiUrl}/register`, formData).subscribe({
+    this.authService.register(formData).subscribe({
       next: (res: any) => {
+
         console.log('Usuario creado correctamente');
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', res.user);
+        
+        if (res.token) {
+          this.authService.setToken(res.token);
+        }
+
         this.router.navigate(['/home']);
       },
       error: (err) => {

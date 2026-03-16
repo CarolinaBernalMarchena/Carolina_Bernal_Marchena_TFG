@@ -46,11 +46,6 @@
   gap: 20px;
   margin-bottom: 40px;
   position: relative;
-  transition: 0.3s;
-}
-
-.welcome-card:hover {
-  transform: translateY(-5px);
 }
 
 .avatar {
@@ -104,6 +99,7 @@
 
 .card:hover {
   transform: translateY(-5px);
+  background: #f5eec9;
 }
 
 .tienda {
