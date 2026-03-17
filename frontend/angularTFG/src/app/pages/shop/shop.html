@@ -14,12 +14,13 @@
   <div class="separator"></div>
 
   <div class="boxes-container">
-    @for (box of boxes; track $index) {
-      <div class="box">
-        <div class="box-image"></div>
-        <p>{{ box.name }}</p>
-      </div>
-    }
+    <div class="box" *ngFor="let box of boxes" (click)="openBox(box)">
+      <div 
+        class="box-image"
+        [ngStyle]="{ 'background-image': 'url(' + box.collectionUrl + ')' } " 
+      ></div>
+      <p>{{ box.name }}</p>
+    </div>
   </div>
 
 </div>

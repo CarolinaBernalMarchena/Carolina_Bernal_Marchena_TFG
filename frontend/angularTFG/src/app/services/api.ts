@@ -8,7 +8,6 @@ export interface BoxOpened {
   type: string;
   hasSpecial: boolean;
   descripcion: string;
-  date: string;
   repetido: number;
   imageUrl: string;
 }
@@ -107,34 +106,6 @@ export class Api {
   }
 
   // =========================
-  // MOCK USERS
-  // =========================
-
-  private mockUsers: User[] = [
-    {
-      id: 1,
-      nombre: 'prueba',
-      email: 'test1@example.com',
-      password: '123456',
-      roles: ['user'],
-      token: 'mock-token-1',
-      boxesOpened: this.generateRandomBoxes(5),
-      trades: [],
-      notifications: true,
-      achievements: [
-        { id: 1, unlocked: true },
-        { id: 2, unlocked: true },
-        { id: 3, unlocked: true },
-        { id: 4, unlocked: false },
-        { id: 5, unlocked: false },
-        { id: 6, unlocked: false }
-      ]
-    }
-  ];
-
-  private currentUser: User = this.mockUsers[0];
-
-  // =========================
   // LOCALSTORAGE TRADES
   // =========================
 
@@ -145,48 +116,6 @@ export class Api {
 
   private saveTrades(trades: Trade[]): void {
     localStorage.setItem(this.STORAGE_KEY_TRADES, JSON.stringify(trades));
-  }
-
-  // =========================
-  // AUTH
-  // =========================
-
-  login(body: any) {
-    const found =
-      this.mockUsers.find(
-        u => u.email === body?.email && u.password === body?.password
-      ) || null;
-
-    if (found) {
-      this.currentUser = found;
-    }
-
-    return of(found);
-  }
-
-  getCurrentUser(): User {
-    return this.currentUser;
-  }
-
-  updateCurrentUser(data: {
-    nombre?: string;
-    password?: string;
-    notifications?: boolean;
-  }) {
-
-    if (data.nombre !== undefined) {
-      this.currentUser.nombre = data.nombre;
-    }
-
-    if (data.password !== undefined && data.password !== '') {
-      this.currentUser.password = data.password;
-    }
-
-    if (data.notifications !== undefined) {
-      this.currentUser.notifications = data.notifications;
-    }
-
-    return of(this.currentUser);
   }
 
   // =========================
@@ -202,24 +131,24 @@ export class Api {
     requestedBoxId: number;
   }) {
 
-    const trades = this.trades;
+    //const trades = this.trades;
 
-    const newTrade: Trade = {
-      id: Date.now(),
-      date: new Date().toISOString().split('T')[0],
-      ownerId: this.currentUser.id,
-      ownerName: this.currentUser.nombre,
-      offeredBoxId: data.offeredBoxId,
-      offeredBoxName: "coleccion 1",
-      requestedBoxId: data.requestedBoxId,
-      requestedBoxName: "coleccion 1",
-      status: 'open'
-    };
+    //const newTrade: Trade = {
+      //id: Date.now(),
+      //date: new Date().toISOString().split('T')[0],
+      //ownerId: this.currentUser.id,
+      //ownerName: this.currentUser.nombre,
+      //offeredBoxId: data.offeredBoxId,
+      //offeredBoxName: "coleccion 1",
+      //requestedBoxId: data.requestedBoxId,
+      //requestedBoxName: "coleccion 1",
+      //status: 'open'
+    //};
 
-    trades.push(newTrade);
-    this.saveTrades(trades);
+    //trades.push(newTrade);
+    //this.saveTrades(trades);
 
-    return of(newTrade);
+    //return of(newTrade);
   }
 
   acceptTrade(tradeId: number): Observable<Trade | null> {
@@ -230,7 +159,7 @@ export class Api {
     if (!trade) return of(null);
 
     trade.status = 'closed';
-    trade.acceptedBy = this.currentUser.id;
+    //trade.acceptedBy = this.currentUser.id;
 
     this.saveTrades(trades);
 
@@ -250,6 +179,13 @@ export class Api {
     return of(true);
   }
 
+  openRandomBox(collection: string) {
+    return this.http.post(
+      `http://localhost:3001/open-random-box/${collection}`,
+      {}
+    );
+  }
+
   // =========================
   // BOXES
   // =========================
@@ -264,7 +200,6 @@ export class Api {
       result.push({
         ...random,
         id: Date.now() + i,
-        date: new Date().toISOString().split('T')[0],
         repetido: 0
       });
     }
@@ -285,12 +220,8 @@ export class Api {
     }));
   }
 
-  // =========================
-  // USERS
-  // =========================
-
-  getUserById(id: number) {
-    return this.mockUsers.find(u => u.id === id);
+  getShopBoxes() {
+    return this.http.get('http://localhost:3001/shop-boxes');
   }
 
   // =========================

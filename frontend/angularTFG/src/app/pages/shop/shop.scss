@@ -100,7 +100,21 @@
   background: #cfd8dc;
   border-radius: 6px;
   margin-bottom: 10px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
+
+.box p {
+  text-align: center;
+  margin-top: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp:2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.2;
+} 
 
 /* Botones */
 button {

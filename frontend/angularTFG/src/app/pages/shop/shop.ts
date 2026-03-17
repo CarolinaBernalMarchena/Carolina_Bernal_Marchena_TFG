@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { Api } from '../../services/api';
 
 @Component({
   selector: 'app-shop',
@@ -14,16 +15,33 @@ export class Shop implements OnInit, OnDestroy {
   countdown: string = '';
   private intervalId: any;
 
-  boxes = [
-    { name: 'Caja 1' },
-    { name: 'Caja 2' },
-    { name: 'Caja 3' }
-  ];
+  boxes: any[] = [ ];
 
-  constructor(private router: Router) {}
+  constructor( private router: Router, private api: Api ) {}
 
   ngOnInit(): void {
     this.startCountdown();
+    this.loadShopBoxes();
+
+    const savedBoxes = localStorage.getItem('shopBoxes');
+    const savedTimestamp = localStorage.getItem('shopBoxesTimestamp');
+
+    if (savedBoxes && savedTimestamp) {
+      const lastSaved = new Date(parseInt(savedTimestamp));
+      const nestReset = this.getNextResetTime();
+      const now = this.getSpainTime();
+
+      if (lastSaved < nestReset) {
+        this.boxes = JSON.parse(savedBoxes);
+      } else {
+        this.loadShopBoxes();
+      }
+    } else {
+      this.loadShopBoxes();
+    }
+
+    this.startCountdown();
+
   }
 
   ngOnDestroy(): void {
@@ -32,6 +50,19 @@ export class Shop implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['/home']);
+  }
+
+  openBox(box: any): void {
+    this.api.openRandomBox(box.collection).subscribe({
+      next: (res:any) => {
+        console.log('Caja abierta:', res.box);
+
+        alert(`Has abierto la caja de ${res.box.type}`);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   private getSpainTime(): Date {
@@ -81,18 +112,21 @@ export class Shop implements OnInit, OnDestroy {
 
   private refreshBoxes(): void {
     clearInterval(this.intervalId);
-
-    this.generateNewBoxes();
-
+    this.loadShopBoxes();
     this.startCountdown();
   }
 
-  private generateNewBoxes(): void {
-    this.boxes = [
-      { name: 'Caja A' },
-      { name: 'Caja B' },
-      { name: 'Caja C' }
-    ];
+  loadShopBoxes(): void {
+    this.api.getShopBoxes().subscribe({
+      next: (data: any) => {
+        this.boxes = data;
+        localStorage.setItem('shopBoxes', JSON.stringify(data));
+        localStorage.setItem('shopBoxesTimestamp', Date.now().toString());
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
   }
 
   private pad(value: number): string {
