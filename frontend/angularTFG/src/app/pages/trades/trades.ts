@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Api, Trade } from '../../services/api';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { TradeCard } from "../../components/trade-card/trade-card";
-import { SpecialTradeCard } from "../../components/special-trade-card/special-trade-card";
+import { TradeCard } from '../../components/trade-card/trade-card';
+import { SpecialTradeCard } from '../../components/special-trade-card/special-trade-card';
 
 @Component({
   selector: 'app-trades',
@@ -13,23 +13,25 @@ import { SpecialTradeCard } from "../../components/special-trade-card/special-tr
   styleUrls: ['./trades.scss'],
 })
 export class Trades implements OnInit {
-
   trades: Trade[] = [];
 
-  constructor(private api: Api, private router: Router) {}
+  constructor(
+    private api: Api,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
     this.loadTrades();
   }
 
   loadTrades() {
-    this.api.getOpenTrades().subscribe(res => {
+    this.api.getTrades().subscribe((res: any) => {
       this.trades = res;
     });
   }
 
   deleteTrade(tradeId: number) {
-    this.api.deleteTrade(tradeId).subscribe(() => {
+    this.api.deleteTradeBackend(tradeId).subscribe(() => {
       this.loadTrades();
     });
   }
@@ -41,7 +43,7 @@ export class Trades implements OnInit {
   createTrade(): void {
     this.router.navigate(['/create-trade']);
   }
-  tradeEnded(): void{
+  tradeEnded(): void {
     this.loadTrades();
   }
 }

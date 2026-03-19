@@ -1,42 +1,86 @@
 import { Component, OnInit } from '@angular/core';
-import { Api, BoxOpened, User, MOCK_BOXES_OPENED } from '../../services/api';
+import { Api, BoxOpened } from '../../services/api';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-create-trade',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './create-trade.html',
   styleUrl: './create-trade.scss',
 })
 export class CreateTrade implements OnInit {
-  currentUser!: User;
   selectedMyBoxId?: number;
   requestedBoxId?: number;
 
   duplicatedBoxes: BoxOpened[] = [];
-  availableBoxes = MOCK_BOXES_OPENED;
+  availableBoxes: BoxOpened[] = [];
 
-  constructor(private api: Api, private router: Router) {}
+  constructor(
+    private api: Api,
+    private router: Router,
+  ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.api.getCurrentUser();
-    this.duplicatedBoxes = this.currentUser.boxesOpened.filter(b => b.repetido > 0);
+    this.loadUserCollection();
+    this.loadAllBoxes();
   }
 
-  proposeTrade() {
-    if (!this.selectedMyBoxId || !this.requestedBoxId) return;
+  private loadUserCollection(): void {
+    this.api.getMyCollection().subscribe({
+      next: (data: any[]) => {
+        const boxes: BoxOpened[] = data.map((item) => ({
+          id: item.Box.id,
+          collection: item.Box.collection,
+          type: item.Box.type,
+          hasSpecial: item.Box.hasSpecial,
+          descripcion: item.Box.description,
+          imageUrl: item.Box.imageUrl,
+          repeated: item.quantity - 1,
+        }));
 
-    this.api.createTrade({
-      offeredBoxId: this.selectedMyBoxId,
-      requestedBoxId: this.requestedBoxId
-    }).subscribe(() => {
-      alert('Intercambio propuesto correctamente');
+        this.duplicatedBoxes = boxes.filter((b) => b.repeated > 0);
+      },
+      error: (err) => console.error('Error cargando colección', err),
     });
   }
 
-  goBack() {
+  private loadAllBoxes(): void {
+    this.api.getAllBoxes().subscribe({
+      next: (data: any) => {
+        this.availableBoxes = data.map((box: any) => ({
+          id: box.id,
+          collection: box.collection,
+          type: box.type,
+          hasSpecial: box.hasSpecial,
+          descripcion: box.description,
+          imageUrl: box.imageUrl,
+          repeated: 0,
+        }));
+      },
+      error: (err: any) => {
+        console.error('Error cargando cajas', err);
+      },
+    });
+  }
+
+  proposeTrade(): void {
+    if (!this.selectedMyBoxId || !this.requestedBoxId) return;
+
+    this.api
+      .createTradeBackend({
+        offeredBoxId: this.selectedMyBoxId,
+        requestedBoxId: this.requestedBoxId,
+      })
+      .subscribe({
+        next: () => alert('Intercambio propuesto correctamente'),
+        error: (err) => console.error('Error creando intercambio', err),
+      });
+  }
+
+  goBack(): void {
     this.router.navigate(['/trades']);
   }
 }

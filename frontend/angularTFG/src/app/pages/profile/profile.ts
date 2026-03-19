@@ -1,41 +1,46 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
 import { AuthService } from '../../services/auth';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './profile.html',
   styleUrl: './profile.scss',
 })
-export class Profile {
-
-  constructor(private router: Router, private api: Api, private authService: AuthService) {}
+export class Profile implements OnInit {
   username: string = 'username';
   boxesCount: number = 0;
   specialCount: number = 0;
   tradesCount: number = 0;
+  datosCargados: boolean = false;
+  constructor(
+    private router: Router,
+    private api: Api,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit() {
     const user = this.authService.getUser();
     this.username = user?.name || 'username';
-    this.boxesCount = this.countBoxes(user?.boxesOpened || []);
-    this.specialCount = this.countSpecials(user?.boxesOpened || []);
-    this.tradesCount = this.countTrades(user?.trades || []);
-  }
 
-  countBoxes(boxes: any[]): number {
-    return boxes.length;
-  }
-
-  countSpecials(boxes: any[]): number {
-    return boxes.filter(box => box.hasSpecial).length;
-  }
-
-  countTrades(trades: any[]): number {
-    return trades.length;
+    this.api.getProfileStats().subscribe({
+      next: (data: any) => {
+        this.datosCargados = true;
+        this.boxesCount = data.boxesCount;
+        this.specialCount = data.specialCount;
+        this.tradesCount = data.tradesCount;
+      },
+      error: (err) => {
+        console.error('Error fetching profile stats:', err);
+        this.boxesCount = 0;
+        this.specialCount = 0;
+        this.tradesCount = 0;
+      },
+    });
   }
 
   goBackHome() {
@@ -57,5 +62,4 @@ export class Profile {
   goToShop() {
     this.router.navigate(['/shop']);
   }
-
 }

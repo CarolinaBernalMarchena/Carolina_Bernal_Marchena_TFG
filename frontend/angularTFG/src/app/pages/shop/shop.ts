@@ -20,18 +20,16 @@ export class Shop implements OnInit, OnDestroy {
   constructor( private router: Router, private api: Api ) {}
 
   ngOnInit(): void {
-    this.startCountdown();
-    this.loadShopBoxes();
-
+    
     const savedBoxes = localStorage.getItem('shopBoxes');
     const savedTimestamp = localStorage.getItem('shopBoxesTimestamp');
+    const now = this.getSpainTime();
 
     if (savedBoxes && savedTimestamp) {
-      const lastSaved = new Date(parseInt(savedTimestamp));
-      const nestReset = this.getNextResetTime();
-      const now = this.getSpainTime();
+      
+      const nextReset = this.getNextResetTime();
 
-      if (lastSaved < nestReset) {
+      if (now < nextReset) {
         this.boxes = JSON.parse(savedBoxes);
       } else {
         this.loadShopBoxes();

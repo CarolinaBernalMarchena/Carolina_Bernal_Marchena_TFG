@@ -11,7 +11,10 @@ const SECRET_KEY = "mi_clave_secreta";
 app.use(cors());
 app.use(express.json());
 app.get("/", (req, res) => res.type('html').send(html));
-
+app.use((req, res, next) => {
+  res.set('Cache-Control', 'no-store');
+  next();
+});
 const sequelize = new Sequelize({
   dialect: 'sqlite',
   storage: 'trinketbox-database/database.sqlite'
@@ -67,7 +70,13 @@ const Box = sequelize.define('Box', {
   imageUrl: {
     type: DataTypes.STRING,
     allowNull: true
-  }
+  },
+  indexes: [
+    {
+      unique: true,
+      fields: ['number', 'collection']
+    }
+  ]
 });
 
 //Modelo Cajas que tiene el usuario
@@ -76,6 +85,46 @@ const UserBox = sequelize.define('UserBox', {
     type: DataTypes.INTEGER,
     defaultValue: 1
   }
+});
+
+//Modelo Intercambios
+const Trade = sequelize.define('Trade', {
+  date:{
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+  ownerId:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  ownerName:{
+    type: DataTypes.STRING,
+    allowNull: false
+  }, 
+  offeredBoxId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  requestedBoxId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  offeredBoxName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  requestedBoxName: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  status: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  acceptedBy: {
+    type: DataTypes.INTEGER,
+    allowNull: true
+  },
 });
 
 //Relaciones
@@ -189,20 +238,7 @@ app.post('/seed-boxes', async (req, res) => {
 
     for (const box of boxes) {
 
-      //Buscamos si ya existe una caja con mismo numero y colección
-      const alreadyExists = await Box.findOne({
-        where: {
-          number: box.number,
-          collection: box.collection
-        }
-      });
-
-      if (alreadyExists) {
-        console.log(`Saltando duplicado: ${box.number} - ${box.collection}`);
-        continue;
-      }
-
-      await Box.create({
+      await Box.upsert({
         number: box.number,
         collection: box.collection,
         collectionUrl: box.collectionUrl,
@@ -224,7 +260,7 @@ app.post('/seed-boxes', async (req, res) => {
 });
 
 //Endpoint para la tienda
-app.get('/shop-boxes', async (req, res) => {
+app.get('/shop-boxes', authenticateToken, async (req, res) => {
   try {
 
     const boxes = await Box.findAll();
@@ -280,23 +316,23 @@ app.post('/open-box/:boxId', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: "Caja no encontrada" });
     }
 
-    // Buscar si el usuario ya tiene esa caja
+    //Buscamos si el usuario ya tiene esa caja
     let userBox = await UserBox.findOne({
       where: {
-        userId: userId,
-        boxId: boxId
+        UserId: userId,
+        BoxId: boxId
       }
     });
 
     if (userBox) {
-      // Ya la tiene → sumamos
+      //Si ya la tiene → sumamos
       userBox.quantity += 1;
       await userBox.save();
     } else {
-      // Primera vez
+      //Si es la primera vez que la abre
       await UserBox.create({
-        userId: userId,
-        boxId: boxId,
+        UserId: userId,
+        BoxId: boxId,
         quantity: 1
       });
     }
@@ -312,14 +348,23 @@ app.post('/open-box/:boxId', authenticateToken, async (req, res) => {
 
 });
 
-app.get('/my-collection', authenticateToken, async (req, res) => {
+app.get('/boxes', authenticateToken, async (req, res) => {
+  try {
+    const boxes = await Box.findAll();
+    res.json(boxes);
+  } catch (error) {
+    res.status(500).json({ message: "Error obteniendo cajas" });
+  }
+});
+
+app.get('/my-collection/:userId', authenticateToken, async (req, res) => {
 
   try {
 
-    const userId = req.user.id;
+    const userId = req.params.userId;
 
     const userBoxes = await UserBox.findAll({
-      where: { userId },
+      where: { UserId: userId },
       include: [Box]
     });
 
@@ -351,7 +396,7 @@ app.post('/open-random-box/:collection', authenticateToken, async (req, res) => 
     const specialBoxes = boxes.filter(b => b.hasSpecial);
     const normalBoxes = boxes.filter(b => !b.hasSpecial);
 
-    const isSpecial = Math.random() < 0.1; // 10% probabilidad
+    const isSpecial = Math.random() < 0.1; //10% probabilidad
 
     let selectedBox;
 
@@ -364,8 +409,8 @@ app.post('/open-random-box/:collection', authenticateToken, async (req, res) => 
     //Buscamos si el usuario ya la tiene
     let userBox = await UserBox.findOne({
       where: {
-        userId: userId,
-        boxId: selectedBox.id
+        UserId: userId,
+        BoxId: selectedBox.id
       }
     });
 
@@ -374,8 +419,8 @@ app.post('/open-random-box/:collection', authenticateToken, async (req, res) => 
       await userBox.save();
     } else {
       await UserBox.create({
-        userId: userId,
-        boxId: selectedBox.id,
+        UserId: userId,
+        BoxId: selectedBox.id,
         quantity: 1
       });
     }
@@ -387,9 +432,118 @@ app.post('/open-random-box/:collection', authenticateToken, async (req, res) => 
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error abriendo caja" });
+    res.status(500).json({ message: "Error al abrir la caja" });
   }
 
+});
+
+//Estadísticas del usuario
+app.get('/profile-stats', authenticateToken, async (req, res) => {
+  try {
+
+    const userId = req.user.id;
+    const userBoxes = await UserBox.findAll({
+      where: { UserId: userId },
+      include: [Box]
+    });
+
+    let boxesCount = 0;
+    let specialCount = 0;
+
+    for (const ub of userBoxes) {
+      boxesCount += ub.quantity;
+
+      if (ub.Box.hasSpecial) {
+        specialCount += ub.quantity;
+      }
+    }
+
+    res.json({
+      boxesCount,
+      specialCount,
+      tradesCount: 0
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener las estadísticas" });
+  }
+});
+
+//Endpoints intercambios
+//Obtener intercambios abiertos
+app.get('/trades', authenticateToken, async (req, res) => {
+  try {
+
+    const trades = await Trade.findAll({
+      where: { status: false } //false = open
+    });
+
+    res.json(trades);
+
+  } catch (error) {
+    res.status(500).json({ message: "Error obteniendo intercambios" });
+  }
+});
+
+//Crear un nuevo intercambio
+app.post('/trades', authenticateToken, async (req, res) => {
+  try {
+
+    const user = req.user;
+
+    const trade = await Trade.create({
+      ...req.body,
+      ownerId: user.id,
+      ownerName: user.name,
+      status: false
+    });
+
+    res.json(trade);
+
+  } catch (error) {
+    res.status(500).json({ message: "Error al crear el intercambio" });
+  }
+});
+
+//Aceptar un intercambio
+app.put('/trades/:id/accept', authenticateToken, async (req, res) => {
+  try {
+
+    const trade = await Trade.findByPk(req.params.id);
+
+    if (!trade) {
+      return res.status(404).json({ message: "Intercambio no encontrado" });
+    }
+
+    trade.status = true;
+    trade.acceptedBy = req.user.id;
+
+    await trade.save();
+
+    res.json(trade);
+
+  } catch (error) {
+    res.status(500).json({ message: "Error al aceptar el intercambio" });
+  }
+});
+
+//Eliminar un intercambio
+app.delete('/trades/:id', authenticateToken, async (req, res) => {
+  try {
+
+    const trade = await Trade.findByPk(req.params.id);
+
+    if (!trade) {
+      return res.status(404).json({ message: "Intercambio no encontrado" });
+    }
+
+    await trade.destroy();
+
+    res.json({ message: "Intercambio eliminado" });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error eliminando intercambio" });
+  }
 });
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
