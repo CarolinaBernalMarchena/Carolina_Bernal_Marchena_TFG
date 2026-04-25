@@ -3,23 +3,68 @@
   <button class="back-btn" (click)="goBackHome()">←</button>
   <h1>Mercado de intercambios</h1>
 
-  @if (trades.length === 0) {
+  @if (filteredTrades.length === 0) {
     <div>
       No hay intercambios disponibles.
     </div>
   }
 
+  <form class="filters-form">
+
+    <!-- COLECCIÓN -->
+    <div class="filter-group">
+      <label>Filtrar por colección</label>
+      <select [(ngModel)]="selectedCollection" name="collection" (change)="applyFilters()">
+        <option value="all">Todas las colecciones</option>
+        @for (col of collections; track col.name) {
+          <option [value]="col.name" [disabled]="col.count === 0">
+            {{ col.name }} ({{ col.count }})
+          </option>
+        }
+      </select>
+    </div>
+
+    <!-- TOGGLES -->
+    <div class="filter-group">
+      <label>Filtros especiales</label>
+
+      <div class="toggle-group">
+
+        <button type="button"
+                class="toggle-pill"
+                [class.active]="onlySpecialBoxes"
+                (click)="onlySpecialBoxes = !onlySpecialBoxes; applyFilters()">
+          💎 Cajas especiales
+        </button>
+
+        <button type="button"
+                class="toggle-pill"
+                [class.active]="onlyPlatformTrades"
+                (click)="onlyPlatformTrades = !onlyPlatformTrades; applyFilters()">
+          ⭐ Plataforma
+        </button>
+
+      </div>
+    </div>
+
+  </form>
+
   <button (click)="createTrade()" class="create-trade">
     Crear nuevo intercambio
   </button>
 
-  @for (trade of trades; track trade.id) {
+  @for (trade of filteredTrades; track trade.id) {
     @if (trade.ownerId == 0){
-      <app-special-trade-card [trade]="trade" (tradeEnded)="tradeEnded()"></app-special-trade-card>
-    }@else {
-      <app-trade-card [trade]="trade" (tradeEnded)="tradeEnded()"></app-trade-card>
+      <!--<app-special-trade-card 
+        [trade]="trade" 
+        (tradeEnded)="tradeEnded()">
+      </app-special-trade-card>-->
+    } @else {
+      <app-trade-card 
+        [trade]="trade" 
+        (tradeEnded)="tradeEnded()">
+      </app-trade-card>
     }
-    
   }
 
 </div>

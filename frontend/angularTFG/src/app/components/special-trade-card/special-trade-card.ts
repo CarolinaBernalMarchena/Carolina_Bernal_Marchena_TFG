@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Api, MOCK_BOXES_OPENED, Trade } from '../../services/api';
+import { Api } from '../../services/api';
+import { Trade } from '../../services/api';
 
 @Component({
   selector: 'app-special-trade-card',
@@ -8,7 +9,6 @@ import { Api, MOCK_BOXES_OPENED, Trade } from '../../services/api';
   styleUrl: './special-trade-card.scss',
 })
 export class SpecialTradeCard {
-
   @Input({ required: true }) trade!: Trade;
   @Output() tradeEnded = new EventEmitter<void>();
 
@@ -16,16 +16,15 @@ export class SpecialTradeCard {
     this.tradeEnded.emit();
   }
   constructor(private api: Api) {}
-  
+
   getBoxImage(boxId: number): string {
-    const box = MOCK_BOXES_OPENED.find(b => b.id === boxId);
-    return box ? box.imageUrl : '';
+    //const box = MOCK_BOXES_OPENED.find((b) => b.id === boxId);
+    //return box ? box.imageUrl : '';
+    return '';
   }
 
   acceptTrade(trade: Trade) {
-    const currentUser = this.api.getCurrentUser();
-
-    this.api.acceptTrade(trade.id).subscribe(() => {
+    /* this.api.acceptTrade(trade.id).subscribe(() => {
 
       //Añadimos la caja ofrecida al que acepta
       this.api.addCollectibleToUser(
@@ -44,7 +43,6 @@ export class SpecialTradeCard {
 
       });
 
-    });
+    });*/
   }
-
 }

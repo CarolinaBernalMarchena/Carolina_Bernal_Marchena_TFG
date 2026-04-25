@@ -1,0 +1,13 @@
+<div class="chat-container">
+
+    <div *ngFor="let msg of messages" 
+        class="bubble"
+        [class.user]="msg.from === 'user'"
+        [class.bot]="msg.from === 'bot'">
+        {{ msg.text }}
+    </div>
+
+</div>
+
+<!-- botón temporal para probar -->
+<button (click)="testMessages()">Test</button>

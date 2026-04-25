@@ -43,7 +43,7 @@ export class CollectionDetail implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    this.api.getMyCollection().subscribe({
+    this.api.getMyCollection(user.id).subscribe({
       next: (data: any) => {
         // Transformar los datos del backend al formato CollectionItem
         const boxes: CollectionItem[] = data.map((item: any) => ({

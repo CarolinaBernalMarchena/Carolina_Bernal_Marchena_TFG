@@ -14,20 +14,24 @@ import { Trades } from './pages/trades/trades';
 import { CreateTrade } from './pages/create-trade/create-trade';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-    //Usuarios no logueados
-    { path: 'login', component: Login, canActivate: [guestGuard] },
-    { path: 'register', component: Register, canActivate: [guestGuard] },
+  //Usuarios no logueados
+  { path: 'login', component: Login, canActivate: [guestGuard] },
+  { path: 'register', component: Register, canActivate: [guestGuard] },
 
-    //Usuarios logueados
-    { path: 'home', component: Home, canActivate: [authGuard] },
-    { path: 'profile', component: Profile, canActivate: [authGuard] },
-    { path: 'settings', component: Settings, canActivate: [authGuard] },
-    { path: 'collection', component: Collection, canActivate: [authGuard] },
-    { path: 'collection-detail/:type', component: CollectionDetail, canActivate: [authGuard] },
-    { path: 'achievements', component: Achievements, canActivate: [authGuard] },
-    { path: 'shop', component: Shop, canActivate: [authGuard] },
-    { path: 'trades', component: Trades, canActivate: [authGuard] },
-    { path: 'create-trade', component: CreateTrade, canActivate: [authGuard] },
+  //Usuarios logueados
+  { path: 'home', component: Home, canActivate: [authGuard] },
+  { path: 'profile', component: Profile, canActivate: [authGuard] },
+  { path: 'settings', component: Settings, canActivate: [authGuard] },
+  { path: 'collection', component: Collection, canActivate: [authGuard] },
+  {
+    path: 'collection-detail/:type',
+    component: CollectionDetail,
+    canActivate: [authGuard],
+  },
+  { path: 'achievements', component: Achievements, canActivate: [authGuard] },
+  { path: 'shop', component: Shop, canActivate: [authGuard] },
+  { path: 'trades', component: Trades, canActivate: [authGuard] },
+  { path: 'create-trade', component: CreateTrade, canActivate: [authGuard] },
 ];

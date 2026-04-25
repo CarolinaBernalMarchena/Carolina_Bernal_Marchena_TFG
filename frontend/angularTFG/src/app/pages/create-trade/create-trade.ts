@@ -3,6 +3,7 @@ import { Api, BoxOpened } from '../../services/api';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-create-trade',
@@ -12,15 +13,22 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './create-trade.scss',
 })
 export class CreateTrade implements OnInit {
-  selectedMyBoxId?: number;
-  requestedBoxId?: number;
-
+  selectedBox?: BoxOpened;
+  requestedBox?: BoxOpened;
   duplicatedBoxes: BoxOpened[] = [];
   availableBoxes: BoxOpened[] = [];
+  filteredBoxesByCollection: BoxOpened[] = [];
+  selectedCollection: string = '';
+  offerCollection: string = 'all';
+  offerOnlySpecial: boolean = false;
+  requestCollection: string = 'all';
+  requestOnlySpecial: boolean = false;
+  searchText: string = '';
 
   constructor(
     private api: Api,
     private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -29,7 +37,12 @@ export class CreateTrade implements OnInit {
   }
 
   private loadUserCollection(): void {
-    this.api.getMyCollection().subscribe({
+    const user = this.authService.getUser();
+    if (!user) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.api.getMyCollection(user.id).subscribe({
       next: (data: any[]) => {
         const boxes: BoxOpened[] = data.map((item) => ({
           id: item.Box.id,
@@ -59,6 +72,7 @@ export class CreateTrade implements OnInit {
           imageUrl: box.imageUrl,
           repeated: 0,
         }));
+        console.log('Cajas disponibles para intercambio:', this.availableBoxes);
       },
       error: (err: any) => {
         console.error('Error cargando cajas', err);
@@ -67,17 +81,34 @@ export class CreateTrade implements OnInit {
   }
 
   proposeTrade(): void {
-    if (!this.selectedMyBoxId || !this.requestedBoxId) return;
+    if (!this.selectedBox || !this.requestedBox || !this.authService.getUser())
+      return;
 
     this.api
-      .createTradeBackend({
-        offeredBoxId: this.selectedMyBoxId,
-        requestedBoxId: this.requestedBoxId,
-      })
+      .createTradeBackend(this.selectedBox.id, this.requestedBox.id)
       .subscribe({
         next: () => alert('Intercambio propuesto correctamente'),
         error: (err) => console.error('Error creando intercambio', err),
       });
+  }
+
+  getCollections(): string[] {
+    const collections = this.availableBoxes.map((b) => b.collection);
+    return [...new Set(collections)];
+  }
+
+  onCollectionChange() {
+    if (!this.selectedCollection) {
+      this.filteredBoxesByCollection = [];
+      this.requestedBox = undefined;
+      return;
+    }
+
+    this.filteredBoxesByCollection = this.availableBoxes.filter(
+      (box) => box.collection === this.selectedCollection,
+    );
+
+    this.requestedBox = undefined;
   }
 
   goBack(): void {

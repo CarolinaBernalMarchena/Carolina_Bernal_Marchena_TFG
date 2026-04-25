@@ -53,3 +53,52 @@ button {
 button:hover {
   background: #8bc97a;
 }
+
+.filters-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
+  row-gap: 10px;
+  justify-content: center;
+  align-items: start;
+  width: fit-content;
+  margin: 20px auto;
+}
+
+.filter-group {
+  display: grid;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  align-items: start;
+}
+
+.filter-group > label {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.toggle-group {
+  display: flex;
+  align-items: center;  /* antes estaba desalineado verticalmente */
+  height: 38px;         /* 👈 iguala al select */
+}
+
+.toggle-pill {
+  padding: 8px 14px;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  background: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.toggle-pill.active {
+  background: #222;
+  color: white;
+  border-color: #222;
+}
+
+select {
+  height: 38px;
+}

@@ -1,0 +1,38 @@
+app-avatar {
+    position: relative;
+    z-index: 1;
+}
+
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+/* ventana del chat */
+.chat-window {
+    position: absolute;
+    bottom: 320px;
+    right: 0;
+
+    background: white;
+    border-radius: 20px;
+    padding: 12px;
+    width: 260px;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+
+    z-index: 2;
+
+    transform: translateY(10px);
+    opacity: 0;
+    animation: popUp 0.2s forwards;
+}
+
+@keyframes popUp {
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

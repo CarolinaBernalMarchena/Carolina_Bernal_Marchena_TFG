@@ -2,31 +2,36 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
+import { Location } from '@angular/common';
+import { AchievementNotification } from '../../services/achievement-notification';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
   imports: [CommonModule],
+  providers: [],
   templateUrl: './shop.html',
-  styleUrl: './shop.scss'
+  styleUrl: './shop.scss',
 })
 export class Shop implements OnInit, OnDestroy {
-
   countdown: string = '';
   private intervalId: any;
 
-  boxes: any[] = [ ];
+  boxes: any[] = [];
 
-  constructor( private router: Router, private api: Api ) {}
+  constructor(
+    private router: Router,
+    private api: Api,
+    private location: Location,
+    private achievementNotification: AchievementNotification,
+  ) {}
 
   ngOnInit(): void {
-    
     const savedBoxes = localStorage.getItem('shopBoxes');
     const savedTimestamp = localStorage.getItem('shopBoxesTimestamp');
     const now = this.getSpainTime();
 
     if (savedBoxes && savedTimestamp) {
-      
       const nextReset = this.getNextResetTime();
 
       if (now < nextReset) {
@@ -39,7 +44,6 @@ export class Shop implements OnInit, OnDestroy {
     }
 
     this.startCountdown();
-
   }
 
   ngOnDestroy(): void {
@@ -47,25 +51,33 @@ export class Shop implements OnInit, OnDestroy {
   }
 
   goBack(): void {
-    this.router.navigate(['/home']);
+    this.location.back();
   }
 
   openBox(box: any): void {
     this.api.openRandomBox(box.collection).subscribe({
-      next: (res:any) => {
+      next: (res: any) => {
         console.log('Caja abierta:', res.box);
 
         alert(`Has abierto la caja de ${res.box.type}`);
+
+        this.api.getAchievements().subscribe((achRes: any) => {
+          if (achRes.newAchievements.length) {
+            this.achievementNotification.showAchievements(
+              achRes.newAchievements,
+            );
+          }
+        });
       },
       error: (err) => {
         console.error(err);
-      }
+      },
     });
   }
 
   private getSpainTime(): Date {
     return new Date(
-      new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' })
+      new Date().toLocaleString('en-US', { timeZone: 'Europe/Madrid' }),
     );
   }
 
@@ -100,8 +112,7 @@ export class Shop implements OnInit, OnDestroy {
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
       const seconds = Math.floor((diff / 1000) % 60);
 
-      this.countdown =
-        `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
+      this.countdown = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
     };
 
     updateCountdown();
@@ -123,7 +134,7 @@ export class Shop implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error(err);
-      }
+      },
     });
   }
 

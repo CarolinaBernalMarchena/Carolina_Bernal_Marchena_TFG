@@ -1,29 +1,71 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
-import { Achievement } from '../../services/api';
+import { AchievementNotification } from '../../services/achievement-notification';
+
+interface AchievementView {
+  id: number;
+  name?: string;
+  unlocked: boolean;
+}
 
 @Component({
   selector: 'app-achievements',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './achievements.html',
-  styleUrl: './achievements.scss'
+  styleUrl: './achievements.scss',
 })
 export class Achievements implements OnInit {
-
   username: string = '';
   totalUnlocked: number = 0;
-  achievements: Achievement[] = [];
+  achievements: AchievementView[] = [];
 
-  constructor(private api: Api, private router: Router) {}
+  constructor(
+    private api: Api,
+    private router: Router,
+    private achievementNotification: AchievementNotification,
+  ) {}
 
   ngOnInit(): void {
-    const user = this.api.getCurrentUser();
-    this.username = user.nombre;
-    this.achievements = user.achievements;
-    this.totalUnlocked = this.achievements.filter(a => a.unlocked).length;
+    this.loadAchievements();
+  }
+
+  loadAchievements(): void {
+    this.api.getAchievements().subscribe({
+      next: (res: any) => {
+        const unlockedIds: number[] = res.unlockedIds || [];
+        const newAchievements: number[] = res.newAchievements || [];
+
+        // 🧠 catálogo local
+        const ALL_ACHIEVEMENTS = [
+          { id: 1, name: 'Primer paso' },
+          { id: 2, name: 'Viciado' },
+          { id: 3, name: 'Coleccionista' },
+          { id: 4, name: 'Suertudo' },
+          { id: 5, name: 'Dios del RNG' },
+        ];
+
+        // 🔥 mapear estado
+        this.achievements = ALL_ACHIEVEMENTS.map((a) => ({
+          id: a.id,
+          name: a.name,
+          unlocked: unlockedIds.includes(a.id),
+        }));
+
+        // 📊 contador
+        this.totalUnlocked = this.achievements.filter((a) => a.unlocked).length;
+
+        // 🎉 🔥 AQUÍ ESTÁ LA CLAVE
+        if (newAchievements.length > 0) {
+          this.achievementNotification.showAchievements(newAchievements);
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando logros', err);
+      },
+    });
   }
 
   goBack(): void {

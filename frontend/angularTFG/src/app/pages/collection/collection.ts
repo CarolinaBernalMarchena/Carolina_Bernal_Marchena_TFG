@@ -3,6 +3,7 @@ import { Api, BoxOpened } from '../../services/api';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-collection',
@@ -20,6 +21,7 @@ export class Collection implements OnInit {
     private api: Api,
     private router: Router,
     private authService: AuthService,
+    private location: Location,
   ) {}
 
   ngOnInit(): void {
@@ -41,7 +43,7 @@ export class Collection implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    this.api.getMyCollection().subscribe({
+    this.api.getMyCollection(user.id).subscribe({
       next: (data: any) => {
         this.boxes = data.map((item: any) => ({
           id: item.Box.id,
@@ -65,8 +67,8 @@ export class Collection implements OnInit {
     this.router.navigate(['/collection-detail', box.type]);
   }
 
-  goBackHome(): void {
-    this.router.navigate(['/profile']);
+  goHome(): void {
+    this.router.navigate(['/home']);
   }
 
   private buildUniqueCollection(boxes: any[]): void {

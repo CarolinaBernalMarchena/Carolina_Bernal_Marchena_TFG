@@ -14,10 +14,14 @@ export class Login {
   email: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   login() {
-    this.authService.login({ email: this.email, password: this.password })
+    this.authService
+      .login({ email: this.email, password: this.password })
       .subscribe({
         next: (response: any) => {
           if (response?.token) {
@@ -31,12 +35,11 @@ export class Login {
         },
         error: () => {
           alert('Error en el login');
-        }
+        },
       });
   }
 
   navigateToRegister() {
     this.router.navigate(['/register']);
   }
-
 }

@@ -1,0 +1,192 @@
+.avatar-container {
+    position: relative;
+    width: 200px;
+    height: auto;
+    display: block;
+}
+
+/* PNG base */
+.avatar-img {
+    width: 200px;
+    height: auto;
+    display: block;
+    transform: none;
+}
+
+/* OJOS */
+.eyes {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 30px;
+}
+
+.eye {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* TRANSICIÓN DE LA CARA */
+.eye::before,
+.eye::after {
+    transition: all 0.2s ease;
+}
+
+/* CARA 😊 */
+.eyes.hover .eye {
+    background: transparent;
+}
+
+.eyes.hover .eye::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 20px;
+    border-top: 4px solid black;
+    border-radius: 50%;
+    top: 10px;
+    left: 0;
+}
+
+/* CARA 😆 */
+.eyes.click .eye {
+    background: transparent;
+}
+
+/* ojo izquierdo ( > ) */
+.eyes.click .eye:first-child::before,
+.eyes.click .eye:first-child::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 3px;
+    background: black;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+}
+
+.eyes.click .eye:first-child::before {
+    transform: translate(-50%, -50%) rotate(25deg);
+}
+
+.eyes.click .eye:first-child::after {
+    transform: translate(-50%, -50%) rotate(-25deg);
+}
+
+/* ojo derecho ( < ) */
+.eyes.click .eye:last-child::before,
+.eyes.click .eye:last-child::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 3px;
+    background: black;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+}
+
+.eyes.click .eye:last-child::before {
+    transform: translate(-50%, -50%) rotate(-25deg);
+}
+
+.eyes.click .eye:last-child::after {
+    transform: translate(-50%, -50%) rotate(25deg);
+}
+
+/* PUPILA */
+.pupil {
+    width: 30px;
+    height: 30px;
+    background: black;
+    border-radius: 50%;
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    transition: transform 0.08s linear;
+}
+
+/* OCULTAR PUPILA */
+.eyes.hover .pupil,
+.eyes.click .pupil {
+    display: none;
+}
+
+/* PARPADEO OJOS */
+.eyes.blink .eye {
+    height: 5px;
+    background: black;
+    border-radius: 10px;
+}
+
+.eyes.blink .pupil {
+    display: none;
+}
+
+/* BOCA NORMAL */
+.mouth {
+    position: absolute;
+    bottom: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 15px;
+    border-bottom: 3px solid #333;
+    border-radius: 0 0 20px 20px;
+    transition: all 0.2s ease;
+}
+
+/* BOCA FELIZ AL HACER CLICK */
+.avatar-container.click .mouth {
+    width: 40px;
+    height: 25px;
+    background: #333;
+    border: none;
+    border-radius: 0 0 40px 40px;
+}
+
+/* LENGUA DENTRO DE LA BOCA */
+.avatar-container.click .mouth::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 10px;
+    background: #ff8aa0;
+    border-radius: 10px;
+}
+
+/* SONROJADO */
+.blush {
+    position: absolute;
+    width: 30px;
+    height: 15px;
+    background: rgba(255, 100, 120, 0.5);
+    border-radius: 50%;
+    top: 140px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.blush.left {
+    left: 40px;
+}
+
+.blush.right {
+    right: 40px;
+}
+
+/* BLUSH APARECE TANTO AL HACER HOVER CÓMO CLICK */
+.avatar-container.hover .blush,
+.avatar-container.click .blush {
+    opacity: 1;
+}

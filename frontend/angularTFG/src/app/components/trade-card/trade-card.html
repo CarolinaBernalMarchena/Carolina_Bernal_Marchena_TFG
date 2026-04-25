@@ -10,7 +10,7 @@
 
             <div>
                 <p>Ofrece</p>
-                <img class="box" [src]="getBoxImage(trade.offeredBoxId)" alt="ofrecido"/>
+                <img class="box" [src]="trade.offeredBoxUrl" alt="ofrecido"/>
                 <p> {{ trade.offeredBoxName }} </p>
             </div>
 
@@ -18,14 +18,19 @@
 
             <div>
                 <p>Busca</p>
-                <img class="box" [src]="getBoxImage(trade.requestedBoxId)" alt="buscado"/>
+                <img class="box" [src]="trade.requestedBoxUrl" alt="buscado"/>
                 <p> {{ trade.requestedBoxName }} </p>
             </div>
         </div>
     </div>
-
+    @if (trade.ownerId !== currentUser?.id ) {
     <button (click)="acceptTrade(trade)">
         Aceptar intercambio
     </button>
+    } @else {
+    <button (click)="deleteTrade(trade)">
+        Eliminar intercambio
+    </button>
+    }
 
 </div>

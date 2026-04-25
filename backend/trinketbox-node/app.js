@@ -39,7 +39,7 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false
   },
-}, {});
+});
 
 //Modelo de los coleccionables
 const Box = sequelize.define('Box', {
@@ -84,7 +84,14 @@ const UserBox = sequelize.define('UserBox', {
   quantity: {
     type: DataTypes.INTEGER,
     defaultValue: 1
-  }
+  }}, {
+  indexes: [
+    {
+      unique: true,
+      fields: ['UserId', 'BoxId']  
+    }
+  ]
+
 });
 
 //Modelo Intercambios
@@ -125,7 +132,43 @@ const Trade = sequelize.define('Trade', {
     type: DataTypes.INTEGER,
     allowNull: true
   },
+  offeredBoxUrl: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  requestedBoxUrl: {
+    type: DataTypes.STRING,
+    allowNull: true
+  }
 });
+
+//Modelo Logros
+const Achievement = sequelize.define('Achievement', {
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  achievementId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  }
+}, {
+  indexes: [
+    {
+      unique: true,
+      fields: ['userId', 'achievementId']
+    }
+  ]
+});
+
+//Catálogo de logros
+const ALL_ACHIEVEMENTS = [
+  { id: 1, name: 'Primer paso', condition: (stats) => stats.boxesCount >= 1 },
+  { id: 2, name: 'Viciado', condition: (stats) => stats.boxesCount >= 10 },
+  { id: 3, name: 'Coleccionista', condition: (stats) => stats.boxesCount >= 50 },
+  { id: 4, name: 'Suertudo', condition: (stats) => stats.specialCount >= 1 },
+  { id: 5, name: 'Dios del RNG', condition: (stats) => stats.specialCount >= 5 }
+];
 
 //Relaciones
 User.belongsToMany(Box, { through: UserBox });
@@ -133,6 +176,9 @@ Box.belongsToMany(User, { through: UserBox });
 
 UserBox.belongsTo(User); 
 UserBox.belongsTo(Box);
+
+Trade.belongsTo(Box, { foreignKey: 'offeredBoxId', as: 'offeredBox' });
+Trade.belongsTo(Box, { foreignKey: 'requestedBoxId', as: 'requestedBox' });
 
 function authenticateToken(req, res, next) {
 
@@ -156,8 +202,39 @@ function authenticateToken(req, res, next) {
 
 }
 
-sequelize.sync();
+//Función calcular logros
+async function checkAndUnlockAchievements(userId, stats) {
 
+  const unlocked = [];
+
+  for (const achievement of ALL_ACHIEVEMENTS) {
+
+    if (achievement.condition(stats)) {
+
+      const exists = await Achievement.findOne({
+        where: {
+          userId,
+          achievementId: achievement.id
+        }
+      });
+
+      if (!exists) {
+        await Achievement.create({
+          userId,
+          achievementId: achievement.id
+        });
+
+        unlocked.push(achievement.id);
+      }
+
+    }
+
+  }
+
+  return unlocked;
+}
+// Sincronizacion tablas
+sequelize.sync();
 //Endpoints usuario
 app.post('/register', async (req, res) => {
   try {
@@ -167,10 +244,10 @@ app.post('/register', async (req, res) => {
       ...req.body,
       password: hashedPassword
     });
-    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' }); //Generamos un token
+    const token = jwt.sign({ id: user.id, email: user.email, name: user.name }, SECRET_KEY, { expiresIn: '1h' }); //Generamos un token
     res.status(201).send({ user, token });
   } catch (error) {
-    return res.status(400).json({ message: "Email ya en uso" });
+    return res.status(400).json({ message: error });
   }
 });
 
@@ -187,7 +264,7 @@ app.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Contraseña incorrecta" });
     }
 
-    const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' }); //Generamos un token
+    const token = jwt.sign({ id: user.id, email: user.email, name: user.name }, SECRET_KEY, { expiresIn: '1h' }); //Generamos un token
     res.json({ user, token });
   } catch (error) {
     res.status(500).json({ message: "Error al iniciar sesión" });
@@ -475,55 +552,161 @@ app.get('/trades', authenticateToken, async (req, res) => {
   try {
 
     const trades = await Trade.findAll({
-      where: { status: false } //false = open
+      where: { status: false },
+      include: [
+        {
+          model: Box,
+          as: 'offeredBox'
+        },
+        {
+          model: Box,
+          as: 'requestedBox'
+        }
+      ]
     });
 
     res.json(trades);
 
   } catch (error) {
-    res.status(500).json({ message: "Error obteniendo intercambios" });
+    res.status(500).json({ message: error });
   }
 });
 
 //Crear un nuevo intercambio
 app.post('/trades', authenticateToken, async (req, res) => {
   try {
-
-    const user = req.user;
+    const requestedBox = await Box.findOne({
+      where: { id:req.body.requestedBoxId}
+    });
+    const offeredBox = await Box.findOne({
+      where: { id:req.body.offeredBoxId}
+    })
 
     const trade = await Trade.create({
-      ...req.body,
-      ownerId: user.id,
-      ownerName: user.name,
+      offeredBoxId: req.body.offeredBoxId,
+      requestedBoxId: req.body.requestedBoxId,
+      offeredBoxName: offeredBox.type,
+      requestedBoxName: requestedBox.type,
+      ownerId: req.user.id,
+      ownerName: req.user.name,
+      offeredBoxUrl: offeredBox.imageUrl,
+      requestedBoxUrl: requestedBox.imageUrl,
       status: false
     });
 
     res.json(trade);
 
   } catch (error) {
-    res.status(500).json({ message: "Error al crear el intercambio" });
+    console.error(error);
+    res.status(500).json({ message: error.message || "Error creando intercambio" });
   }
 });
 
-//Aceptar un intercambio
+//Aceptar intercambio
 app.put('/trades/:id/accept', authenticateToken, async (req, res) => {
+  const t = await sequelize.transaction();
+
   try {
 
-    const trade = await Trade.findByPk(req.params.id);
+    const trade = await Trade.findByPk(req.params.id, { transaction: t });
 
     if (!trade) {
+      await t.rollback();
       return res.status(404).json({ message: "Intercambio no encontrado" });
     }
 
-    trade.status = true;
-    trade.acceptedBy = req.user.id;
+    if (trade.status === true) {
+      await t.rollback();
+      return res.status(400).json({ message: "El intercambio ya fue aceptado" });
+    }
 
-    await trade.save();
+    if (trade.ownerId === req.user.id) {
+      await t.rollback();
+      return res.status(400).json({ message: "No puedes aceptar tu propio intercambio" });
+    }
 
-    res.json(trade);
+    const ownerId = trade.ownerId;
+    const accepterId = req.user.id;
+
+    const ownerOffered = await UserBox.findOne({
+      where: { UserId: ownerId, BoxId: trade.offeredBoxId },
+      transaction: t
+    });
+
+    const accepterRequested = await UserBox.findOne({
+      where: { UserId: accepterId, BoxId: trade.requestedBoxId },
+      transaction: t
+    });
+
+    if (!ownerOffered || ownerOffered.quantity < 1) {
+      await t.rollback();
+      return res.status(400).json({ message: "El creador ya no tiene esa caja" });
+    }
+
+    if (!accepterRequested || accepterRequested.quantity < 1) {
+      await t.rollback();
+      return res.status(400).json({ message: "No tienes la caja solicitada" });
+    }
+
+    //Restamos las cajas solicitadas a los respectivos usuarios
+    ownerOffered.quantity -= 1;
+    if (ownerOffered.quantity === 0) {
+      await ownerOffered.destroy({ transaction: t });
+    } else {
+      await ownerOffered.save({ transaction: t });
+    }
+
+    accepterRequested.quantity -= 1;
+    if (accepterRequested.quantity === 0) {
+      await accepterRequested.destroy({ transaction: t });
+    } else {
+      await accepterRequested.save({ transaction: t });
+    }
+
+    //Añadimos las cajas a los usuarios
+    const ownerGets = await UserBox.findOne({
+      where: { UserId: ownerId, BoxId: trade.requestedBoxId },
+      transaction: t
+    });
+
+    if (ownerGets) {
+      ownerGets.quantity += 1;
+      await ownerGets.save({ transaction: t });
+    } else {
+      await UserBox.create({
+        UserId: ownerId,
+        BoxId: trade.requestedBoxId,
+        quantity: 1
+      }, { transaction: t });
+    }
+
+    //La persona que acepta el intercambio recibe offeredBox
+    const accepterGets = await UserBox.findOne({
+      where: { UserId: accepterId, BoxId: trade.offeredBoxId },
+      transaction: t
+    });
+
+    if (accepterGets) {
+      accepterGets.quantity += 1;
+      await accepterGets.save({ transaction: t });
+    } else {
+      await UserBox.create({
+        UserId: accepterId,
+        BoxId: trade.offeredBoxId,
+        quantity: 1
+      }, { transaction: t });
+    }
+
+    //Eliminar intercambio
+    await trade.destroy({ transaction: t });
+    await t.commit();
+
+    res.json({ message: "Intercambio realizado correctamente" });
 
   } catch (error) {
-    res.status(500).json({ message: "Error al aceptar el intercambio" });
+    await t.rollback();
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 });
 
@@ -543,6 +726,49 @@ app.delete('/trades/:id', authenticateToken, async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ message: "Error eliminando intercambio" });
+  }
+});
+
+//Endpoint logros
+app.get('/achievements', authenticateToken, async (req, res) => {
+  try {
+
+    const userId = req.user.id;
+
+    // reutilizamos tu lógica existente
+    const userBoxes = await UserBox.findAll({
+      where: { UserId: userId },
+      include: [Box]
+    });
+
+    let boxesCount = 0;
+    let specialCount = 0;
+
+    for (const ub of userBoxes) {
+      boxesCount += ub.quantity;
+
+      if (ub.Box.hasSpecial) {
+        specialCount += ub.quantity;
+      }
+    }
+
+    const stats = { boxesCount, specialCount };
+
+    // desbloquear nuevos logros automáticamente
+    const newAchievements = await checkAndUnlockAchievements(userId, stats);
+
+    // obtener todos los desbloqueados
+    const userAchievements = await Achievement.findAll({
+      where: { userId }
+    });
+
+    res.json({
+      unlockedIds: userAchievements.map(a => a.achievementId),
+      newAchievements
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error obteniendo logros" });
   }
 });
 

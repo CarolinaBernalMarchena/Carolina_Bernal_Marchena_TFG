@@ -1,0 +1,33 @@
+<div 
+    class="avatar-container"
+    [class.hover]="isHover"
+    [class.click]="isClick"
+
+    (mousemove)="onMouseMove($event)"
+    (mouseenter)="isHover = true"
+    (mouseleave)="resetState()"
+
+    (mousedown)="onMouseDown()"
+    (mouseup)="onMouseUp()"
+    >
+
+    <img src="/images/avatar.png" class="avatar-img" />
+
+    <div class="eyes" 
+        [class.hover]="isHover && !isClick"
+        [class.click]="isClick"
+        [class.blink]="isBlinking && !isClick">
+
+        <div class="eye">
+        <div class="pupil" #pupilLeft></div>
+        </div>
+
+        <div class="eye">
+        <div class="pupil" #pupilRight></div>
+        </div>
+    </div>
+    <div class="blush left"></div>
+    <div class="blush right"></div>
+
+    <div class="mouth"></div>
+</div>
