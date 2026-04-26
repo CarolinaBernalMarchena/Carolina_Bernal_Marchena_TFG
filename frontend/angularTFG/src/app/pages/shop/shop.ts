@@ -57,8 +57,6 @@ export class Shop implements OnInit, OnDestroy {
   openBox(box: any): void {
     this.api.openRandomBox(box.collection).subscribe({
       next: (res: any) => {
-        console.log('Caja abierta:', res.box);
-
         alert(`Has abierto la caja de ${res.box.type}`);
 
         this.api.getAchievements().subscribe((achRes: any) => {
@@ -68,9 +66,6 @@ export class Shop implements OnInit, OnDestroy {
             );
           }
         });
-      },
-      error: (err) => {
-        console.error(err);
       },
     });
   }

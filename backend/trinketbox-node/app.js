@@ -235,6 +235,7 @@ async function checkAndUnlockAchievements(userId, stats) {
 }
 // Sincronizacion tablas
 sequelize.sync();
+
 //Endpoints usuario
 app.post('/register', async (req, res) => {
   try {
@@ -735,7 +736,7 @@ app.get('/achievements', authenticateToken, async (req, res) => {
 
     const userId = req.user.id;
 
-    // reutilizamos tu lógica existente
+    //Reutilizamos la lógica existente
     const userBoxes = await UserBox.findAll({
       where: { UserId: userId },
       include: [Box]
@@ -754,10 +755,10 @@ app.get('/achievements', authenticateToken, async (req, res) => {
 
     const stats = { boxesCount, specialCount };
 
-    // desbloquear nuevos logros automáticamente
+    //Desbloqueamos nuevos logros automáticamente
     const newAchievements = await checkAndUnlockAchievements(userId, stats);
 
-    // obtener todos los desbloqueados
+    //Obtenemos todos los desbloqueados
     const userAchievements = await Achievement.findAll({
       where: { userId }
     });

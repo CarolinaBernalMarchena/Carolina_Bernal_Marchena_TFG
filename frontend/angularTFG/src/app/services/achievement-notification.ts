@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/internal/Subject';
+import { Subject, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AchievementNotification {
-  private achievementSubject = new Subject<number[]>();
+  private achievementSubject = new BehaviorSubject<number[] | null>(null);
 
   achievement$ = this.achievementSubject.asObservable();
 

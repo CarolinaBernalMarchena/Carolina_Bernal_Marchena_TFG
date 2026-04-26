@@ -38,7 +38,7 @@ export class Achievements implements OnInit {
         const unlockedIds: number[] = res.unlockedIds || [];
         const newAchievements: number[] = res.newAchievements || [];
 
-        // 🧠 catálogo local
+        // Catálogo local de logros
         const ALL_ACHIEVEMENTS = [
           { id: 1, name: 'Primer paso' },
           { id: 2, name: 'Viciado' },
@@ -47,17 +47,16 @@ export class Achievements implements OnInit {
           { id: 5, name: 'Dios del RNG' },
         ];
 
-        // 🔥 mapear estado
+        // Mapear estado
         this.achievements = ALL_ACHIEVEMENTS.map((a) => ({
           id: a.id,
           name: a.name,
           unlocked: unlockedIds.includes(a.id),
         }));
 
-        // 📊 contador
+        // Contador
         this.totalUnlocked = this.achievements.filter((a) => a.unlocked).length;
 
-        // 🎉 🔥 AQUÍ ESTÁ LA CLAVE
         if (newAchievements.length > 0) {
           this.achievementNotification.showAchievements(newAchievements);
         }

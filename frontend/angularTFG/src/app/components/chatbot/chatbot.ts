@@ -19,7 +19,7 @@ export class ChatbotComponent {
   toggleChat() {
     this.isOpen = !this.isOpen;
 
-    // mensaje inicial
+    //Mensaje inicial
     if (this.isOpen && this.chatBubbles) {
       this.chatBubbles.addMessage('¡Hola! 👋', 'bot');
     }

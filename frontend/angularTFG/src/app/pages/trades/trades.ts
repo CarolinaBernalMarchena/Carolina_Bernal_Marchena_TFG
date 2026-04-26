@@ -50,14 +50,14 @@ export class Trades implements OnInit {
   extractCollections(boxes: any[]) {
     const map = new Map<string, number>();
 
-    // Inicializar colecciones
+    // Inicializamos las colecciones
     boxes.forEach((box) => {
       if (!map.has(box.collection)) {
         map.set(box.collection, 0);
       }
     });
 
-    // Contar SOLO ofertas de trades
+    // Contamos SOLO ofertas de trades
     this.allTrades.forEach((trade) => {
       const offered = trade.offeredBox?.collection;
 
