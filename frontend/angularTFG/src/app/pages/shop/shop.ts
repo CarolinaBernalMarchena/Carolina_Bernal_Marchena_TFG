@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { Api } from '../../services/api';
 import { Location } from '@angular/common';
 import { AchievementNotification } from '../../services/achievement-notification';
+import { AchievementPopupComponent } from '../../components/achievement-popup/achievement-popup';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AchievementPopupComponent],
   providers: [],
   templateUrl: './shop.html',
   styleUrl: './shop.scss',
@@ -61,9 +62,9 @@ export class Shop implements OnInit, OnDestroy {
 
         this.api.getAchievements().subscribe((achRes: any) => {
           if (achRes.newAchievements.length) {
-            this.achievementNotification.showAchievements(
-              achRes.newAchievements,
-            );
+            for (const id of achRes.newAchievements) {
+              this.achievementNotification.showAchievements(id);
+            }
           }
         });
       },

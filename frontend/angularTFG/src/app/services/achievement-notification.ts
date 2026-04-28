@@ -5,11 +5,11 @@ import { Subject, BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class AchievementNotification {
-  private achievementSubject = new BehaviorSubject<number[] | null>(null);
+  private achievementSubject = new BehaviorSubject<number | null>(null);
 
   achievement$ = this.achievementSubject.asObservable();
 
-  showAchievements(ids: number[]) {
-    this.achievementSubject.next(ids);
+  showAchievements(id: number) {
+    this.achievementSubject.next(id);
   }
 }

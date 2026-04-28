@@ -10,4 +10,6 @@
 </div>
 
 <!-- botón temporal para probar -->
-<button (click)="testMessages()">Test</button>
+@for (mensaje of opcionesMensajes; track $index) {
+<button (click)="enviarMensaje(mensaje, 'user')">{{mensaje}}</button>
+}

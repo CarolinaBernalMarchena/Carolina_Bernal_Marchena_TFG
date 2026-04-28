@@ -1,13 +1,14 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
-import { AchievementNotification } from '../../services/achievement-notification';
+import { ALL_ACHIEVEMENTS } from '../../constants/archievements_object';
 
 interface AchievementView {
   id: number;
   name?: string;
   unlocked: boolean;
+  image?: string;
 }
 
 @Component({
@@ -25,7 +26,6 @@ export class Achievements implements OnInit {
   constructor(
     private api: Api,
     private router: Router,
-    private achievementNotification: AchievementNotification,
   ) {}
 
   ngOnInit(): void {
@@ -36,30 +36,16 @@ export class Achievements implements OnInit {
     this.api.getAchievements().subscribe({
       next: (res: any) => {
         const unlockedIds: number[] = res.unlockedIds || [];
-        const newAchievements: number[] = res.newAchievements || [];
 
-        // Catálogo local de logros
-        const ALL_ACHIEVEMENTS = [
-          { id: 1, name: 'Primer paso' },
-          { id: 2, name: 'Viciado' },
-          { id: 3, name: 'Coleccionista' },
-          { id: 4, name: 'Suertudo' },
-          { id: 5, name: 'Dios del RNG' },
-        ];
-
-        // Mapear estado
         this.achievements = ALL_ACHIEVEMENTS.map((a) => ({
           id: a.id,
           name: a.name,
+          image: a.image,
           unlocked: unlockedIds.includes(a.id),
         }));
 
-        // Contador
+        //Contador
         this.totalUnlocked = this.achievements.filter((a) => a.unlocked).length;
-
-        if (newAchievements.length > 0) {
-          this.achievementNotification.showAchievements(newAchievements);
-        }
       },
       error: (err) => {
         console.error('Error cargando logros', err);

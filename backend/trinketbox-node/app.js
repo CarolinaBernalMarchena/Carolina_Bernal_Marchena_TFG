@@ -38,7 +38,7 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.STRING,
     allowNull: false
-  },
+  }
 });
 
 //Modelo de los coleccionables
@@ -167,7 +167,11 @@ const ALL_ACHIEVEMENTS = [
   { id: 2, name: 'Viciado', condition: (stats) => stats.boxesCount >= 10 },
   { id: 3, name: 'Coleccionista', condition: (stats) => stats.boxesCount >= 50 },
   { id: 4, name: 'Suertudo', condition: (stats) => stats.specialCount >= 1 },
-  { id: 5, name: 'Dios del RNG', condition: (stats) => stats.specialCount >= 5 }
+  { id: 5, name: 'Destino', condition: (stats) => stats.specialCount >= 5 },
+  { id: 6, name: 'Dios del RNG', condition: (stats) => stats.specialCount >= 10 },
+  { id: 7, name: 'Permutante', condition: (stats) => stats.tradesCount >= 1 },
+  { id: 8, name: 'Negociador de oro', condition: (stats) => stats.tradesCount >= 10 },
+  { id: 9, name: 'Comerciante experto', condition: (stats) => stats.tradesCount >= 50 }
 ];
 
 //Relaciones

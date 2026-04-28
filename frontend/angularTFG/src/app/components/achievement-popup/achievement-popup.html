@@ -1,9 +1,12 @@
-<div class="popup" *ngIf="visible">
-    🎉 Logro desbloqueado!
+<button (click)="open('jnksdj','affe')">Abrir popup</button>
 
-    <div class="achievement-list">
-        <div *ngFor="let id of achievements">
-        🏆 Logro #{{ id }}
+@if (isOpen) {
+    <div class="overlay" (click)="close()">
+        <div class="modal" (click)="$event.stopPropagation()">
+        <h2>{{titulo}}</h2>
+        <p>{{contenido}}</p>
+
+        <button (click)="close()">Cerrar</button>
         </div>
     </div>
-</div>
+}

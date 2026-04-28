@@ -14,13 +14,18 @@
   <div class="grid">
     
     @for (achievement of achievements; track achievement.id) {
-      <div 
-        class="achievement"
-        [class.locked]="!achievement.unlocked"
-      >
-        @if (!achievement.unlocked) {
-          <span>🔒</span>
+      <div class="achievement" [class.locked]="!achievement.unlocked">
+        @if (achievement.image) {
+          <img 
+            [src]="achievement.image" 
+            alt="achievement"
+            class="achievement-img"
+          />
         }
+        @if (!achievement.unlocked) {
+          <div class="lock-overlay">🔒</div>
+        }
+
       </div>
     }
 

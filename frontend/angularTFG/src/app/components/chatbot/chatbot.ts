@@ -21,15 +21,7 @@ export class ChatbotComponent {
 
     //Mensaje inicial
     if (this.isOpen && this.chatBubbles) {
-      this.chatBubbles.addMessage('¡Hola! 👋', 'bot');
+      this.chatBubbles.enviarMensaje('¡Hola! 👋', 'bot');
     }
-  }
-
-  sendTestMessage() {
-    this.chatBubbles.addMessage('Hola!', 'user');
-
-    setTimeout(() => {
-      this.chatBubbles.addMessage('Soy tu asistente 😊', 'bot');
-    }, 500);
   }
 }

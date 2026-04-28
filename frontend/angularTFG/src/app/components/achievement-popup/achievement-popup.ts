@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AchievementNotification } from '../../services/achievement-notification';
+import { ALL_ACHIEVEMENTS } from '../../constants/archievements_object';
 
 @Component({
   selector: 'app-achievement-popup',
@@ -12,29 +13,30 @@ import { AchievementNotification } from '../../services/achievement-notification
 export class AchievementPopupComponent implements OnInit {
   visible = false;
 
-  achievements: number[] = [];
+  contenido = '¡Has desbloqueado un nuevo logro!';
+  titulo = '¡Nuevo logro!';
 
   constructor(private achievementService: AchievementNotification) {}
+  isOpen = false;
 
-  ngOnInit(): void {
-    this.achievementService.achievement$.subscribe((ids) => {
-      if (!ids || ids.length === 0) return;
-      console.log('popup recibió:', ids);
-      this.achievements = ids;
-      this.show();
-    });
+  open(titulo: string, contenido: string) {
+    this.isOpen = true;
+    this.titulo = titulo;
+
+    this.contenido = contenido;
   }
 
-  show() {
-    this.visible = true;
+  close() {
+    this.isOpen = false;
+  }
 
-    //para añadir sonido en un futuro ??
-    const audio = new Audio('assets/sounds/achievement.mp3');
-    audio.play();
-
-    setTimeout(() => {
-      this.visible = false;
-      this.achievements = [];
-    }, 3000);
+  ngOnInit(): void {
+    this.achievementService.achievement$.subscribe((id) => {
+      if (!id) return;
+      ALL_ACHIEVEMENTS.filter((a) => a.id === id).find((a) => {
+        console.log('popup recibió:', id);
+        this.open(a.name, a.description);
+      });
+    });
   }
 }
