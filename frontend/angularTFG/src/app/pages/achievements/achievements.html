@@ -3,11 +3,17 @@
   <button class="back-btn" (click)="goBack()">←</button>
 
   <div class="profile-section">
-    <div class="avatar"></div>
+    <div class="profilePicture-section">
+      <img 
+        [src]="'images/' + profilePicture + '.png'" 
+        class="profilePicture"
+        alt="profile picture"
+      />
+    </div>
     <h3>{{ username }}</h3>
   </div>
 
-  <p class="subtitle">
+  <p class="subtitle" style="font-size: 150%;">
     Tienes un total de {{ totalUnlocked }} logros, ¡sigue así!
   </p>
 

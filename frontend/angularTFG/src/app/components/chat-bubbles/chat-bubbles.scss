@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-
     max-width: 250px;
 }
 
@@ -11,8 +10,8 @@
     padding: 10px 14px;
     border-radius: 20px;
     max-width: 80%;
-    font-size: 14px;
     animation: fadeIn 0.2s ease;
+    font: oblique bold 80% cursive;
 }
 
 /* usuario (derecha) */
@@ -27,6 +26,26 @@
     align-self: flex-start;
     background: #eee;
     color: #333;
+}
+
+.divider {
+    height: 2px;
+    background: linear-gradient(to right, transparent, #4f7cff, transparent);
+    margin: 20px 0;
+    border-radius: 2px;
+}
+
+button {
+    background: #b8c4e8;
+    border: 2px solid #7a93d6;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-bottom: 1%;
+}
+
+button:hover {
+    transform: translateY(-5px);
+    background: #f5eec9;
 }
 
 /* animación */

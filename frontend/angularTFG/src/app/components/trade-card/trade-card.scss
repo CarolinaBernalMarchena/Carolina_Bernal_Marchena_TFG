@@ -15,11 +15,13 @@
   align-items: center;
   gap: 40px;
   margin: 20px 0;
+  font-size: 150%;
 }
 
 .user {
   font-size: 14px;
   color: #6a4d86;
+  font-size: 150%;
 }
 
 .box {
@@ -28,4 +30,28 @@
   object-fit: cover;
   border-radius: 8px;
   border: 2px solid #a8b6c2;
+}
+
+.btn {
+  padding: 15px 20px;
+  border-radius: 10px;
+  border: 2px solid;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+  font: oblique bold 100% cursive;
+}
+
+.btn:hover {
+  background: #8bc97a;
+}
+
+.ok {
+  background-color: #bde5b8;
+  border-color: #7ecb7e;
+}
+
+.delete{
+  background-color: #f8b6c1;
+  border-color: #e77a94;
 }

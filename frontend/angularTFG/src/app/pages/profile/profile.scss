@@ -3,8 +3,8 @@
   background-color: #f3e6f2;
   padding: 30px 20px;
   text-align: center;
-  font-family: 'Arial', sans-serif;
   position: relative;
+  font-size: 150%;
 }
 
 .top-bar {
@@ -23,18 +23,27 @@
   font-size: 20px;
   color: #c96c9d;
   cursor: pointer;
+  font: oblique bold 100% cursive;
 }
 
 .avatar-section {
   margin-top: 60px;
 }
 
-.avatar {
-  width: 130px;
-  height: 130px;
-  background-color: #cfd8dc;
+.profilePicture-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.profilePicture {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
   border-radius: 50%;
-  margin: 0 auto;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .username {
@@ -50,7 +59,7 @@
   border-radius: 8px;
   max-width: 350px;
   color: #8e6ba8;
-  font-size: 18px;
+  font-size: 120%;
 }
 
 .actions {
@@ -71,16 +80,19 @@
 .tienda {
   background-color: #f8b6c1;
   border-color: #e77a94;
+  font: oblique bold 80% cursive;
 }
 
 .coleccion {
   background-color: #c3c8f7;
   border-color: #8f9df5;
+  font: oblique bold 80% cursive;
 }
 
 .logros {
   background-color: #bde5b8;
   border-color: #7ecb7e;
+  font: oblique bold 80% cursive;
 }
 
 button {

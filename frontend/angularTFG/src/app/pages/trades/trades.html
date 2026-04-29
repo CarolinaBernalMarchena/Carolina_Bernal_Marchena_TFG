@@ -12,8 +12,8 @@
   <form class="filters-form">
 
     <!-- COLECCIÓN -->
-    <div class="filter-group">
-      <label>Filtrar por colección</label>
+    <div class="filter-group select-group">
+      <label class="filter-label">Filtrar por colección</label>
       <select [(ngModel)]="selectedCollection" name="collection" (change)="applyFilters()">
         <option value="all">Todas las colecciones</option>
         @for (col of collections; track col.name) {
@@ -26,7 +26,7 @@
 
     <!-- TOGGLES -->
     <div class="filter-group">
-      <label>Filtros especiales</label>
+      <label class="filter-label">Filtros especiales</label>
 
       <div class="toggle-group">
 

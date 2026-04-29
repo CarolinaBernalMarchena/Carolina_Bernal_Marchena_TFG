@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
 import { AuthService } from '../../services/auth';
@@ -13,10 +13,13 @@ import { CommonModule } from '@angular/common';
 })
 export class Profile implements OnInit {
   username: string = 'username';
+  profilePicture: string = 'profile1';
+
   boxesCount: number = 0;
   specialCount: number = 0;
   tradesCount: number = 0;
   datosCargados: boolean = false;
+
   constructor(
     private router: Router,
     private api: Api,
@@ -25,7 +28,11 @@ export class Profile implements OnInit {
 
   ngOnInit() {
     const user = this.authService.getUser();
-    this.username = user?.name || 'username';
+
+    if (user) {
+      this.username = user.name || 'username';
+      this.profilePicture = user.profilePicture || 'profile1';
+    }
 
     this.api.getProfileStats().subscribe({
       next: (data: any) => {

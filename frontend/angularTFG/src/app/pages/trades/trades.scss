@@ -32,6 +32,7 @@ h1 {
   cursor: pointer;
   transition: 0.3s;
   z-index: 1000;
+  font: oblique bold 100% cursive;
 }
 
 .arrow {
@@ -65,23 +66,45 @@ button:hover {
   margin: 20px auto;
 }
 
-.filter-group {
-  display: grid;
-  grid-template-rows: auto auto;
-  justify-items: center;
-  align-items: start;
+.filter-group { 
+  display: grid; 
+  grid-template-rows: auto auto; 
+  justify-items: center; 
+  align-items: start; 
 }
 
-.filter-group > label {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+.filter-label {
+  font-size: 150%;
 }
 
-.toggle-group {
-  display: flex;
-  align-items: center;  /* antes estaba desalineado verticalmente */
-  height: 38px;         /* 👈 iguala al select */
+.select-group {
+  row-gap: 25%;
+}
+
+.filter-group select {
+  padding: 8px 14px;
+  border: 1px solid #ffdeb2;
+  border-radius: 999px;
+  background-color: #ffff91;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  text-align: center;
+  font: oblique bold 100% cursive;
+}
+
+.filter-group select:hover {
+  background-color: #fff176;
+}
+
+.filter-group select:focus {
+  outline: none;
+  border-color: #222;
 }
 
 .toggle-pill {
@@ -91,6 +114,10 @@ button:hover {
   background: white;
   cursor: pointer;
   transition: 0.2s;
+  font-weight: bold;
+  background-color: #ffff91;
+  border-color: #ffdeb2;
+  font: oblique bold 100% cursive;
 }
 
 .toggle-pill.active {

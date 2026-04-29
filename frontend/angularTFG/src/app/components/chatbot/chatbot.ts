@@ -18,10 +18,5 @@ export class ChatbotComponent {
 
   toggleChat() {
     this.isOpen = !this.isOpen;
-
-    //Mensaje inicial
-    if (this.isOpen && this.chatBubbles) {
-      this.chatBubbles.enviarMensaje('¡Hola! 👋', 'bot');
-    }
   }
 }

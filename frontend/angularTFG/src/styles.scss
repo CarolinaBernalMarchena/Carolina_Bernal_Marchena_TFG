@@ -1,6 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: 'Stars-Regular', oblique bold;
+}
+
+@font-face {
+  font-family: 'Stars-Regular';
+  src: url('/fonts/Stars-Regular.woff');
+  font-weight: normal;
+  font-style: normal;
 }

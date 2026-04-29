@@ -6,7 +6,13 @@
     </div>
 
     <div class="avatar-section">
-        <div class="avatar"></div>
+        <div class="profilePicture-section">
+            <img 
+                [src]="'images/' + profilePicture + '.png'" 
+                alt="profile picture"
+                class="profilePicture"
+            />
+        </div>
         <h2 class="username">{{username}}</h2>
     </div>
 

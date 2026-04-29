@@ -1,0 +1,12 @@
+<div class="backdrop" (click)="onBackdropClick()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+        <p>{{ message }}</p>
+
+        <div class="buttons">
+        <button class="cancel" (click)="onCancel()">Cancelar</button>
+        <button class="confirm" (click)="onConfirm()">Aceptar</button>
+        </div>
+
+    </div>
+</div>

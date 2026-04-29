@@ -61,12 +61,21 @@
 
 /* Mascota */
 .mascot {
-  width: 100px;
-  height: 100px;
-  margin: 20px auto;
-  border-radius: 50%;
-  background: #f0e5d8;
-  border: 2px solid #89b4a0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+  cursor: pointer;
+}
+
+.mascot app-avatar {
+  display: block;
+}
+
+.mascot app-avatar:hover {
+  transform: scale(1.05);
+  transition: 0.2s ease;
 }
 
 /* Separador */

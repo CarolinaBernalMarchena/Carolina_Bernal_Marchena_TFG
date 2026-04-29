@@ -22,8 +22,8 @@ export interface User {
   token: string;
   boxesOpened: BoxOpened[];
   trades: Trade[];
-  notifications: boolean;
   achievements: Achievement[];
+  profilePicture?: string;
 }
 
 export interface Achievement {
@@ -151,6 +151,14 @@ export class Api {
 
   getMyCollection(userId: number): Observable<any> {
     return this.http.get(`http://localhost:3001/my-collection/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
+  }
+
+  updateUser(data: any): Observable<any> {
+    return this.http.put('http://localhost:3001/user', data, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },

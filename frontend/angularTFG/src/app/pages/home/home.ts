@@ -11,15 +11,21 @@ import { ChatbotComponent } from '../../components/chatbot/chatbot';
   styleUrl: './home.scss',
 })
 export class Home {
+  username: string = 'username';
+  profilePicture: string = 'profile1';
+
   constructor(
     private router: Router,
     private authService: AuthService,
   ) {}
-  username: string = 'username';
 
   ngOnInit() {
     const user = this.authService.getUser();
-    this.username = user.name || 'username';
+
+    if (user) {
+      this.username = user.name || 'username';
+      this.profilePicture = user.profilePicture || 'profile1';
+    }
   }
 
   logout() {

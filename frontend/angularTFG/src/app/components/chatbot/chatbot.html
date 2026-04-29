@@ -1,10 +1,11 @@
 <div class="chatbot-container">
 
     <!-- BURBUJAS -->
-    <div class="chat-window" *ngIf="isOpen">
-        <app-chat-bubbles></app-chat-bubbles>
-
-    </div>
+    @if (isOpen) {
+        <div class="chat-window" >
+            <app-chat-bubbles></app-chat-bubbles>
+        </div>
+    }
 
     <!-- AVATAR -->
     <div (click)="toggleChat()">

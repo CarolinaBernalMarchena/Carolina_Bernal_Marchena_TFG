@@ -1,0 +1,7 @@
+<div class="modal-backdrop" (click)="close()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+        <p>{{ message }}</p>
+
+        <button (click)="close()">Aceptar</button>
+    </div>
+</div>

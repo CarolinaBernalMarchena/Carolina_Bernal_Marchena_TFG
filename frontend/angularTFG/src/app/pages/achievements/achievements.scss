@@ -20,17 +20,24 @@
   margin-top: 40px;
 }
 
-.avatar {
-  width: 120px;
-  height: 120px;
-  background: #d0d0d0;
+.profilePicture-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.profilePicture {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
   border-radius: 50%;
-  margin: 0 auto 10px auto;
+  border: 3px solid #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .subtitle {
   margin: 20px 0;
-  font-size: 18px;
   color: #555;
 }
 

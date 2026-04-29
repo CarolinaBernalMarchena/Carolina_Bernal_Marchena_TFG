@@ -24,6 +24,7 @@
   cursor: pointer;
   transition: 0.3s;
   z-index: 1000;
+  font: oblique bold 100% cursive;
 }
 
 .logout:hover {
@@ -48,6 +49,21 @@
   position: relative;
 }
 
+.profilePicture-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profilePicture-home .profilePicture {
+  width: 55px;
+  height: 55px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
 .welcome-text h2 {
   margin: 0;
   color: #8a6c9d;
@@ -56,6 +72,7 @@
 .welcome-text p {
   margin: 0;
   color: #6e5c7e;
+  font-size: 150%;
 }
 
 .intercambios {
@@ -67,6 +84,7 @@
   color: #8a6c9d;
   font-weight: 500;
   transition: 0.3s;
+  font-size: 150%;
 }
 
 .intercambios:hover {
@@ -98,14 +116,17 @@
 .tienda {
   background: #f4b3c2;
   border: 2px solid #e487a0;
+  font-size: 150%;
 }
 
 .coleccion {
   background: #b8c4e8;
   border: 2px solid #7a93d6;
+  font-size: 150%;
 }
 
 .perfil {
   background: #bfe3b4;
   border: 2px solid #84c27d;
+  font-size: 150%;
 }

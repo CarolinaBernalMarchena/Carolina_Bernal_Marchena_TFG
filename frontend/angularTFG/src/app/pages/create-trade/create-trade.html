@@ -14,7 +14,7 @@
             [class.selected]="selectedBox === box"
           >
             <img [src]="box.imageUrl" />
-            <p>{{ box.descripcion }}</p>
+            <p style="font-size: 150%;">{{ box.descripcion }}</p>
           </div>
         } 
         @empty {
@@ -69,12 +69,15 @@
     </p>
   }
 
-  <button 
-    class="trade-button"
-    [disabled]="!selectedBox || !requestedBox"
-    (click)="proposeTrade()"
-  >
+  <button class="trade-button" [disabled]="!selectedBox || !requestedBox" (click)="proposeTrade()">
     Publicar intercambio
   </button>
+
+  @if (showModal) {
+    <app-modal
+      [message]="modalMessage"
+      (closed)="onModalClose()"
+    />
+  }
 
 </div>

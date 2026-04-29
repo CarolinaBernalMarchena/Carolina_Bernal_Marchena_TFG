@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
+import { Modal } from '../../components/modal/modal';
 
 @Component({
   selector: 'app-create-trade',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, Modal],
   templateUrl: './create-trade.html',
   styleUrl: './create-trade.scss',
 })
@@ -24,6 +25,8 @@ export class CreateTrade implements OnInit {
   requestCollection: string = 'all';
   requestOnlySpecial: boolean = false;
   searchText: string = '';
+  showModal = false;
+  modalMessage = '';
 
   constructor(
     private api: Api,
@@ -87,8 +90,15 @@ export class CreateTrade implements OnInit {
     this.api
       .createTradeBackend(this.selectedBox.id, this.requestedBox.id)
       .subscribe({
-        next: () => alert('Intercambio propuesto correctamente'),
-        error: (err) => console.error('Error creando intercambio', err),
+        next: () => {
+          this.modalMessage = 'Intercambio propuesto correctamente';
+          this.showModal = true;
+        },
+        error: (err) => {
+          console.error('Error creando intercambio', err);
+          this.modalMessage = 'Error al crear el intercambio';
+          this.showModal = true;
+        },
       });
   }
 
@@ -109,6 +119,11 @@ export class CreateTrade implements OnInit {
     );
 
     this.requestedBox = undefined;
+  }
+
+  onModalClose(): void {
+    this.showModal = false;
+    this.router.navigate(['/trades']);
   }
 
   goBack(): void {

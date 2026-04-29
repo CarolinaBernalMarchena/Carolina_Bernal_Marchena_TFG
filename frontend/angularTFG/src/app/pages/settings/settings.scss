@@ -22,19 +22,6 @@
   color: #8e6ba8;
 }
 
-.avatar {
-  width: 130px;
-  height: 130px;
-  background-color: #cfd8dc;
-  border-radius: 50%;
-  margin: 20px auto;
-}
-
-.change-avatar {
-  color: #6d6d6d;
-  margin-bottom: 20px;
-}
-
 .input {
   width: 100%;
   max-width: 300px;
@@ -63,30 +50,6 @@
   opacity: 0;
   width: 0;
   height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  background-color: #ccc;
-  border-radius: 25px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  transition: .3s;
-}
-
-.slider:before {
-  content: "";
-  position: absolute;
-  height: 19px;
-  width: 19px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  border-radius: 50%;
-  transition: .3s;
 }
 
 input:checked + .slider {
@@ -120,4 +83,47 @@ button {
 
 button:hover {
   background: #8bc97a;
+}
+
+.change-avatar-btn {
+  margin-top: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.avatar-grid img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.avatar-grid img.selected {
+  border: 2px solid #00bfff;
 }

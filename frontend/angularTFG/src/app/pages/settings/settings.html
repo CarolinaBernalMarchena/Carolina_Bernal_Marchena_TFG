@@ -4,8 +4,13 @@
 
     <h1 class="title">Ajustes</h1>
 
-    <div class="avatar"></div>
-    <p class="change-avatar">Cambiar avatar del perfil</p>
+    <div class="profilePicture-preview">
+        <img [src]="'images/' + selectedProfilePicture + '.png'" />
+    </div>
+
+    <button type="button" class="change-avatar-btn" (click)="openAvatarModal()">
+        Cambiar avatar
+    </button>
 
     <form (ngSubmit)="saveChanges()">
 
@@ -14,14 +19,6 @@
         <input type="password" [(ngModel)]="currentPassword" name="currentPassword" placeholder="Contraseña actual" class="input"/>
         <input type="password" [(ngModel)]="password" name="password" placeholder="Nueva contraseña" class="input"/>
 
-        <div class="toggle-container">
-            <label class="switch">
-                <input type="checkbox" [(ngModel)]="notifications" name="notifications">
-                <span class="slider"></span>
-            </label>
-            <span>Notificaciones activas</span>
-        </div>
-
         <button type="submit" class="save-btn">
             Aceptar Cambios
         </button>
@@ -29,3 +26,20 @@
     </form>
 
 </div>
+@if (showAvatarModal) {
+    <div class="modal-backdrop">
+            <div class="modal">
+                <h3>Selecciona un avatar</h3>
+                <div class="avatar-grid">
+                    @for (profilePicture of profilePictures; track profilePicture) {
+                    <img 
+                        [src]="'images/' + profilePicture + '.png'"
+                        (click)="selectProfilePicture(profilePicture)"
+                        [class.selected]="tempProfilePicture === profilePicture"
+                    />
+                    }
+                </div>
+            </div>
+        
+    </div>
+}

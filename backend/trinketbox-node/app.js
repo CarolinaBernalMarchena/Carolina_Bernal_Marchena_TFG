@@ -38,6 +38,11 @@ const User = sequelize.define('User', {
   role: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  profilePicture: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    defaultValue: 'profile1'
   }
 });
 
@@ -279,7 +284,7 @@ app.post("/login", async (req, res) => {
 app.put("/user", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
-    const { name, email, password, currentPassword } = req.body;
+    const { name, email, password, currentPassword, profilePicture } = req.body;
     const user = await User.findByPk(userId);
     if (!user) {
       return res.status(404).json({ message: "Usuario no encontrado" });
@@ -299,6 +304,9 @@ app.put("/user", authenticateToken, async (req, res) => {
         return res.status(400).json({ message: "Contraseña actual incorrecta" });
       }
       user.password = await bcrypt.hash(password, 10);
+    }
+    if (profilePicture) {
+      user.profilePicture = profilePicture;
     }
     await user.save();
     res.json({message: "Usuario actualizado correctamente", user});

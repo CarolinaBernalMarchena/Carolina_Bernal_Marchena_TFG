@@ -9,7 +9,9 @@
     <h2>{{ countdown }}</h2>
   </div>
 
-  <div class="mascot"></div>
+  <div class="mascot">
+    <app-chatbot-avatar></app-chatbot-avatar>
+  </div>
 
   <div class="separator"></div>
 
@@ -22,5 +24,12 @@
       <p>{{ box.name }}</p>
     </div>
   </div>
+  
+  @if (showModal) {
+    <app-modal
+      [message]="modalMessage"
+      (closed)="showModal = false"
+    />
+  }
 
 </div>

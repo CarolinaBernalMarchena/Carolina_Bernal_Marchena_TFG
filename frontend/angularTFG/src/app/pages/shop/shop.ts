@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { Api } from '../../services/api';
 import { Location } from '@angular/common';
 import { AchievementNotification } from '../../services/achievement-notification';
-import { AchievementPopupComponent } from '../../components/achievement-popup/achievement-popup';
+import { ChatbotAvatar } from '../../components/chatbot-avatar/chatbot-avatar';
+import { Modal } from '../../components/modal/modal';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, AchievementPopupComponent],
+  imports: [CommonModule, ChatbotAvatar, Modal],
   providers: [],
   templateUrl: './shop.html',
   styleUrl: './shop.scss',
@@ -17,6 +18,9 @@ import { AchievementPopupComponent } from '../../components/achievement-popup/ac
 export class Shop implements OnInit, OnDestroy {
   countdown: string = '';
   private intervalId: any;
+
+  showModal = false;
+  modalMessage = '';
 
   boxes: any[] = [];
 
@@ -58,7 +62,8 @@ export class Shop implements OnInit, OnDestroy {
   openBox(box: any): void {
     this.api.openRandomBox(box.collection).subscribe({
       next: (res: any) => {
-        alert(`Has abierto la caja de ${res.box.type}`);
+        this.modalMessage = `Has abierto la caja de ${res.box.type}`;
+        this.showModal = true;
 
         this.api.getAchievements().subscribe((achRes: any) => {
           if (achRes.newAchievements.length) {

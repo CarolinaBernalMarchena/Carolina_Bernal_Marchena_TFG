@@ -3,7 +3,7 @@
     <div class="trade-card">
 
         <p class="user">
-            Publicado por: <strong>{{trade.ownerName}}</strong>
+            Publicado por: <strong>{{ trade.ownerName }}</strong>
         </p>
 
         <div class="trade-row">
@@ -11,7 +11,7 @@
             <div>
                 <p>Ofrece</p>
                 <img class="box" [src]="trade.offeredBoxUrl" alt="ofrecido"/>
-                <p> {{ trade.offeredBoxName }} </p>
+                <p>{{ trade.offeredBoxName }}</p>
             </div>
 
             <div class="arrow">⇄</div>
@@ -19,18 +19,28 @@
             <div>
                 <p>Busca</p>
                 <img class="box" [src]="trade.requestedBoxUrl" alt="buscado"/>
-                <p> {{ trade.requestedBoxName }} </p>
+                <p>{{ trade.requestedBoxName }}</p>
             </div>
+
         </div>
     </div>
-    @if (trade.ownerId !== currentUser?.id ) {
-    <button (click)="acceptTrade(trade)">
-        Aceptar intercambio
-    </button>
+
+    @if (trade.ownerId !== currentUser?.id) {
+        <button (click)="openAcceptModal()" class="btn ok">
+            Aceptar intercambio
+        </button>
     } @else {
-    <button (click)="deleteTrade(trade)">
-        Eliminar intercambio
-    </button>
+        <button (click)="openDeleteModal()" class="btn delete">
+            Eliminar intercambio
+        </button>
+    }
+
+    @if (showModal) {
+        <app-trade-confirm-modal
+            [message]="modalMessage"
+            (confirm)="onModalConfirm()"
+            (cancel)="onModalCancel()"
+        />
     }
 
 </div>

@@ -5,7 +5,6 @@
   justify-content: center;
   height: 100vh;
   background: #e8dfe6;
-  font-family: 'Poppins', sans-serif;
   padding: 20px;
 
   .logo {
@@ -16,10 +15,18 @@
     margin-bottom: 50px;
 
     .logo-box {
-      width: 50px;
-      height: 50px;
+      width: 80px;
+      height: 80px;
       background: #f4b6b6;
-      border-radius: 8px;
+      border-radius: 10px;
+      overflow: hidden;
+
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
 
     h1 {
@@ -52,6 +59,7 @@
         outline: none;
         font-size: 1rem;
         transition: 0.3s;
+        font: oblique bold 100% cursive;
 
         &:focus {
           border-color: #a47db7;
@@ -70,6 +78,7 @@
       font-size: 1rem;
       cursor: pointer;
       transition: 0.3s;
+      font: oblique bold 100% cursive;
 
       &:hover {
         background: #e87c7c;
@@ -81,7 +90,7 @@
   .register-link {
     display: block;
     margin-top: 25px;
-    font-size: 0.95rem;
+    font-size: 150%;
     color: #7c5a8e;
     text-decoration: underline;
     cursor: pointer;

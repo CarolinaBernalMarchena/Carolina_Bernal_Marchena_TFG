@@ -1,15 +1,15 @@
 <div class="chat-container">
-
-    <div *ngFor="let msg of messages" 
+    @for (msg of messages; track msg) {
+        <div 
         class="bubble"
         [class.user]="msg.from === 'user'"
         [class.bot]="msg.from === 'bot'">
         {{ msg.text }}
-    </div>
-
+        </div>
+    }
 </div>
+<div class="divider"></div>
 
-<!-- botón temporal para probar -->
 @for (mensaje of opcionesMensajes; track $index) {
-<button (click)="enviarMensaje(mensaje, 'user')">{{mensaje}}</button>
+<button style="font: oblique bold 80% cursive;" (click)="enviarMensaje(mensaje, 'user')">{{mensaje}}</button>
 }

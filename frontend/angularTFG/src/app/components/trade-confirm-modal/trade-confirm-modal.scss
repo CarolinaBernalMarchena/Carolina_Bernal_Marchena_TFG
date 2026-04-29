@@ -1,0 +1,65 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+
+    background: rgba(0, 0, 0, 0.5);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 9999;
+}
+
+.modal {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 12px;
+
+    min-width: 280px;
+    max-width: 90%;
+
+    text-align: center;
+    font-size: 150%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+
+    animation: pop 0.2s ease-out;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    gap: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font: oblique bold 100% cursive;
+}
+
+.cancel {
+    background: #ddd;
+}
+
+.confirm {
+    background: #9fd48f;
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

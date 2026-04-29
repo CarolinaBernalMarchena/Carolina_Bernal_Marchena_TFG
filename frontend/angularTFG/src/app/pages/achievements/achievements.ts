@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Api } from '../../services/api';
+import { AuthService } from '../../services/auth';
 import { ALL_ACHIEVEMENTS } from '../../constants/archievements_object';
 
 interface AchievementView {
@@ -20,15 +21,25 @@ interface AchievementView {
 })
 export class Achievements implements OnInit {
   username: string = '';
+  profilePicture: string = 'profile1';
+
   totalUnlocked: number = 0;
   achievements: AchievementView[] = [];
 
   constructor(
     private api: Api,
     private router: Router,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
+    const user = this.authService.getUser();
+
+    if (user) {
+      this.username = user.nombre || '';
+      this.profilePicture = user.profilePicture || 'profile1';
+    }
+
     this.loadAchievements();
   }
 
@@ -44,7 +55,6 @@ export class Achievements implements OnInit {
           unlocked: unlockedIds.includes(a.id),
         }));
 
-        //Contador
         this.totalUnlocked = this.achievements.filter((a) => a.unlocked).length;
       },
       error: (err) => {
