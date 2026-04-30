@@ -69,7 +69,7 @@ export class ChatBubbles {
         );
       } else if (text.includes('¿Cómo se obtienen los tokens?')) {
         this.enviarMensaje(
-          'Los tokens digitales se obtienen al cumplir logros, intercambiar coleccionables o comprando en la tiendasimplemente esperando ya que conseguiras un nuevo token cada día.',
+          'Los tokens digitales se obtienen al cumplir logros cómo intercambiar coleccionables o simplemente esperando ya que conseguiras un nuevo token cada día.',
           'bot',
         );
         this.opcionesMensajes = this.opcionesMensajes.filter(

@@ -48,6 +48,10 @@ export interface Trade {
   requestedBox?: BoxOpened;
 }
 
+export interface TokenCoin {
+  tokens: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -95,14 +99,12 @@ export class Api {
   }
 
   openRandomBox(collection: string) {
-    const token = localStorage.getItem('token');
-
     return this.http.post(
       `http://localhost:3001/open-random-box/${collection}`,
       {},
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${this.authService.getToken()}`,
         },
       },
     );
@@ -142,12 +144,12 @@ export class Api {
 
   getProfileStats() {
     return this.http.get<any>('http://localhost:3001/profile-stats');
+    /*, {
+        headers: {
+          Authorization: `Bearer ${this.getToken()}`
+        }
+      }*/
   }
-  /*, {
-      headers: {
-        Authorization: `Bearer ${this.getToken()}`
-      }
-    }*/
 
   getMyCollection(userId: number): Observable<any> {
     return this.http.get(`http://localhost:3001/my-collection/${userId}`, {
@@ -191,6 +193,18 @@ export class Api {
 
   getAchievements(): Observable<any> {
     return this.http.get('http://localhost:3001/achievements', {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
+  }
+
+  // =========================
+  // TOKENS
+  // =========================
+
+  getTokens(): Observable<TokenCoin> {
+    return this.http.get<TokenCoin>('http://localhost:3001/token', {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },

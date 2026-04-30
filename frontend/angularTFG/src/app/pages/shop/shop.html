@@ -1,8 +1,14 @@
 <div class="shop-container">
 
   <div class="awning"></div>
+
   <button class="back-btn" (click)="goBack()">←</button>
+
   <h1 class="title">Tienda</h1>
+
+  <div class="tokens" [class.disabled]="tokens <= 0">
+    🪙 {{ tokens }}
+  </div>
 
   <div class="timer-box">
     <p>Próximo cambio en:</p>
@@ -14,17 +20,26 @@
   </div>
 
   <div class="separator"></div>
-
   <div class="boxes-container">
-    <div class="box" *ngFor="let box of boxes" (click)="openBox(box)">
+
+    <div 
+      class="box" 
+      *ngFor="let box of boxes" 
+      (click)="openBox(box)"
+      [class.disabled]="tokens <= 0"
+    >
+
       <div 
         class="box-image"
-        [ngStyle]="{ 'background-image': 'url(' + box.collectionUrl + ')' } " 
+        [ngStyle]="{ 'background-image': 'url(' + box.collectionUrl + ')' }"
       ></div>
+
       <p>{{ box.name }}</p>
+
     </div>
+
   </div>
-  
+
   @if (showModal) {
     <app-modal
       [message]="modalMessage"

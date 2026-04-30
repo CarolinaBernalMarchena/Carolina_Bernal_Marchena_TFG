@@ -1,6 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { Api } from '../../services/api';
 import { Location } from '@angular/common';
 import { AchievementNotification } from '../../services/achievement-notification';
@@ -16,22 +15,22 @@ import { Modal } from '../../components/modal/modal';
   styleUrl: './shop.scss',
 })
 export class Shop implements OnInit, OnDestroy {
-  countdown: string = '';
   private intervalId: any;
-
+  countdown: string = '';
   showModal = false;
   modalMessage = '';
-
+  tokens: number = 0;
+  tokenChange: number | null = null;
   boxes: any[] = [];
 
   constructor(
-    private router: Router,
     private api: Api,
     private location: Location,
     private achievementNotification: AchievementNotification,
   ) {}
 
   ngOnInit(): void {
+    this.loadTokens();
     const savedBoxes = localStorage.getItem('shopBoxes');
     const savedTimestamp = localStorage.getItem('shopBoxesTimestamp');
     const now = this.getSpainTime();
@@ -60,10 +59,18 @@ export class Shop implements OnInit, OnDestroy {
   }
 
   openBox(box: any): void {
+    //Si el usuario no tiene tokens, mostramos un mensaje y no permitimos abrir la caja
+    if (this.tokens <= 0) {
+      this.modalMessage = 'Tienes 0 tokens, no puedes hacer ninguna compra';
+      this.showModal = true;
+      return;
+    }
+
     this.api.openRandomBox(box.collection).subscribe({
       next: (res: any) => {
         this.modalMessage = `Has abierto la caja de ${res.box.type}`;
         this.showModal = true;
+        this.loadTokens();
 
         this.api.getAchievements().subscribe((achRes: any) => {
           if (achRes.newAchievements.length) {
@@ -141,5 +148,16 @@ export class Shop implements OnInit, OnDestroy {
 
   private pad(value: number): string {
     return value.toString().padStart(2, '0');
+  }
+
+  loadTokens(): void {
+    this.api.getTokens().subscribe({
+      next: (res) => {
+        this.tokens = res.tokens;
+      },
+      error: (err) => {
+        console.error(err);
+      },
+    });
   }
 }
