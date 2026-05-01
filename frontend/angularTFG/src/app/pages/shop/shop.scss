@@ -9,10 +9,16 @@
 /* Tokens */
 .tokens {
   position: absolute;
-  top: 20px;
+  top: 100px;
   right: 20px;
   font-size: 20px;
   font-weight: bold;
+  margin: 30px auto;
+  padding: 20px;
+  width: 50px;
+  background: #e6e2b3;
+  border: 2px solid #89b4e4;
+  border-radius: 6px;
 }
 
 /* Cajas desactivadas */
@@ -101,7 +107,7 @@
   margin: 30px 0;
 }
 
-/* Cajas */
+/* Cajas Activas */
 .boxes-container {
   display: flex;
   justify-content: center;
@@ -110,7 +116,14 @@
 }
 
 .box {
+  width: 120px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   text-align: center;
+
   cursor: pointer;
   transition: transform 0.2s ease;
 
@@ -131,15 +144,17 @@
 }
 
 .box p {
-  text-align: center;
+  width: 100%;
   margin-top: 8px;
+  text-align: center;
   display: -webkit-box;
   -webkit-line-clamp: 2;
-  line-clamp:2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   line-height: 1.2;
-} 
+  word-break: break-word;
+}
 
 /* Botones */
 button {

@@ -47,17 +47,20 @@ export class CreateTrade implements OnInit {
     }
     this.api.getMyCollection(user.id).subscribe({
       next: (data: any[]) => {
-        const boxes: BoxOpened[] = data.map((item) => ({
+        const boxes = data.map((item: any) => ({
           id: item.Box.id,
           collection: item.Box.collection,
           type: item.Box.type,
           hasSpecial: item.Box.hasSpecial,
           descripcion: item.Box.description,
           imageUrl: item.Box.imageUrl,
+          noForBuying: item.Box.noForBuying,
           repeated: item.quantity - 1,
         }));
 
-        this.duplicatedBoxes = boxes.filter((b) => b.repeated > 0);
+        this.duplicatedBoxes = boxes.filter(
+          (b: any) => b.repeated > 0 && !b.noForBuying,
+        );
       },
       error: (err) => console.error('Error cargando colección', err),
     });
@@ -66,7 +69,10 @@ export class CreateTrade implements OnInit {
   private loadAllBoxes(): void {
     this.api.getAllBoxes().subscribe({
       next: (data: any) => {
-        this.availableBoxes = data.map((box: any) => ({
+        //si la caja se ha conseguido mediante un intercambio especial, la eliminamos de las cajas disponibles para intercambio
+        const filtered = data.filter((box: any) => !box.noForBuying);
+
+        this.availableBoxes = filtered.map((box: any) => ({
           id: box.id,
           collection: box.collection,
           type: box.type,

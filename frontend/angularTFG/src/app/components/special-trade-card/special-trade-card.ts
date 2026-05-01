@@ -1,10 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Api } from '../../services/api';
-import { Trade } from '../../services/api';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Api, Trade, User } from '../../services/api';
+import { AuthService } from '../../services/auth';
+import { TradeConfirmModal } from '../trade-confirm-modal/trade-confirm-modal';
+import { AchievementNotification } from '../../services/achievement-notification';
 
 @Component({
   selector: 'app-special-trade-card',
-  imports: [],
+  imports: [TradeConfirmModal],
   templateUrl: './special-trade-card.html',
   styleUrl: './special-trade-card.scss',
 })
@@ -12,37 +14,61 @@ export class SpecialTradeCard {
   @Input({ required: true }) trade!: Trade;
   @Output() tradeEnded = new EventEmitter<void>();
 
-  endTrade() {
-    this.tradeEnded.emit();
+  currentUser: User | null = null;
+
+  showModal = false;
+  modalMessage = '';
+  pendingAction: 'accept' | 'delete' | null = null;
+
+  constructor(
+    private api: Api,
+    private authService: AuthService,
+    private achievementNotification: AchievementNotification,
+  ) {
+    this.currentUser = this.authService.getUser();
   }
-  constructor(private api: Api) {}
 
-  getBoxImage(boxId: number): string {
-    //const box = MOCK_BOXES_OPENED.find((b) => b.id === boxId);
-    //return box ? box.imageUrl : '';
-    return '';
-  }
+  private acceptTrade(trade: Trade): void {
+    this.api.acceptTrade(trade.id).subscribe({
+      next: (res) => {
+        console.log('Trade aceptado', res);
 
-  acceptTrade(trade: Trade) {
-    /* this.api.acceptTrade(trade.id).subscribe(() => {
+        this.api.getAchievements().subscribe((achRes: any) => {
+          console.log('logros tras trade:', achRes);
 
-      //Añadimos la caja ofrecida al que acepta
-      this.api.addCollectibleToUser(
-        trade.offeredBoxId,
-        currentUser.id
-      ).subscribe(() => {
-
-        //Quitamos la caja ofrecida al creador de la oferta
-        this.api.removeCollectibleFromUser(
-          trade.offeredBoxId,
-          trade.ownerId
-        ).subscribe(() => {
-
-          this.endTrade();
+          if (achRes.newAchievements?.length) {
+            this.achievementNotification.showAchievements(
+              achRes.newAchievements,
+            );
+          }
         });
 
-      });
+        this.tradeEnded.emit();
+      },
+      error: (err) => {
+        console.error('Error al aceptar trade', err);
+      },
+    });
+  }
 
-    });*/
+  openAcceptModal(): void {
+    this.modalMessage = '¿Quieres aceptar este intercambio?';
+    this.pendingAction = 'accept';
+    this.showModal = true;
+  }
+
+  onModalConfirm(): void {
+    this.showModal = false;
+
+    if (this.pendingAction === 'accept') {
+      this.acceptTrade(this.trade);
+    }
+
+    this.pendingAction = null;
+  }
+
+  onModalCancel(): void {
+    this.showModal = false;
+    this.pendingAction = null;
   }
 }

@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Api, Trade, User } from '../../services/api';
 import { AuthService } from '../../services/auth';
 import { TradeConfirmModal } from '../trade-confirm-modal/trade-confirm-modal';
+import { AchievementNotification } from '../../services/achievement-notification';
 
 @Component({
   selector: 'app-trade-card',
@@ -23,6 +24,7 @@ export class TradeCard {
   constructor(
     private api: Api,
     private authService: AuthService,
+    private achievementNotification: AchievementNotification,
   ) {
     this.currentUser = this.authService.getUser();
   }
@@ -31,6 +33,17 @@ export class TradeCard {
     this.api.acceptTrade(trade.id).subscribe({
       next: (res) => {
         console.log('Trade aceptado', res);
+
+        this.api.getAchievements().subscribe((achRes: any) => {
+          console.log('logros tras trade:', achRes);
+
+          if (achRes.newAchievements?.length) {
+            this.achievementNotification.showAchievements(
+              achRes.newAchievements,
+            );
+          }
+        });
+
         this.tradeEnded.emit();
       },
       error: (err) => {

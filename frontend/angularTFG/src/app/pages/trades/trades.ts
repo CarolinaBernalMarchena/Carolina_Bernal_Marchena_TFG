@@ -10,7 +10,7 @@ import { SpecialTradeCard } from '../../components/special-trade-card/special-tr
 @Component({
   selector: 'app-trades',
   standalone: true,
-  imports: [CommonModule, TradeCard, FormsModule],
+  imports: [CommonModule, TradeCard, SpecialTradeCard, FormsModule],
   templateUrl: './trades.html',
   styleUrls: ['./trades.scss'],
 })

@@ -47,42 +47,52 @@ const User = sequelize.define("User", {
 });
 
 //Modelo de los coleccionables
-const Box = sequelize.define("Box", {
-  number: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  collection: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  collectionUrl: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  hasSpecial: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  imageUrl: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  indexes: [
-    {
-      unique: true,
-      fields: ["number", "collection"],
+const Box = sequelize.define(
+  "Box",
+  {
+    number: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
-  ],
-});
+    collection: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    collectionUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    hasSpecial: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    imageUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    noForBuying: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+  },
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ["number", "collection"],
+      },
+    ],
+  },
+);
 
 //Modelo Cajas que tiene el usuario
 const UserBox = sequelize.define(
@@ -312,7 +322,7 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, name: user.name },
       SECRET_KEY,
-      { expiresIn: "1h" },
+      //{ expiresIn: "1h" },
     ); //Generamos un token
     res.json({ user, token });
   } catch (error) {
@@ -364,61 +374,108 @@ app.put("/user", authenticateToken, async (req, res) => {
 //Endpoints cajas
 app.post("/seed-boxes", async (req, res) => {
   try {
-    const { boxes } = req.body;
+    const { boxes, specialTrades } = req.body;
 
     if (!boxes || !Array.isArray(boxes)) {
       return res.status(400).json({ message: "Formato inválido" });
     }
 
     for (const box of boxes) {
-      await Box.upsert({
-        number: box.number,
-        collection: box.collection,
-        collectionUrl: box.collectionUrl,
-        type: box.type,
-        hasSpecial: box.hasSpecial,
-        description: box.description,
-        imageUrl: box.imageUrl,
-      });
+      if (box.id) {
+        await Box.upsert({
+          id: box.id,
+          number: box.number,
+          collection: box.collection,
+          collectionUrl: box.collectionUrl,
+          type: box.type,
+          hasSpecial: box.hasSpecial,
+          description: box.description,
+          imageUrl: box.imageUrl,
+          noForBuying: box.noForBuying,
+        });
+      } else {
+        await Box.upsert({
+          number: box.number,
+          collection: box.collection,
+          collectionUrl: box.collectionUrl,
+          type: box.type,
+          hasSpecial: box.hasSpecial,
+          description: box.description,
+          imageUrl: box.imageUrl,
+          noForBuying: box.noForBuying,
+        });
+      }
     }
 
+    await User.upsert({
+      id: 0,
+      email: "admin@gmail.com",
+      name: "admin",
+      role: "admin",
+      password: "x",
+    });
+
+    for (const trade of specialTrades) {
+      await Trade.upsert({
+        offeredBoxId: trade.offeredBoxId,
+        requestedBoxId: trade.requestedBoxId,
+        offeredBoxName: trade.offeredBoxName,
+        requestedBoxName: trade.requestedBoxName,
+        ownerId: 0,
+        ownerName: "Intercambio especial",
+        offeredBoxUrl: trade.offeredBoxUrl,
+        requestedBoxUrl: trade.requestedBoxUrl,
+        status: false,
+      });
+    }
     res.json({ message: "Cajas insertadas correctamente" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error al insertar las cajas" });
+    res.status(500).json({ message: error });
   }
 });
 
 //Endpoint para la tienda
 app.get("/shop-boxes", authenticateToken, async (req, res) => {
   try {
-    const boxes = await Box.findAll();
-    const shuffled = boxes.sort(() => 0.5 - Math.random());
-    const unique = [];
-    const usedIds = new Set();
-
-    let selected = [];
-
-    for (let box of shuffled) {
-      if (!usedIds.has(box.id)) {
-        unique.push(box);
-        usedIds.add(box.id);
-      }
-      if (unique.length === 3) {
-        break;
-      }
-    }
+    const boxes = await Box.findAll({
+      order: [["id", "ASC"]],
+    });
 
     if (!boxes.length) {
-      return res.status(404).json({ message: "No hay cajas disponibles" });
+      return res.status(404).json({
+        message: "No hay cajas disponibles",
+      });
     }
 
-    while (selected.length < 3) {
-      selected.push(...shuffled);
-    }
-    selected = selected.slice(0, 3);
+    const today = new Date().toLocaleDateString("sv-SE", {
+      timeZone: "Europe/Madrid",
+    });
 
-    const result = selected.map((box) => ({
+    //Generamos una semilla diaria basada en la fecha
+    const daySeed = [...today].reduce(
+      (acc, char) => acc + char.charCodeAt(0),
+      0,
+    );
+
+    function mulberry32(a) {
+      return function () {
+        let t = (a += 0x6d2b79f5);
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+
+    const shuffled = [...boxes];
+    const random = mulberry32(daySeed);
+
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    const result = shuffled.slice(0, 3).map((box) => ({
       collection: box.collection,
       name: box.type,
       collectionUrl: box.collectionUrl,
@@ -426,7 +483,11 @@ app.get("/shop-boxes", authenticateToken, async (req, res) => {
 
     res.json(result);
   } catch (error) {
-    res.status(500).json({ message: "Error obteniendo cajas de tienda" });
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error obteniendo cajas de tienda",
+    });
   }
 });
 
@@ -515,7 +576,10 @@ app.post(
 
       //Obtenemos todas las cajas de esa colección
       const boxes = await Box.findAll({
-        where: { collection },
+        where: {
+          collection,
+          noForBuying: false,
+        },
       });
 
       if (!boxes.length) {
@@ -637,28 +701,49 @@ app.post("/trades", authenticateToken, async (req, res) => {
     const requestedBox = await Box.findOne({
       where: { id: req.body.requestedBoxId },
     });
+
     const offeredBox = await Box.findOne({
       where: { id: req.body.offeredBoxId },
     });
 
+    //Validamos existencia de las cajas
+    if (!requestedBox || !offeredBox) {
+      return res.status(404).json({
+        message: "Caja no encontrada",
+      });
+    }
+
+    //Bloqueamos las cajas especiales, no pueden usarse en los intercambios
+    if (requestedBox.noForBuying || offeredBox.noForBuying) {
+      return res.status(400).json({
+        message:
+          "Las cajas especiales no pueden usarse en intercambios de usuarios",
+      });
+    }
+
     const trade = await Trade.create({
       offeredBoxId: req.body.offeredBoxId,
       requestedBoxId: req.body.requestedBoxId,
+
       offeredBoxName: offeredBox.type,
       requestedBoxName: requestedBox.type,
+
       ownerId: req.user.id,
       ownerName: req.user.name,
+
       offeredBoxUrl: offeredBox.imageUrl,
       requestedBoxUrl: requestedBox.imageUrl,
+
       status: false,
     });
 
     res.json(trade);
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({ message: error.message || "Error creando intercambio" });
+
+    res.status(500).json({
+      message: error.message || "Error creando intercambio",
+    });
   }
 });
 
@@ -691,6 +776,14 @@ app.put("/trades/:id/accept", authenticateToken, async (req, res) => {
     const ownerId = trade.ownerId;
     const accepterId = req.user.id;
 
+    //Intercambios especiales
+    const offeredBox = await Box.findByPk(trade.offeredBoxId, {
+      transaction: t,
+    });
+
+    const isGlobalTrade = offeredBox.noForBuying;
+
+    //
     const ownerOffered = await UserBox.findOne({
       where: { UserId: ownerId, BoxId: trade.offeredBoxId },
       transaction: t,
@@ -713,65 +806,119 @@ app.put("/trades/:id/accept", authenticateToken, async (req, res) => {
       return res.status(400).json({ message: "No tienes la caja solicitada" });
     }
 
-    //Restamos las cajas solicitadas a los respectivos usuarios
-    ownerOffered.quantity -= 1;
-    if (ownerOffered.quantity === 0) {
-      await ownerOffered.destroy({ transaction: t });
-    } else {
-      await ownerOffered.save({ transaction: t });
-    }
+    // ======================================================
+    // INTERCAMBIO ESPECIAL (sistema)
+    // ======================================================
 
-    accepterRequested.quantity -= 1;
-    if (accepterRequested.quantity === 0) {
-      await accepterRequested.destroy({ transaction: t });
-    } else {
-      await accepterRequested.save({ transaction: t });
-    }
+    if (isGlobalTrade) {
+      // Quitamos la caja que entrega el usuario
+      accepterRequested.quantity -= 1;
 
-    //Añadimos las cajas a los usuarios
-    const ownerGets = await UserBox.findOne({
-      where: { UserId: ownerId, BoxId: trade.requestedBoxId },
-      transaction: t,
-    });
+      if (accepterRequested.quantity === 0) {
+        await accepterRequested.destroy({ transaction: t });
+      } else {
+        await accepterRequested.save({ transaction: t });
+      }
 
-    if (ownerGets) {
-      ownerGets.quantity += 1;
-      await ownerGets.save({ transaction: t });
-    } else {
-      await UserBox.create(
-        {
-          UserId: ownerId,
-          BoxId: trade.requestedBoxId,
-          quantity: 1,
-        },
-        { transaction: t },
-      );
-    }
-
-    //La persona que acepta el intercambio recibe offeredBox
-    const accepterGets = await UserBox.findOne({
-      where: { UserId: accepterId, BoxId: trade.offeredBoxId },
-      transaction: t,
-    });
-
-    if (accepterGets) {
-      accepterGets.quantity += 1;
-      await accepterGets.save({ transaction: t });
-    } else {
-      await UserBox.create(
-        {
+      // Le damos la recompensa
+      const accepterGets = await UserBox.findOne({
+        where: {
           UserId: accepterId,
           BoxId: trade.offeredBoxId,
-          quantity: 1,
         },
-        { transaction: t },
-      );
-    }
+        transaction: t,
+      });
 
-    //Eliminar intercambio
-    trade.status = true;
-    trade.acceptedBy = accepterId;
-    await trade.save({ transaction: t });
+      if (accepterGets) {
+        accepterGets.quantity += 1;
+
+        await accepterGets.save({ transaction: t });
+      } else {
+        await UserBox.create(
+          {
+            UserId: accepterId,
+            BoxId: trade.offeredBoxId,
+            quantity: 1,
+          },
+          { transaction: t },
+        );
+      }
+    }
+    // ======================================================
+    // INTERCAMBIO NORMAL
+    // ======================================================
+    else {
+      // Quitamos cajas
+      ownerOffered.quantity -= 1;
+
+      if (ownerOffered.quantity === 0) {
+        await ownerOffered.destroy({ transaction: t });
+      } else {
+        await ownerOffered.save({ transaction: t });
+      }
+
+      accepterRequested.quantity -= 1;
+
+      if (accepterRequested.quantity === 0) {
+        await accepterRequested.destroy({ transaction: t });
+      } else {
+        await accepterRequested.save({ transaction: t });
+      }
+
+      // Owner recibe requestedBox
+      const ownerGets = await UserBox.findOne({
+        where: {
+          UserId: ownerId,
+          BoxId: trade.requestedBoxId,
+        },
+        transaction: t,
+      });
+
+      if (ownerGets) {
+        ownerGets.quantity += 1;
+
+        await ownerGets.save({ transaction: t });
+      } else {
+        await UserBox.create(
+          {
+            UserId: ownerId,
+            BoxId: trade.requestedBoxId,
+            quantity: 1,
+          },
+          { transaction: t },
+        );
+      }
+
+      // Accepter recibe offeredBox
+      const accepterGets = await UserBox.findOne({
+        where: {
+          UserId: accepterId,
+          BoxId: trade.offeredBoxId,
+        },
+        transaction: t,
+      });
+
+      if (accepterGets) {
+        accepterGets.quantity += 1;
+
+        await accepterGets.save({ transaction: t });
+      } else {
+        await UserBox.create(
+          {
+            UserId: accepterId,
+            BoxId: trade.offeredBoxId,
+            quantity: 1,
+          },
+          { transaction: t },
+        );
+      }
+
+      // Marcar trade como completado
+      trade.status = true;
+      trade.acceptedBy = accepterId;
+
+      await trade.save({ transaction: t });
+    }
 
     await t.commit();
 
@@ -834,6 +981,17 @@ app.get("/achievements", authenticateToken, async (req, res) => {
     //Desbloqueamos nuevos logros automáticamente
     const newAchievements = await checkAndUnlockAchievements(userId, stats);
 
+    //Añadimos 1 token al usuario por cada nuevo logro desbloqueado
+    if (newAchievements.length > 0) {
+      let tokenData = await Token.findOne({ where: { userId } });
+
+      if (!tokenData) return; //Añadimos esto por si ocurriera el caso de que el usuario no tiene tabla de tokens (no debería de pasar nunca pero por si acaso)
+
+      tokenData.numTokens += newAchievements.length;
+
+      await tokenData.save();
+    }
+
     //Obtenemos todos los desbloqueados
     const userAchievements = await Achievement.findAll({
       where: { userId },
@@ -855,34 +1013,37 @@ app.get("/token", authenticateToken, async (req, res) => {
 
     let tokenData = await Token.findOne({ where: { userId } });
 
-    const today = new Date();
-    const todayStr = today.toISOString().split("T")[0];
+    const todayStr = new Date().toLocaleDateString("sv-SE", {
+      timeZone: "Europe/Madrid",
+    });
 
-    //Si no existe información de tokens le añadimos al usuario 5 tokens
+    //Si no existe información de tokens se lo generamos al usuario
     if (!tokenData) {
       tokenData = await Token.create({
         userId,
         numTokens: 5,
-        lastTokenDate: today,
+        lastTokenDate: todayStr,
       });
 
       return res.json({ tokens: tokenData.numTokens });
     }
 
-    //Comparamos las fechas (solo día)
-    const lastDateStr = new Date(tokenData.lastTokenDate)
-      .toISOString()
-      .split("T")[0];
+    //Comparamos el día de hoy con el último día que el usuario inició sesión
+    const lastDateStr = new Date(tokenData.lastTokenDate).toLocaleDateString(
+      "sv-SE",
+      {
+        timeZone: "Europe/Madrid",
+      },
+    );
 
-    //Si NO es hoy, le añadimos 1 token al usuario
+    //Si es un nuevo día añadimos un token nuevo al usuario
     if (lastDateStr !== todayStr) {
       tokenData.numTokens += 1;
-      tokenData.lastTokenDate = today;
+      tokenData.lastTokenDate = new Date();
 
       await tokenData.save();
     }
 
-    //Devolvemos tokens
     res.json({ tokens: tokenData.numTokens });
   } catch (error) {
     console.error(error);

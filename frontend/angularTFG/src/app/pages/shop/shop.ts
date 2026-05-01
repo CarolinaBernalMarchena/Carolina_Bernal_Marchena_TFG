@@ -31,21 +31,9 @@ export class Shop implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadTokens();
-    const savedBoxes = localStorage.getItem('shopBoxes');
-    const savedTimestamp = localStorage.getItem('shopBoxesTimestamp');
     const now = this.getSpainTime();
 
-    if (savedBoxes && savedTimestamp) {
-      const nextReset = this.getNextResetTime();
-
-      if (now < nextReset) {
-        this.boxes = JSON.parse(savedBoxes);
-      } else {
-        this.loadShopBoxes();
-      }
-    } else {
-      this.loadShopBoxes();
-    }
+    this.loadShopBoxes();
 
     this.startCountdown();
   }
@@ -89,41 +77,36 @@ export class Shop implements OnInit, OnDestroy {
     );
   }
 
-  private getNextResetTime(): Date {
-    const now = this.getSpainTime();
-    const nextReset = new Date(now);
-
-    const hours = now.getHours();
-
-    if (hours < 12) {
-      nextReset.setHours(12, 0, 0, 0);
-    } else {
-      nextReset.setDate(nextReset.getDate() + 1);
-      nextReset.setHours(0, 0, 0, 0);
-    }
-
-    return nextReset;
-  }
-
   private startCountdown(): void {
     const updateCountdown = () => {
       const now = this.getSpainTime();
-      const nextReset = this.getNextResetTime();
+
+      //Próximas cajas a medianoche (hora española)
+      const nextReset = new Date(now);
+
+      nextReset.setHours(24, 0, 0, 0);
+
       const diff = nextReset.getTime() - now.getTime();
 
+      //Al llegar a las 00:00
       if (diff <= 0) {
         this.refreshBoxes();
         return;
       }
 
       const hours = Math.floor(diff / (1000 * 60 * 60));
+
       const minutes = Math.floor((diff / (1000 * 60)) % 60);
+
       const seconds = Math.floor((diff / 1000) % 60);
 
       this.countdown = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(seconds)}`;
     };
 
+    //Ejecutamos inmediatamente el update del contador
     updateCountdown();
+
+    //Actualizamos cada segundo
     this.intervalId = setInterval(updateCountdown, 1000);
   }
 
@@ -137,8 +120,6 @@ export class Shop implements OnInit, OnDestroy {
     this.api.getShopBoxes().subscribe({
       next: (data: any) => {
         this.boxes = data;
-        localStorage.setItem('shopBoxes', JSON.stringify(data));
-        localStorage.setItem('shopBoxesTimestamp', Date.now().toString());
       },
       error: (err) => {
         console.error(err);

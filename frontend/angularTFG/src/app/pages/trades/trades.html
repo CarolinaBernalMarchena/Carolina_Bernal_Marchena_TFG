@@ -13,7 +13,7 @@
 
     <!-- COLECCIÓN -->
     <div class="filter-group select-group">
-      <label class="filter-label">Filtrar por colección</label>
+      <label class="filter-label">Filtrar por colección ofrecida</label>
       <select [(ngModel)]="selectedCollection" name="collection" (change)="applyFilters()">
         <option value="all">Todas las colecciones</option>
         @for (col of collections; track col.name) {
@@ -41,7 +41,7 @@
                 class="toggle-pill"
                 [class.active]="onlyPlatformTrades"
                 (click)="onlyPlatformTrades = !onlyPlatformTrades; applyFilters()">
-          ⭐ Plataforma
+          ⭐ Intercambios especiales
         </button>
 
       </div>
@@ -55,10 +55,10 @@
 
   @for (trade of filteredTrades; track trade.id) {
     @if (trade.ownerId == 0){
-      <!--<app-special-trade-card 
+      <app-special-trade-card 
         [trade]="trade" 
         (tradeEnded)="tradeEnded()">
-      </app-special-trade-card>-->
+      </app-special-trade-card>
     } @else {
       <app-trade-card 
         [trade]="trade" 
