@@ -1,8 +1,8 @@
 <div class="modal-backdrop" (click)="close()">
   <div class="modal-content" (click)="$event.stopPropagation()">
     @if (imageUrl) {
-      <img class="modalImage" [src]="imageUrl" />
-      <ngx-confetti-explosion></ngx-confetti-explosion>
+    <img class="modalImage" [src]="imageUrl" />
+    <ngx-confetti-explosion></ngx-confetti-explosion>
     }
     <p>{{ message }}</p>
 
