@@ -4,9 +4,9 @@
   <h1>Mercado de intercambios</h1>
 
   @if (filteredTrades.length === 0) {
-    <div>
-      No hay intercambios disponibles.
-    </div>
+  <div>
+    No hay intercambios disponibles.
+  </div>
   }
 
   <form class="filters-form">
@@ -17,9 +17,9 @@
       <select [(ngModel)]="selectedCollection" name="collection" (change)="applyFilters()">
         <option value="all">Todas las colecciones</option>
         @for (col of collections; track col.name) {
-          <option [value]="col.name" [disabled]="col.count === 0">
-            {{ col.name }} ({{ col.count }})
-          </option>
+        <option [value]="col.name" [disabled]="col.count === 0">
+          {{ col.name }} ({{ col.count }})
+        </option>
         }
       </select>
     </div>
@@ -30,17 +30,13 @@
 
       <div class="toggle-group">
 
-        <button type="button"
-                class="toggle-pill"
-                [class.active]="onlySpecialBoxes"
-                (click)="onlySpecialBoxes = !onlySpecialBoxes; applyFilters()">
+        <button type="button" class="toggle-pill" [class.active]="onlySpecialBoxes"
+          (click)="onlySpecialBoxes = !onlySpecialBoxes; applyFilters()">
           💎 Cajas especiales
         </button>
 
-        <button type="button"
-                class="toggle-pill"
-                [class.active]="onlyPlatformTrades"
-                (click)="onlyPlatformTrades = !onlyPlatformTrades; applyFilters()">
+        <button type="button" class="toggle-pill" [class.active]="onlyPlatformTrades"
+          (click)="onlyPlatformTrades = !onlyPlatformTrades; applyFilters()">
           ⭐ Intercambios especiales
         </button>
 
@@ -54,17 +50,13 @@
   </button>
 
   @for (trade of filteredTrades; track trade.id) {
-    @if (trade.ownerId == 0){
-      <app-special-trade-card 
-        [trade]="trade" 
-        (tradeEnded)="tradeEnded()">
-      </app-special-trade-card>
-    } @else {
-      <app-trade-card 
-        [trade]="trade" 
-        (tradeEnded)="tradeEnded()">
-      </app-trade-card>
-    }
+  @if (trade.ownerId == 0){
+  <app-special-trade-card [trade]="trade" (tradeEnded)="tradeEnded()">
+  </app-special-trade-card>
+  } @else {
+  <app-trade-card [trade]="trade" (tradeEnded)="tradeEnded()">
+  </app-trade-card>
+  }
   }
 
 </div>

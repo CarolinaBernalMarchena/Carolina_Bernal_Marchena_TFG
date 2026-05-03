@@ -8,19 +8,15 @@
       <h3>Tu coleccionable (oferta)</h3>
       <div class="grid">
         @for (box of duplicatedBoxes; track box.id) {
-          <div 
-            class="card"
-            (click)="selectedBox = box"
-            [class.selected]="selectedBox === box"
-          >
-            <img [src]="box.imageUrl" />
-            <p style="font-size: 150%;">{{ box.descripcion }}</p>
-          </div>
-        } 
+        <div class="card" (click)="selectedBox = box" [class.selected]="selectedBox === box">
+          <img [src]="box.imageUrl" />
+          <p style="font-size: 150%;">{{ box.type }}</p>
+        </div>
+        }
         @empty {
-          <div class="empty">
-            No tienes coleccionables repetidos
-          </div>
+        <div class="empty">
+          No tienes coleccionables repetidos
+        </div>
         }
       </div>
     </div>
@@ -36,37 +32,37 @@
           <option value="">Selecciona una colección</option>
 
           @for (collection of getCollections(); track collection) {
-            <option [value]="collection">
-              {{ collection }}
-            </option>
+          <option [value]="collection">
+            {{ collection }}
+          </option>
           }
         </select>
 
         <!-- SELECT COLECCIONABLE -->
         @if (selectedCollection) {
-          <select [(ngModel)]="requestedBox" class="box-select">
-            <option [ngValue]="undefined">
-              Selecciona un coleccionable
-            </option>
+        <select [(ngModel)]="requestedBox" class="box-select">
+          <option [ngValue]="undefined">
+            Selecciona un coleccionable
+          </option>
 
-            @for (box of filteredBoxesByCollection; track box.id) {
-              <option [ngValue]="box">
-                {{ box.type }}
-              </option>
-            }
-          </select>
+          @for (box of filteredBoxesByCollection; track box.id) {
+          <option [ngValue]="box">
+            {{ box.type }}
+          </option>
+          }
+        </select>
         }
 
       </div>
 
     </div>
-    
+
   </div>
 
   @if (selectedBox && requestedBox) {
-    <p class="preview">
-      Estás proponiendo un intercambio con los coleccionables seleccionados.
-    </p>
+  <p class="preview">
+    Estás proponiendo un intercambio con los coleccionables seleccionados.
+  </p>
   }
 
   <button class="trade-button" [disabled]="!selectedBox || !requestedBox" (click)="proposeTrade()">
@@ -74,10 +70,7 @@
   </button>
 
   @if (showModal) {
-    <app-modal
-      [message]="modalMessage"
-      (closed)="onModalClose()"
-    />
+  <app-modal [message]="modalMessage" (closed)="onModalClose()" />
   }
 
 </div>

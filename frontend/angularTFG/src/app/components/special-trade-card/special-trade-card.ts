@@ -34,12 +34,10 @@ export class SpecialTradeCard {
         console.log('Trade aceptado', res);
 
         this.api.getAchievements().subscribe((achRes: any) => {
-          console.log('logros tras trade:', achRes);
-
-          if (achRes.newAchievements?.length) {
-            this.achievementNotification.showAchievements(
-              achRes.newAchievements,
-            );
+          if (achRes.newAchievements.length) {
+            for (const id of achRes.newAchievements) {
+              this.achievementNotification.showAchievements(id);
+            }
           }
         });
 

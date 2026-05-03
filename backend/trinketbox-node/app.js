@@ -214,20 +214,31 @@ const ALL_ACHIEVEMENTS = [
 ];
 
 //Modelo Tokens
-const Token = sequelize.define("Token", {
-  userId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+const Token = sequelize.define(
+  "Token",
+  {
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    numTokens: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    lastTokenDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
   },
-  numTokens: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ["userId"],
+      },
+    ],
   },
-  lastTokenDate: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-});
+);
 
 //Relaciones
 User.belongsToMany(Box, { through: UserBox });
@@ -285,7 +296,7 @@ async function checkAndUnlockAchievements(userId, stats) {
 }
 // Sincronizacion tablas
 sequelize.sync();
-
+//sequelize.sync({ force: true });
 //Endpoints usuario
 app.post("/register", async (req, res) => {
   try {
@@ -415,6 +426,18 @@ app.post("/seed-boxes", async (req, res) => {
       password: "x",
     });
 
+    const todayStr = new Date().toLocaleDateString("sv-SE", {
+      timeZone: "Europe/Madrid",
+    });
+    const userRico = await User.findOne({
+      where: { email: "Carolinabm2000@gmail.com" },
+    });
+    await Token.upsert({
+      userId: userRico.id,
+      numTokens: 50,
+      lastTokenDate: todayStr,
+    });
+
     for (const trade of specialTrades) {
       await Trade.upsert({
         offeredBoxId: trade.offeredBoxId,
@@ -426,6 +449,11 @@ app.post("/seed-boxes", async (req, res) => {
         offeredBoxUrl: trade.offeredBoxUrl,
         requestedBoxUrl: trade.requestedBoxUrl,
         status: false,
+      });
+      await UserBox.upsert({
+        UserId: 0,
+        BoxId: trade.offeredBoxId,
+        quantity: 1000,
       });
     }
     res.json({ message: "Cajas insertadas correctamente" });
@@ -453,7 +481,7 @@ app.get("/shop-boxes", authenticateToken, async (req, res) => {
     });
 
     //Generamos una semilla diaria basada en la fecha
-    const daySeed = [...today].reduce(
+    const daySeed = [...(today + "mi semilla")].reduce(
       (acc, char) => acc + char.charCodeAt(0),
       0,
     );
@@ -811,16 +839,7 @@ app.put("/trades/:id/accept", authenticateToken, async (req, res) => {
     // ======================================================
 
     if (isGlobalTrade) {
-      // Quitamos la caja que entrega el usuario
-      accepterRequested.quantity -= 1;
-
-      if (accepterRequested.quantity === 0) {
-        await accepterRequested.destroy({ transaction: t });
-      } else {
-        await accepterRequested.save({ transaction: t });
-      }
-
-      // Le damos la recompensa
+      // Le damos la recompensa al usuario que pide la caja
       const accepterGets = await UserBox.findOne({
         where: {
           UserId: accepterId,
@@ -828,6 +847,14 @@ app.put("/trades/:id/accept", authenticateToken, async (req, res) => {
         },
         transaction: t,
       });
+
+      accepterRequested.quantity -= 1;
+
+      if (accepterRequested.quantity === 0) {
+        await accepterRequested.destroy({ transaction: t });
+      } else {
+        await accepterRequested.save({ transaction: t });
+      }
 
       if (accepterGets) {
         accepterGets.quantity += 1;

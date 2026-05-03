@@ -45,7 +45,7 @@ export class ChatBubbles {
         );
       } else if (text.includes('¿Cómo funciona la tienda?')) {
         this.enviarMensaje(
-          'En la tienda puedes comprar con tus tokens digitales distintas colecciones. Las colecciones que ofrece la tienda son aleatorias y se reponen cada 12 horas. Las cajas son coleccionables sorpresas ¡Anímate a completar una colección entera!',
+          'En la tienda puedes comprar con tus tokens digitales distintas colecciones. Las colecciones que ofrece la tienda son aleatorias y se reponen cada 24 horas. Las cajas son coleccionables sorpresas ¡Anímate a completar una colección entera!',
           'bot',
         );
         this.opcionesMensajes = this.opcionesMensajes.filter(
