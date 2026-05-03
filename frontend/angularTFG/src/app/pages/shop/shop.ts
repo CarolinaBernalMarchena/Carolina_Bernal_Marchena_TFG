@@ -19,6 +19,7 @@ export class Shop implements OnInit, OnDestroy {
   countdown: string = '';
   showModal = false;
   modalMessage = '';
+  modalImage = '';
   tokens: number = 0;
   tokenChange: number | null = null;
   boxes: any[] = [];
@@ -56,6 +57,8 @@ export class Shop implements OnInit, OnDestroy {
 
     this.api.openRandomBox(box.collection).subscribe({
       next: (res: any) => {
+        console.log(res);
+        this.modalImage = res.box.imageUrl;
         this.modalMessage = `Has abierto la caja de ${res.box.type}`;
         this.showModal = true;
         this.loadTokens();

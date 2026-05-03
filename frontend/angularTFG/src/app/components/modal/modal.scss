@@ -32,3 +32,8 @@
 button {
     font: oblique bold 100% cursive;
 }
+.modalImage{
+    max-width: 100px;
+    max-height: 150px;
+    object-fit: contain;
+}
