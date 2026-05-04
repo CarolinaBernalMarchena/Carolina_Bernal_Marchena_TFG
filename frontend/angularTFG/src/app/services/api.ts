@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { AuthService } from './auth';
+import { environment } from '../../environments/environment';
 
 export interface BoxOpened {
   id: number;
@@ -56,7 +57,7 @@ export interface TokenCoin {
   providedIn: 'root',
 })
 export class Api {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = environment.apiUrl;
   constructor(
     private http: HttpClient,
     private authService: AuthService,
@@ -75,7 +76,7 @@ export class Api {
   // =========================
 
   getTrades() {
-    return this.http.get('http://localhost:3001/trades', {
+    return this.http.get(`${this.apiUrl}/trades`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -83,7 +84,7 @@ export class Api {
   }
 
   acceptTrade(id: number): Observable<any> {
-    return this.http.put(`http://localhost:3001/trades/${id}/accept`, null, {
+    return this.http.put(`${this.apiUrl}/trades/${id}/accept`, null, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -91,7 +92,7 @@ export class Api {
   }
 
   deleteTradeBackend(tradeId: number) {
-    return this.http.delete(`http://localhost:3001/trades/${tradeId}`, {
+    return this.http.delete(`${this.apiUrl}/trades/${tradeId}`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -100,7 +101,7 @@ export class Api {
 
   openRandomBox(collection: string) {
     return this.http.post(
-      `http://localhost:3001/open-random-box/${collection}`,
+      `${this.apiUrl}/open-random-box/${collection}`,
       {},
       {
         headers: {
@@ -115,7 +116,7 @@ export class Api {
       offeredBoxId: offeredBoxId,
       requestedBoxId: requestedBoxId,
     };
-    return this.http.post('http://localhost:3001/trades', data, {
+    return this.http.post(`${this.apiUrl}/trades`, data, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -127,11 +128,11 @@ export class Api {
   // =========================
 
   getShopBoxes() {
-    return this.http.get('http://localhost:3001/shop-boxes');
+    return this.http.get(`${this.apiUrl}/shop-boxes`);
   }
 
   getAllBoxes() {
-    return this.http.get('http://localhost:3001/boxes', {
+    return this.http.get(`${this.apiUrl}/boxes`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -143,7 +144,7 @@ export class Api {
   // =========================
 
   getProfileStats() {
-    return this.http.get<any>('http://localhost:3001/profile-stats');
+    return this.http.get<any>(`${this.apiUrl}/profile-stats`);
     /*, {
         headers: {
           Authorization: `Bearer ${this.getToken()}`
@@ -152,7 +153,7 @@ export class Api {
   }
 
   getMyCollection(userId: number): Observable<any> {
-    return this.http.get(`http://localhost:3001/my-collection/${userId}`, {
+    return this.http.get(`${this.apiUrl}/my-collection/${userId}`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -160,7 +161,7 @@ export class Api {
   }
 
   updateUser(data: any): Observable<any> {
-    return this.http.put('http://localhost:3001/user', data, {
+    return this.http.put(`${this.apiUrl}/user`, data, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -192,7 +193,7 @@ export class Api {
   // =========================
 
   getAchievements(): Observable<any> {
-    return this.http.get('http://localhost:3001/achievements', {
+    return this.http.get(`${this.apiUrl}/achievements`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -204,7 +205,7 @@ export class Api {
   // =========================
 
   getTokens(): Observable<TokenCoin> {
-    return this.http.get<TokenCoin>('http://localhost:3001/token', {
+    return this.http.get<TokenCoin>(`${this.apiUrl}/token`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
