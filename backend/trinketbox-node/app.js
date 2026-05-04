@@ -333,7 +333,6 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign(
       { id: user.id, email: user.email, name: user.name },
       SECRET_KEY,
-      //{ expiresIn: "1h" },
     ); //Generamos un token
     res.json({ user, token });
   } catch (error) {
@@ -481,7 +480,7 @@ app.get("/shop-boxes", authenticateToken, async (req, res) => {
     });
 
     //Generamos una semilla diaria basada en la fecha
-    const daySeed = [...(today + "mi semilla")].reduce(
+    const daySeed = [...today].reduce(
       (acc, char) => acc + char.charCodeAt(0),
       0,
     );
@@ -540,11 +539,11 @@ app.post("/open-box/:boxId", authenticateToken, async (req, res) => {
     });
 
     if (userBox) {
-      //Si ya la tiene → sumamos
+      //Si ya la tiene la sumamos
       userBox.quantity += 1;
       await userBox.save();
     } else {
-      //Si es la primera vez que la abre
+      //Si es la primera vez que la abre se le añade con cantidad igual a 1
       await UserBox.create({
         UserId: userId,
         BoxId: boxId,
@@ -620,7 +619,7 @@ app.post(
       const specialBoxes = boxes.filter((b) => b.hasSpecial);
       const normalBoxes = boxes.filter((b) => !b.hasSpecial);
 
-      const isSpecial = Math.random() < 0.1; //10% probabilidad
+      const isSpecial = Math.random() < 0.05; //5% probabilidad
 
       let selectedBox;
 
