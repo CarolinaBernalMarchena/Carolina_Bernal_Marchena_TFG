@@ -22,7 +22,6 @@ export class AchievementPopupComponent implements OnInit {
   open(titulo: string, contenido: string) {
     this.isOpen = true;
     this.titulo = titulo;
-
     this.contenido = contenido;
   }
 

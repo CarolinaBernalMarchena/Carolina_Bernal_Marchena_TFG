@@ -45,7 +45,6 @@ export class CollectionDetail implements OnInit {
     }
     this.api.getMyCollection(user.id).subscribe({
       next: (data: any) => {
-        // Transformamos los datos del backend al formato CollectionItem
         const boxes: CollectionItem[] = data.map((item: any) => ({
           id: item.Box.id,
           collection: item.Box.collection,
@@ -53,13 +52,13 @@ export class CollectionDetail implements OnInit {
           hasSpecial: item.Box.hasSpecial,
           descripcion: item.Box.description,
           imageUrl: item.Box.imageUrl,
-          total: item.quantity, // backend ya tiene quantity
+          total: item.quantity,
           repeated: item.quantity - 1,
         }));
 
         this.buildCollection(boxes);
 
-        // Recalculamos selectedBox en caso de que la URL ya tenga type
+        //Recalculamos selectedBox en caso de que la URL ya tenga type
         const type = this.route.snapshot.paramMap.get('type');
         if (type) {
           this.selectedBox = this.collection.find((box) => box.type === type);
