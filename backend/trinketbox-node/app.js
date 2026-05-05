@@ -114,52 +114,63 @@ const UserBox = sequelize.define(
 );
 
 //Modelo Intercambios
-const Trade = sequelize.define("Trade", {
-  date: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
+const Trade = sequelize.define(
+  "Trade",
+  {
+    date: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    ownerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    ownerName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    offeredBoxId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    requestedBoxId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    offeredBoxName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    requestedBoxName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    acceptedBy: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    offeredBoxUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    requestedBoxUrl: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
-  ownerId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+  {
+    indexes: [
+      {
+        unique: true,
+        fields: ["ownerId", "offeredBoxId", "requestedBoxId"],
+      },
+    ],
   },
-  ownerName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  offeredBoxId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  requestedBoxId: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  offeredBoxName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  requestedBoxName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  status: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  acceptedBy: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-  },
-  offeredBoxUrl: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  requestedBoxUrl: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-});
+);
 
 //Modelo Logros
 const Achievement = sequelize.define(
