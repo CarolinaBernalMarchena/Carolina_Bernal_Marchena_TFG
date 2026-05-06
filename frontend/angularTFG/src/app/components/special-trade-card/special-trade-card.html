@@ -33,23 +33,23 @@
     <div class="special-trade-card">
 
         <p class="user">
-            Intercambio especial
+            Intercambio especial (este intercambio ha sido propuesto por la plataforma)
         </p>
 
         <div class="trade-row">
 
             <div>
-                <p>Ofrece</p>
-                <img class="box" [src]="trade.offeredBoxUrl" alt="ofrecido"/>
-                <p>{{ trade.offeredBoxName }}</p>
+                <p>Tu coleccionable</p>
+                <img class="box" [src]="trade.requestedBoxUrl" alt="buscado" />
+                <p>{{ trade.requestedBoxName }}</p>
             </div>
 
             <div class="arrow">⇄</div>
 
             <div>
-                <p>Busca</p>
-                <img class="box" [src]="trade.requestedBoxUrl" alt="buscado"/>
-                <p>{{ trade.requestedBoxName }}</p>
+                <p>Coleccionable que vas a recibir</p>
+                <img class="box" [src]="trade.offeredBoxUrl" alt="ofrecido" />
+                <p>{{ trade.offeredBoxName }}</p>
             </div>
 
         </div>
@@ -60,11 +60,7 @@
     </button>
 
     @if (showModal) {
-        <app-trade-confirm-modal
-            [message]="modalMessage"
-            (confirm)="onModalConfirm()"
-            (cancel)="onModalCancel()"
-        />
+    <app-trade-confirm-modal [message]="modalMessage" (confirm)="onModalConfirm()" (cancel)="onModalCancel()" />
     }
 
 </div>
