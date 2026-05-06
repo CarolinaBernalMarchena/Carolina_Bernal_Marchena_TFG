@@ -8,15 +8,11 @@
 
         <div class="welcome-card">
             <div class="profilePicture-home">
-                <img 
-                    [src]="'images/' + profilePicture + '.png'" 
-                    class="profilePicture"
-                    alt="profile picture"
-                />
+                <img [src]="'images/' + profilePicture + '.png'" class="profilePicture" alt="profile picture" />
             </div>
             <div class="welcome-text">
-            <h2>{{ username }}</h2>
-            <p>Bienvenid@ de nuevo!</p>
+                <h2>{{ username }}</h2>
+                <p>Bienvenid@ de nuevo!</p>
             </div>
         </div>
 
@@ -26,7 +22,7 @@
 
         <div class="actions">
             <div class="card tienda" (click)="goToShop()">Tienda</div>
-            <div class="card coleccion" (click)="goToCollection()">Mi colección</div>
+            <div class="card coleccion" (click)="goToCollection()">Mis colecciones</div>
             <div class="card perfil" (click)="goToProfile()">Mi perfil</div>
         </div>
 

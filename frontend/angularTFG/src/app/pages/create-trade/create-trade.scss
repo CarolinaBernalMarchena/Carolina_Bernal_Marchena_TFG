@@ -126,7 +126,6 @@ input {
   border-radius: 10px;
   cursor: pointer;
   transition: 0.2s;
-  font: oblique bold 100% cursive;
 }
 
 .trade-button:hover {
@@ -156,42 +155,27 @@ input {
 }
 
 .selects-container select {
-  width: 100%;
-  height: 40px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: none;
-  font-size: 16px;
-  text-align: center;
-  background: #bde5b8;
+  background-color: #fff;
+  border: 2px solid #e4b6d0;
+  border-radius: 14px;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #9b5c7c;
   cursor: pointer;
-  transition: 0.2s;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  font: oblique bold 100% cursive;
-}
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
-.selects-container select:hover {
-  background: #7ecb7e;
-}
+  &:hover {
+    border-color: #c96c9d;
+    transform: translateY(-1px);
+  }
 
-.selects-container select:disabled {
-  background: #b9e1b0;
-  cursor: not-allowed;
-}
-
-.selects-container {
-  position: relative;
-}
-
-.selects-container::after {
-  content: "▼";
-  font-size: 10px;
-  position: absolute;
-  right: 12px;
-  top: 14px;
-  pointer-events: none;
+  &:focus {
+    border-color: #c96c9d;
+    box-shadow: 0 0 0 4px rgba(201, 108, 157, 0.15);
+  }
 }
 
 .box-select {

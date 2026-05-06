@@ -2,37 +2,72 @@
 
     <button class="back-btn" (click)="goHome()">←</button>
 
-    <h2 class="title">Mi colección</h2>
+    <h2 class="title">Mis colecciones</h2>
 
     <div class="badge-counter">
         Tienes {{ boxesCount }} coleccionables
     </div>
 
-    @if (boxes.length === 0) {
-        <div class="empty-state">
-            Aún no tienes coleccionables 🥺
-        </div>
+    <div class="filter-container">
+
+        <select class="collection-selector" (change)="onCollectionChange($event)">
+
+            <option value="all">
+                Todas las colecciones
+            </option>
+
+            @for (collection of collections; track collection) {
+
+            <option [value]="collection">
+                {{ collection }}
+            </option>
+
+            }
+
+        </select>
+
+    </div>
+
+    @if (filteredBoxes.length === 0) {
+
+    <div class="empty-state">
+        No hay coleccionables en esta colección 🥺
+    </div>
+
     }
 
-    @if (uniqueBoxes.length > 0) {
-        <div class="grid">
+    @if (filteredBoxes.length > 0) {
 
-            @for (box of uniqueBoxes; track box.id) {
-                <div 
-                    class="collectible" 
-                    (click)="onCollectibleClick(box)"
-                >
+    <div class="grid">
 
-                    <img [src]="box.imageUrl" [alt]="box.descripcion"/>
+        @for (box of filteredBoxes; track box.id) {
 
-                    @if (box.hasSpecial) {
-                        <div class="special-badge">⭐</div>
-                    }
+        <div class="collectible" [class.locked]="!box.unlocked" (click)="onCollectibleClick(box)">
 
-                </div>
+            <img [src]="box.imageUrl" [alt]="box.type" />
+
+            @if (!box.unlocked) {
+
+            <div class="lock-overlay">
+                🔒
+            </div>
+
+            }
+
+            @if (box.hasSpecial && box.unlocked) {
+
+            <div class="special-badge">
+                ⭐
+            </div>
+
             }
 
         </div>
+
+        }
+
+    </div>
+
     }
 
 </div>

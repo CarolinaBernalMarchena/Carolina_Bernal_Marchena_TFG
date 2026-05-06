@@ -7,28 +7,24 @@
 
     <div class="avatar-section">
         <div class="profilePicture-section">
-            <img 
-                [src]="'images/' + profilePicture + '.png'" 
-                alt="profile picture"
-                class="profilePicture"
-            />
+            <img [src]="'images/' + profilePicture + '.png'" alt="profile picture" class="profilePicture" />
         </div>
         <h2 class="username">{{username}}</h2>
     </div>
 
     <div class="stats-box">
-        @if (datosCargados == false) { 
-            <p>Cargando datos...</p>
+        @if (datosCargados == false) {
+        <p>Cargando datos...</p>
         } @else {
-            <p>{{ boxesCount }} Cajas abiertas</p>
-            <p>{{ specialCount }} figuras especiales</p>
-            <p>{{ tradesCount }} intercambios realizados</p>
+        <p>{{ boxesCount }} Cajas abiertas</p>
+        <p>{{ specialCount }} figuras especiales</p>
+        <p>{{ tradesCount }} intercambios realizados</p>
         }
     </div>
 
     <div class="actions">
         <button class="btn tienda" (click)="goToShop()">Tienda</button>
-        <button class="btn coleccion" (click)="goToCollection()">Mi colección</button>
+        <button class="btn coleccion" (click)="goToCollection()">Mis colecciones</button>
         <button class="btn logros" (click)="goToAchievements()">Logros</button>
     </div>
 

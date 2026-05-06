@@ -59,7 +59,6 @@ input {
   background: #f4f1f4;
   outline: none;
   transition: 0.3s;
-  font: oblique bold 100% cursive;
 }
 
 input:focus {
@@ -82,7 +81,6 @@ button {
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s;
-  font: oblique bold 100% cursive;
 }
 
 button:hover:not(:disabled) {

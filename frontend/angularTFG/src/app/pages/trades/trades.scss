@@ -32,7 +32,6 @@ h1 {
   cursor: pointer;
   transition: 0.3s;
   z-index: 1000;
-  font: oblique bold 100% cursive;
 }
 
 .arrow {
@@ -95,7 +94,6 @@ button:hover {
   -moz-appearance: none;
 
   text-align: center;
-  font: oblique bold 100% cursive;
 }
 
 .filter-group select:hover {
@@ -117,7 +115,6 @@ button:hover {
   font-weight: bold;
   background-color: #ffff91;
   border-color: #ffdeb2;
-  font: oblique bold 100% cursive;
 }
 
 .toggle-pill.active {

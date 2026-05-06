@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Api, BoxOpened } from '../../services/api';
+import { Api } from '../../services/api';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
-import { Location } from '@angular/common';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-collection',
@@ -13,19 +13,24 @@ import { Location } from '@angular/common';
   styleUrl: './collection.scss',
 })
 export class Collection implements OnInit {
-  boxes: BoxOpened[] = [];
-  uniqueBoxes: BoxOpened[] = [];
+  boxes: any[] = [];
+  uniqueBoxes: any[] = [];
+  filteredBoxes: any[] = [];
+
+  collections: string[] = [];
+  selectedCollection: string = 'all';
+
   boxesCount: number = 0;
 
   constructor(
     private api: Api,
     private router: Router,
     private authService: AuthService,
-    private location: Location,
   ) {}
 
   ngOnInit(): void {
     this.loadCollection();
+
     this.api.getProfileStats().subscribe({
       next: (data: any) => {
         this.boxesCount = data.boxesCount;
@@ -39,20 +44,27 @@ export class Collection implements OnInit {
 
   private loadCollection(): void {
     const user = this.authService.getUser();
+
     if (!user) {
       this.router.navigate(['/login']);
       return;
     }
-    this.api.getMyCollection(user.id).subscribe({
-      next: (data: any) => {
-        this.boxes = data.map((item: any) => ({
-          id: item.Box.id,
-          collection: item.Box.collection,
-          type: item.Box.type,
-          hasSpecial: item.Box.hasSpecial,
-          descripcion: item.Box.description,
-          repeated: item.quantity - 1,
-          imageUrl: item.Box.imageUrl,
+
+    forkJoin({
+      all: this.api.getAllBoxes(),
+      mine: this.api.getMyCollection(user.id),
+    }).subscribe({
+      next: ({ all, mine }: any) => {
+        const ownedTypes = new Set(mine.map((item: any) => item.Box.type));
+
+        this.boxes = all.map((box: any) => ({
+          id: box.id,
+          collection: box.collection,
+          type: box.type,
+          hasSpecial: box.hasSpecial,
+          descripcion: box.description,
+          imageUrl: box.imageUrl,
+          unlocked: ownedTypes.has(box.type),
         }));
 
         this.buildUniqueCollection(this.boxes);
@@ -61,14 +73,6 @@ export class Collection implements OnInit {
         console.error('Error cargando colección', err);
       },
     });
-  }
-
-  onCollectibleClick(box: any) {
-    this.router.navigate(['/collection-detail', box.type]);
-  }
-
-  goHome(): void {
-    this.router.navigate(['/home']);
   }
 
   private buildUniqueCollection(boxes: any[]): void {
@@ -81,6 +85,39 @@ export class Collection implements OnInit {
     });
 
     this.uniqueBoxes = Array.from(map.values());
-    console.log('Unique boxes:', this.uniqueBoxes);
+
+    this.collections = [
+      ...new Set(this.uniqueBoxes.map((box) => box.collection)),
+    ];
+
+    this.applyFilter();
+  }
+
+  onCollectionChange(event: Event): void {
+    const target = event.target as HTMLSelectElement;
+    this.selectedCollection = target.value;
+
+    this.applyFilter();
+  }
+
+  private applyFilter(): void {
+    if (this.selectedCollection === 'all') {
+      this.filteredBoxes = this.uniqueBoxes;
+      return;
+    }
+
+    this.filteredBoxes = this.uniqueBoxes.filter(
+      (box) => box.collection === this.selectedCollection,
+    );
+  }
+
+  onCollectibleClick(box: any): void {
+    if (!box.unlocked) return;
+
+    this.router.navigate(['/collection-detail', box.type]);
+  }
+
+  goHome(): void {
+    this.router.navigate(['/home']);
   }
 }
