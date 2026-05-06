@@ -1,5 +1,6 @@
 <div>
 
+    @if (trade.ownerId !== currentUser?.id) {
     <div class="trade-card">
 
         <p class="user">
@@ -25,11 +26,37 @@
         </div>
     </div>
 
-    @if (trade.ownerId !== currentUser?.id) {
     <button (click)="openAcceptModal()" class="btn ok">
         Aceptar intercambio
     </button>
+
     } @else {
+
+    <div class="trade-card">
+
+        <p class="user">
+            Éste intercambio lo has propuesto tú <strong>{{ trade.ownerName }}</strong>
+        </p>
+
+        <div class="trade-row">
+
+            <div>
+                <p>Coleccionable que estás ofreciendo</p>
+                <img class="box" [src]="trade.offeredBoxUrl" alt="ofrecido" />
+                <p>{{ trade.offeredBoxName }}</p>
+            </div>
+
+            <div class="arrow">⇄</div>
+
+            <div>
+                <p>Coleccionable que estás buscando</p>
+                <img class="box" [src]="trade.requestedBoxUrl" alt="buscado" />
+                <p>{{ trade.requestedBoxName }}</p>
+            </div>
+
+        </div>
+
+    </div>
     <button (click)="openDeleteModal()" class="btn delete">
         Eliminar intercambio
     </button>
