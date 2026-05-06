@@ -7,16 +7,34 @@
   font-size: 150%;
 }
 
-.top-bar {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 20px;
+.back-btn {
+  position: fixed;
+  top: 110px;
+  left: 25px;
+  width: 52px;
+  height: 52px;
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: #c96c9d;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  z-index: 20;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    background: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
 }
 
-.back-btn,
 .settings-btn {
   background: none;
   border: none;
@@ -79,19 +97,16 @@
 .tienda {
   background-color: #f8b6c1;
   border-color: #e77a94;
-  font: oblique bold 80% cursive;
 }
 
 .coleccion {
   background-color: #c3c8f7;
   border-color: #8f9df5;
-  font: oblique bold 80% cursive;
 }
 
 .logros {
   background-color: #bde5b8;
   border-color: #7ecb7e;
-  font: oblique bold 80% cursive;
 }
 
 button {

@@ -53,6 +53,15 @@ export interface TokenCoin {
   tokens: number;
 }
 
+export interface TokenHistory {
+  id: number;
+  userId: number;
+  amount: number;
+  type: 'gain' | 'spent';
+  reason: string;
+  date: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -206,6 +215,14 @@ export class Api {
 
   getTokens(): Observable<TokenCoin> {
     return this.http.get<TokenCoin>(`${this.apiUrl}/token`, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
+  }
+
+  getTokenHistory(): Observable<TokenHistory[]> {
+    return this.http.get<TokenHistory[]>(`${this.apiUrl}/token-history`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },

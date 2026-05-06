@@ -7,14 +7,31 @@
 }
 
 .back-btn {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  background: none;
+  position: fixed;
+  top: 110px;
+  left: 25px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: none;
-  font-size: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
   color: #c96c9d;
+  font-size: 28px;
+  font-weight: bold;
   cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(6px);
+  z-index: 20;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    background: white;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
 }
 
 .title {

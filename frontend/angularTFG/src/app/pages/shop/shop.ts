@@ -21,8 +21,9 @@ export class Shop implements OnInit, OnDestroy {
   modalMessage = '';
   modalImage = '';
   tokens: number = 0;
-  tokenChange: number | null = null;
   boxes: any[] = [];
+  showHistory = false;
+  tokenHistory: any[] = [];
 
   constructor(
     private api: Api,
@@ -31,12 +32,10 @@ export class Shop implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadTokens();
     const now = this.getSpainTime();
-
     this.loadShopBoxes();
-
     this.startCountdown();
+    this.refreshTokensData();
   }
 
   ngOnDestroy(): void {
@@ -61,7 +60,7 @@ export class Shop implements OnInit, OnDestroy {
         this.modalImage = res.box.imageUrl;
         this.modalMessage = `Has abierto la caja de ${res.box.type}`;
         this.showModal = true;
-        this.loadTokens();
+        this.refreshTokensData();
 
         this.api.getAchievements().subscribe((achRes: any) => {
           if (achRes.newAchievements.length) {
@@ -69,6 +68,7 @@ export class Shop implements OnInit, OnDestroy {
               this.achievementNotification.showAchievements(id);
             }
           }
+          this.loadTokenHistory();
         });
       },
     });
@@ -143,5 +143,22 @@ export class Shop implements OnInit, OnDestroy {
         console.error(err);
       },
     });
+  }
+
+  loadTokenHistory(): void {
+    this.api.getTokenHistory().subscribe({
+      next: (res) => {
+        this.tokenHistory = res;
+      },
+      error: (err) => {
+        console.error('Error cargando historial de tokens', err);
+        this.tokenHistory = [];
+      },
+    });
+  }
+
+  private refreshTokensData(): void {
+    this.loadTokens();
+    this.loadTokenHistory();
   }
 }

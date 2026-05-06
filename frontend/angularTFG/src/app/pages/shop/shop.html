@@ -4,48 +4,104 @@
 
   <button class="back-btn" (click)="goBack()">←</button>
 
-  <h1 class="title">Tienda</h1>
+  <div class="shop-layout">
 
-  <div class="tokens" [class.disabled]="tokens <= 0">
-    🪙 {{ tokens }}
-  </div>
+    <div class="shop-sidebar">
 
-  <div class="timer-box">
-    <p>Próximo cambio en:</p>
-    <h2>{{ countdown }}</h2>
-  </div>
+      <h1 class="title">Tienda</h1>
 
-  <div class="mascot">
-    <app-chatbot-avatar></app-chatbot-avatar>
-  </div>
+      <div class="tokens" [class.disabled]="tokens <= 0" (mouseenter)="showHistory = true"
+        (mouseleave)="showHistory = false">
 
-  <div class="separator"></div>
-  <div class="boxes-container">
+        <span class="tokens-label">
+          Tu saldo actual es de
+        </span>
 
-    <div 
-      class="box" 
-      *ngFor="let box of boxes" 
-      (click)="openBox(box)"
-      [class.disabled]="tokens <= 0"
-    >
+        <strong class="tokens-value">
+          {{ tokens }} monedas 🪙
+        </strong>
 
-      <div 
-        class="box-image"
-        [ngStyle]="{ 'background-image': 'url(' + box.collectionUrl + ')' }"
-      ></div>
+        @if (tokens <= 0) { <span class="tokens-warning">
+          Sin saldo
+          </span>
+          }
 
-      <p>{{ box.collection }}</p>
+          <!-- 🪙 HISTORIAL -->
+          @if (showHistory) {
+          <div class="tokens-history">
+
+            <div class="history-title">
+              Historial de monedas
+            </div>
+
+            @for (h of tokenHistory; track h.id) {
+
+            <div class="history-item">
+
+              <span [class.positive]="h.type === 'gain'" [class.negative]="h.type === 'spent'">
+                {{ h.type === 'gain' ? '+' : '-' }}{{ h.amount }} 🪙
+              </span>
+
+              <small class="reason">
+                {{ h.reason }}
+              </small>
+
+              <small class="date">
+                {{ h.date | date:'short' }}
+              </small>
+
+            </div>
+
+            }
+
+            @if (tokenHistory.length === 0) {
+            <div class="empty-history">
+              No hay movimientos todavía
+            </div>
+            }
+
+          </div>
+          }
+      </div>
+
+      <div class="timer-box">
+        <p>Las cajas disponibles cambiarán en:</p>
+        <h2>{{ countdown }}</h2>
+      </div>
+
+      <div class="mascot">
+        <app-chatbot-avatar></app-chatbot-avatar>
+      </div>
+
+    </div>
+
+    <div class="shop-content">
+
+      <div class="boxes-container">
+
+        <div class="box" *ngFor="let box of boxes" (click)="openBox(box)" [class.disabled]="tokens <= 0">
+
+          <div class="box-image" [ngStyle]="{
+              'background-image': 'url(' + box.collectionUrl + ')'
+            }">
+
+            <div class="box-cost">
+              Esta caja cuesta 1 moneda 🪙
+            </div>
+          </div>
+
+          <p>{{ box.collection }}</p>
+
+        </div>
+
+      </div>
 
     </div>
 
   </div>
 
   @if (showModal) {
-    <app-modal
-      [message]="modalMessage"
-      [imageUrl]="modalImage"
-      (closed)="showModal = false"
-    />
+  <app-modal [message]="modalMessage" [imageUrl]="modalImage" (closed)="showModal = false" />
   }
 
 </div>

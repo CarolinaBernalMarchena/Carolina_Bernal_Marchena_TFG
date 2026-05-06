@@ -251,6 +251,30 @@ const Token = sequelize.define(
   },
 );
 
+//Modelo historial de tokens
+const TokenHistory = sequelize.define("TokenHistory", {
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  amount: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  type: {
+    type: DataTypes.ENUM("gain", "spent"),
+    allowNull: false,
+  },
+  reason: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  date: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
+  },
+});
+
 //Relaciones
 User.belongsToMany(Box, { through: UserBox });
 Box.belongsToMany(User, { through: UserBox });
@@ -611,6 +635,14 @@ app.post(
       // Consumir 1 token
       tokenData.numTokens -= 1;
       await tokenData.save();
+
+      //historial de tokens
+      await TokenHistory.create({
+        userId,
+        amount: 1,
+        type: "spent",
+        reason: `Compra de caja de ${collection}`,
+      });
 
       //Obtenemos todas las cajas de esa colección
       const boxes = await Box.findAll({
@@ -1020,6 +1052,13 @@ app.get("/achievements", authenticateToken, async (req, res) => {
 
     //Añadimos 1 token al usuario por cada nuevo logro desbloqueado
     if (newAchievements.length > 0) {
+      await TokenHistory.create({
+        userId,
+        amount: newAchievements.length,
+        type: "gain",
+        reason: "Logro desbloqueado",
+      });
+
       let tokenData = await Token.findOne({ where: { userId } });
 
       if (!tokenData) return; //Añadimos esto por si ocurriera el caso de que el usuario no tiene tabla de tokens (no debería de pasar nunca pero por si acaso)
@@ -1077,14 +1116,36 @@ app.get("/token", authenticateToken, async (req, res) => {
     if (lastDateStr !== todayStr) {
       tokenData.numTokens += 1;
       tokenData.lastTokenDate = new Date();
-
       await tokenData.save();
+      await TokenHistory.create({
+        userId,
+        amount: 1,
+        type: "gain",
+        reason: "Recompensa diaria",
+      });
     }
 
     res.json({ tokens: tokenData.numTokens });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error al obtener tokens" });
+  }
+});
+
+//Endpoint historial de tokens
+app.get("/token-history", authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const history = await TokenHistory.findAll({
+      where: { userId },
+      order: [["date", "DESC"]],
+      limit: 50,
+    });
+
+    res.json(history);
+  } catch (error) {
+    res.status(500).json({ message: "Error obteniendo historial" });
   }
 });
 
