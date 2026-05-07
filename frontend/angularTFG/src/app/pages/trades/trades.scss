@@ -1,6 +1,6 @@
 .market-wrapper {
   min-height: 100vh;
-  background: #e6d6e6;
+  background: var(--bg-primary);
   padding: 40px;
   text-align: center;
 }
@@ -16,25 +16,25 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #c96c9d;
+  background: var(--card-bg-strong);
+  color: var(--danger);
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
   z-index: 20;
   transition: all 0.2s ease;
 
   &:hover {
     transform: scale(1.08);
-    background: white;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    background: var(--card-bg-strong);
+    box-shadow: var(--shadow);
   }
 }
 
 h1 {
-  color: #7c5a9e;
+  color: var(--text-primary);
   font-size: 32px;
   margin-bottom: 30px;
 }
@@ -49,17 +49,19 @@ h1 {
   cursor: pointer;
   transition: 0.3s;
   z-index: 1000;
+  background: var(--card-bg-strong);
+  color: var(--text-primary);
 }
 
 .arrow {
   font-size: 28px;
-  color: #7c5a9e;
+  color: var(--text-primary);
 }
 
 button {
   margin-top: 15px;
   padding: 10px 20px;
-  background: #9fd48f;
+  background: var(--accent-green);
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -68,7 +70,7 @@ button {
 }
 
 button:hover {
-  background: #8bc97a;
+  background: var(--accent-pink);
 }
 
 .filters-form {
@@ -82,62 +84,59 @@ button:hover {
   margin: 20px auto;
 }
 
-.filter-group { 
-  display: grid; 
-  grid-template-rows: auto auto; 
-  justify-items: center; 
-  align-items: start; 
+.filter-group {
+  display: grid;
+  grid-template-rows: auto auto;
+  justify-items: center;
+  align-items: start;
 }
 
 .filter-label {
   font-size: 150%;
-}
-
-.select-group {
-  row-gap: 25%;
+  color: var(--text-primary);
 }
 
 .filter-group select {
-  padding: 8px 14px;
-  border: 1px solid #ffdeb2;
-  border-radius: 999px;
-  background-color: #ffff91;
-  font-weight: bold;
+  background-color: var(--card-bg-strong);
+  border: 2px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: 0.2s;
-
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-
-  text-align: center;
-}
-
-.filter-group select:hover {
-  background-color: #fff176;
-}
-
-.filter-group select:focus {
   outline: none;
-  border-color: #222;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
+
+  &:hover {
+    border-color: var(--danger);
+  }
+
+  &:focus {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 4px rgba(201, 108, 157, 0.15);
+  }
 }
 
 .toggle-pill {
-  padding: 8px 14px;
-  border: 1px solid #ccc;
-  border-radius: 999px;
-  background: white;
+  background-color: var(--card-bg-strong);
+  border: 2px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 8px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
   cursor: pointer;
-  transition: 0.2s;
-  font-weight: bold;
-  background-color: #ffff91;
-  border-color: #ffdeb2;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow);
 }
 
 .toggle-pill.active {
-  background: #222;
+  background: var(--text-primary);
   color: white;
-  border-color: #222;
+  border-color: var(--text-primary);
 }
 
 select {

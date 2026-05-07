@@ -1,8 +1,9 @@
 .collection-container {
-  background-color: #f3e6f2;
+  background: var(--bg-primary);
   min-height: 100vh;
   padding: 24px;
   text-align: center;
+  color: var(--text-primary);
 }
 
 .back-btn {
@@ -16,19 +17,19 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #c96c9d;
+  background: var(--surface-solid);
+  color: var(--danger);
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
   z-index: 20;
   transition: all 0.2s ease;
 
   &:hover {
     transform: scale(1.08);
-    background: white;
+    background: var(--surface-solid);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
 }
@@ -37,11 +38,12 @@
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 16px;
+  color: var(--text-primary);
 }
 
 .badge-counter {
   font-size: 150%;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 10px;
 }
 
@@ -52,25 +54,25 @@
 }
 
 .collection-selector {
-  background-color: #fff;
-  border: 2px solid #e4b6d0;
+  background: var(--surface-solid);
+  border: 2px solid var(--border-soft);
   border-radius: 14px;
   padding: 12px 18px;
   font-size: 15px;
   font-weight: 500;
-  color: #9b5c7c;
+  color: var(--text-primary);
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    border-color: #c96c9d;
+    border-color: var(--danger);
     transform: translateY(-1px);
   }
 
   &:focus {
-    border-color: #c96c9d;
+    border-color: var(--danger);
     box-shadow: 0 0 0 4px rgba(201, 108, 157, 0.15);
   }
 }
@@ -85,7 +87,7 @@
 
 .collectible {
   aspect-ratio: 1 / 1;
-  background: #b8dba5;
+  background: var(--accent-green);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -97,7 +99,7 @@
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow);
   }
 
   img {
@@ -131,7 +133,7 @@
   position: absolute;
   top: 6px;
   right: 6px;
-  background-color: gold;
+  background: gold;
   padding: 4px 6px;
   border-radius: 8px;
   font-size: 12px;
@@ -142,20 +144,16 @@
 .empty-state {
   margin-top: 40px;
   font-size: 16px;
-  color: #777;
+  color: var(--text-muted);
 }
 
 button {
   margin-top: 15px;
   padding: 10px 20px;
-  background: #9fd48f;
+  background: var(--accent-green);
   border: none;
   border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
   transition: 0.2s;
-}
-
-button:hover {
-  background: #8bc97a;
 }

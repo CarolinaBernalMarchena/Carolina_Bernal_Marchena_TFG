@@ -1,8 +1,9 @@
 .detail-container {
-  background-color: #f3e6f2;
+  background: var(--bg-primary);
   min-height: 100vh;
   padding: 20px;
   text-align: center;
+  color: var(--text-primary);
 }
 
 .back-btn {
@@ -16,19 +17,19 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #c96c9d;
+  background: var(--surface-solid);
+  color: var(--danger);
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
   z-index: 20;
   transition: all 0.2s ease;
 
   &:hover {
     transform: scale(1.08);
-    background: white;
+    background: var(--surface-solid);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
 }
@@ -36,14 +37,15 @@
 .title {
   margin-top: 40px;
   font-size: 22px;
+  color: var(--text-primary);
 }
 
 .badge {
   display: inline-block;
   margin: 16px 0;
   padding: 8px 16px;
-  background-color: #fff4cc;
-  border: 1px solid #f5d37a;
+  background-color: var(--accent-yellow);
+  border: 1px solid var(--border-soft);
   border-radius: 8px;
 }
 
@@ -53,7 +55,7 @@
   margin: 20px auto;
   border-radius: 12px;
   overflow: hidden;
-  background-color: #ddd;
+  background-color: var(--card-bg-strong);
 }
 
 .image-container img {
@@ -65,24 +67,10 @@
 .info-box {
   margin: 30px auto;
   max-width: 400px;
-  background: #eaeaea;
+  background: var(--surface);
   padding: 20px;
   border-radius: 8px;
   text-align: left;
   font-size: 150%;
-}
-
-button {
-  margin-top: 15px;
-  padding: 10px 20px;
-  background: #9fd48f;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-button:hover {
-  background: #8bc97a;
+  color: var(--text-secondary);
 }

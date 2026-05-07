@@ -3,40 +3,75 @@
   <button class="back-btn" (click)="goBack()">←</button>
 
   <div class="profile-section">
+
     <div class="profilePicture-section">
-      <img 
-        [src]="'images/' + profilePicture + '.png'" 
-        class="profilePicture"
-        alt="profile picture"
-      />
+      <img [src]="'images/' + profilePicture + '.png'" class="profilePicture" alt="profile picture" />
     </div>
-    <h3>{{ username }}</h3>
+
+    <h2>{{ username }}</h2>
+
   </div>
 
-  <p class="subtitle" style="font-size: 150%;">
-    Tienes un total de {{ totalUnlocked }} logros, ¡sigue así!
+  <p class="subtitle">
+    Tienes un total de {{ totalUnlocked }} logros desbloqueados
   </p>
 
-  <div class="grid">
-    
+  <div class="achievements-list">
+
     @for (achievement of achievements; track achievement.id) {
-      <div class="achievement" [class.locked]="!achievement.unlocked">
+
+    <div class="achievement-card" [class.locked]="!achievement.unlocked">
+
+      <div class="achievement-image-container">
+
         @if (achievement.image) {
-          <img 
-            [src]="achievement.image" 
-            alt="achievement"
-            class="achievement-img"
-          />
+        <img [src]="achievement.image" alt="achievement" class="achievement-img" />
         }
+
         @if (!achievement.unlocked) {
-          <div class="lock-overlay">🔒</div>
+        <div class="lock-overlay">
+          🔒
+        </div>
         }
 
       </div>
+
+      <div class="achievement-info">
+
+        <h3>
+          {{ achievement.name }}
+        </h3>
+
+        <p>
+          {{ achievement.description }}
+        </p>
+
+        @if (achievement.reward) {
+        <div class="achievement-reward">
+          🎁 {{ achievement.reward }}
+        </div>
+        }
+
+        <span class="achievement-status" [class.unlocked]="achievement.unlocked">
+          {{
+          achievement.unlocked
+          ? 'Desbloqueado'
+          : 'Bloqueado'
+          }}
+        </span>
+
+      </div>
+
+    </div>
+
     }
 
   </div>
 
-</div>
+  <footer>
+    <a href="https://lordicon.com/" style="color: darkslateblue;">
+      Achievement icons by Lordicon.com
+    </a>
+  </footer>
 
-<footer><a href="https://lordicon.com/" style="color: darkslateblue;">Achievement icons by Lordicon.com</a></footer>
+</div>

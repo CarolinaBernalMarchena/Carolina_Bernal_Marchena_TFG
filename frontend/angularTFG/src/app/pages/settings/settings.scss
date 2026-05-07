@@ -1,6 +1,6 @@
 .settings-container {
   min-height: 100vh;
-  background-color: #f3e6f2;
+  background: var(--bg-primary);
   padding: 30px 20px;
   text-align: center;
   position: relative;
@@ -17,12 +17,12 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #c96c9d;
+  background: var(--card-bg-strong);
+  color: var(--danger);
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
   z-index: 20;
   transition: all 0.2s ease;
@@ -36,7 +36,7 @@
 
 .title {
   margin-top: 20px;
-  color: #8e6ba8;
+  color: var(--text-primary);
 }
 
 .input {
@@ -44,7 +44,7 @@
   max-width: 300px;
   padding: 12px;
   margin: 10px auto;
-  border: 2px solid #8e6ba8;
+  border: 2px solid var(--text-primary);
   border-radius: 8px;
   display: block;
 }
@@ -70,7 +70,7 @@
 }
 
 input:checked + .slider {
-  background-color: #8e6ba8;
+  background-color: var(--text-primary);
 }
 
 input:checked + .slider:before {
@@ -78,7 +78,7 @@ input:checked + .slider:before {
 }
 
 .save-btn {
-  background-color: #f28b82;
+  background-color: var(--danger);
   border: none;
   padding: 12px 25px;
   border-radius: 8px;
@@ -90,7 +90,7 @@ input:checked + .slider:before {
 button {
   margin-top: 15px;
   padding: 10px 20px;
-  background: #9fd48f;
+  background: var(--accent-green);
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -121,10 +121,13 @@ button:hover {
 }
 
 .modal {
-  background: white;
+  background: var(--surface);
+  border: 2px solid var(--border-soft);
+  border-radius: 16px;
   padding: 20px;
-  border-radius: 10px;
   width: 300px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
 }
 
 .avatar-grid {

@@ -1,33 +1,36 @@
 <div class="profile-container">
 
-    <div>
-        <button class="back-btn" (click)="goBackHome()">←</button>
-    </div>
-    <div>
-        <button class="settings-btn" (click)="goToSettings()">Ajustes ⚙</button>
-    </div>
+    <button class="back-btn" (click)="goBackHome()">←</button>
+    <button class="settings-btn" (click)="goToSettings()">Ajustes ⚙</button>
 
-    <div class="avatar-section">
-        <div class="profilePicture-section">
-            <img [src]="'images/' + profilePicture + '.png'" alt="profile picture" class="profilePicture" />
+    <div class="profile-content">
+
+        <div class="avatar-section">
+            <div class="profilePicture-section">
+                <img [src]="'images/' + profilePicture + '.png'" class="profilePicture" />
+            </div>
+
+            <h2 class="username">{{username}}</h2>
         </div>
-        <h2 class="username">{{username}}</h2>
-    </div>
 
-    <div class="stats-box">
-        @if (datosCargados == false) {
-        <p>Cargando datos...</p>
-        } @else {
-        <p>{{ boxesCount }} Cajas abiertas</p>
-        <p>{{ specialCount }} figuras especiales</p>
-        <p>{{ tradesCount }} intercambios realizados</p>
-        }
-    </div>
+        <div class="stats-box">
 
-    <div class="actions">
-        <button class="btn tienda" (click)="goToShop()">Tienda</button>
-        <button class="btn coleccion" (click)="goToCollection()">Mis colecciones</button>
-        <button class="btn logros" (click)="goToAchievements()">Logros</button>
+            @if (datosCargados == false) {
+            <p>Cargando datos...</p>
+            } @else {
+            <div class="stat">{{ boxesCount }} cajas abiertas</div>
+            <div class="stat">{{ specialCount }} especiales</div>
+            <div class="stat">{{ tradesCount }} intercambios</div>
+            }
+
+        </div>
+
+        <div class="actions">
+            <button class="btn tienda" (click)="goToShop()">Tienda</button>
+            <button class="btn coleccion" (click)="goToCollection()">Mis colecciones</button>
+            <button class="btn logros" (click)="goToAchievements()">Mis logros</button>
+        </div>
+
     </div>
 
 </div>

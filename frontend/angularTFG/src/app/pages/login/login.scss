@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: #e8dfe6;
+  background: var(--bg-primary);
   padding: 20px;
 
   .logo {
@@ -17,10 +17,9 @@
     .logo-box {
       width: 80px;
       height: 80px;
-      background: #f4b6b6;
+      background: var(--accent-pink);
       border-radius: 10px;
       overflow: hidden;
-
 
       img {
         width: 100%;
@@ -30,7 +29,7 @@
     }
 
     h1 {
-      color: #7c5a8e;
+      color: var(--text-primary);
       font-weight: 700;
       font-size: 2rem;
     }
@@ -44,8 +43,8 @@
     max-width: 100%;
     padding: 40px 30px;
     border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    background: var(--card-bg-strong);
+    box-shadow: var(--shadow);
 
     .input-group {
       display: flex;
@@ -54,7 +53,7 @@
       input {
         padding: 15px 12px;
         border-radius: 10px;
-        border: 2px solid #7c5a8e;
+        border: 2px solid var(--text-primary);
         background: #f4f1f4;
         outline: none;
         font-size: 1rem;
@@ -71,7 +70,7 @@
       padding: 15px;
       border-radius: 10px;
       border: none;
-      background: #f49b9b;
+      background: var(--accent-pink);
       color: black;
       font-weight: 600;
       font-size: 1rem;
@@ -89,7 +88,7 @@
     display: block;
     margin-top: 25px;
     font-size: 150%;
-    color: #7c5a8e;
+    color: var(--text-primary);
     text-decoration: underline;
     cursor: pointer;
   }

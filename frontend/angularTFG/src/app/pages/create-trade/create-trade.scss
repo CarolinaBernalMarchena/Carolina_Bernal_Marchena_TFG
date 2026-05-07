@@ -1,6 +1,6 @@
 .trade-wrapper {
   min-height: 100vh;
-  background: #e6d6e6;
+  background: var(--bg-primary);
   padding: 40px;
   text-align: center;
   position: relative;
@@ -17,12 +17,12 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-  color: #c96c9d;
+  background: var(--card-bg-strong);
+  color: var(--danger);
   font-size: 28px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
   z-index: 20;
   transition: all 0.2s ease;
@@ -35,10 +35,9 @@
 }
 
 h1 {
-  color: #7c5a9e;
+  color: var(--text-primary);
   margin-bottom: 30px;
 }
-
 
 .columns {
   display: flex;
@@ -51,10 +50,10 @@ h1 {
 .column {
   flex: 1;
   max-width: 450px;
-  background: #d9c4dd;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 25px;
-  border: 2px solid #c4a8cb;
+  border: 2px solid var(--border-soft);
 }
 
 .grid {
@@ -85,6 +84,7 @@ h1 {
 .card p {
   font-size: 12px;
   padding: 4px;
+  color: var(--text-secondary);
 }
 
 .card:hover:not(.selected) {
@@ -98,7 +98,7 @@ h1 {
 .card.selected {
   border-color: #6ecb63;
   transform: scale(1.05);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  box-shadow: var(--shadow);
 }
 
 .card.selected::after {
@@ -106,21 +106,16 @@ h1 {
   position: absolute;
   top: 6px;
   right: 6px;
-
   width: 22px;
   height: 22px;
-
   background: #6ecb63;
   color: white;
   font-size: 14px;
   font-weight: bold;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 50%;
-
   pointer-events: none;
 }
 
@@ -128,7 +123,7 @@ input {
   margin-top: 10px;
   padding: 10px;
   border-radius: 8px;
-  border: 2px solid #c4a8cb;
+  border: 2px solid var(--border-soft);
   font-size: 16px;
   width: 120px;
   text-align: center;
@@ -138,7 +133,7 @@ input {
   margin-top: 35px;
   padding: 12px 28px;
   font-size: 16px;
-  background: #9fd48f;
+  background: var(--accent-green);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -157,11 +152,13 @@ input {
 .empty {
   font-size: 14px;
   margin-bottom: 10px;
+  color: var(--text-secondary);
 }
 
 .hint {
   font-size: 13px;
   margin-bottom: 10px;
+  color: var(--text-secondary);
 }
 
 .selects-container {
@@ -210,6 +207,7 @@ input {
   }
 }
 
-.preview{
+.preview {
   font-size: 150%;
+  color: var(--text-primary);
 }

@@ -2,7 +2,46 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: oblique bold;
+  font-family: 'Poppins', sans-serif;
+}
+
+:root {
+  /* BACKGROUND */
+  --bg-primary: #e6d6e6;
+
+  /* CARDS / SURFACES */
+  --surface: rgba(255, 255, 255, 0.45);
+  --surface-strong: rgba(255, 255, 255, 0.65);
+  --surface-solid: #ffffff;
+  --surface-warm: rgba(255, 255, 255, 0.35);
+
+  /* TEXT */
+  --text-primary: #7c5a9e;
+  --text-secondary: #6d547f;
+  --text-muted: #555;
+
+  /* ACCENTS */
+  --accent-pink: #f4b3c2;
+  --accent-blue: #b8c4e8;
+  --accent-green: #bfe3b4;
+  --accent-yellow: #e7d59b;
+
+  /* BORDERS */
+  --border-soft: #d8bfd8;
+  --border-green: #b8dba5;
+  --border-blue: #89b4e4;
+  --border-warn: #f1c27d;
+
+  /* STATES */
+  --danger: #c96c9d;
+
+  /* SHADOW */
+  --shadow: 0 10px 20px rgba(0,0,0,0.12);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
 }
 
 @font-face {

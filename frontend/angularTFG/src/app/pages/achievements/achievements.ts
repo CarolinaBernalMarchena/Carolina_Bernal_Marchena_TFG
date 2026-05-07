@@ -8,6 +8,8 @@ import { ALL_ACHIEVEMENTS } from '../../constants/archievements_object';
 interface AchievementView {
   id: number;
   name?: string;
+  description?: string;
+  reward?: string;
   unlocked: boolean;
   image?: string;
 }
@@ -48,9 +50,11 @@ export class Achievements implements OnInit {
       next: (res: any) => {
         const unlockedIds: number[] = res.unlockedIds || [];
 
-        this.achievements = ALL_ACHIEVEMENTS.map((a) => ({
+        this.achievements = ALL_ACHIEVEMENTS.map((a: any) => ({
           id: a.id,
           name: a.name,
+          description: a.description,
+          reward: a.reward,
           image: a.image,
           unlocked: unlockedIds.includes(a.id),
         }));
