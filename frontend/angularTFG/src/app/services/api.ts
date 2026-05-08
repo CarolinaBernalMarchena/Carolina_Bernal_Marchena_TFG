@@ -62,6 +62,15 @@ export interface TokenHistory {
   date: string;
 }
 
+export interface ActivityItem {
+  type: 'token' | 'trade' | 'achievement' | 'box';
+  title: string;
+  description: string;
+  date: string;
+  icon?: string;
+  positive?: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -84,8 +93,8 @@ export class Api {
   // TRADES
   // =========================
 
-  getTrades() {
-    return this.http.get(`${this.apiUrl}/trades`, {
+  getTrades(): Observable<Trade[]> {
+    return this.http.get<Trade[]>(`${this.apiUrl}/trades`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },
@@ -171,6 +180,14 @@ export class Api {
 
   updateUser(data: any): Observable<any> {
     return this.http.put(`${this.apiUrl}/user`, data, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
+  }
+
+  getUserHistory(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/user-history`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },

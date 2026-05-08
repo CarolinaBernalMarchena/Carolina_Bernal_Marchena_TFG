@@ -17,7 +17,7 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: var(--card-bg-strong);
+  background: var(--surface-solid);
   color: var(--danger);
   font-size: 28px;
   font-weight: bold;
@@ -29,7 +29,7 @@
 
   &:hover {
     transform: scale(1.08);
-    background: white;
+    background: var(--surface-solid);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
 }

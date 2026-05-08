@@ -39,6 +39,22 @@ html, body {
   --shadow: 0 10px 20px rgba(0,0,0,0.12);
 }
 
+.dark-theme {
+  --bg-primary: #1f1b24;
+  --card-bg: rgba(40, 40, 50, 0.6);
+
+  --text-primary: #e9d8ff;
+  --text-secondary: #cbb6e6;
+
+  --border-soft: #3a3244;
+
+  --accent-pink: #c95175;
+  --accent-blue: #6488cf;
+  --accent-green: #44bb73;
+
+  --shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
 body {
   background: var(--bg-primary);
   color: var(--text-primary);

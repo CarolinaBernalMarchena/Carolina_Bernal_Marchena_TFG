@@ -1,0 +1,74 @@
+<div class="stats-container">
+    <button class="back-btn" (click)="goBack()">←</button>
+    <h1>Actividad del usuario</h1>
+
+    @if (loading) {
+    <div>Cargando...</div>
+    }
+
+    @if (!loading && groupedActivities.length === 0) {
+    <div>No hay actividad todavía.</div>
+    }
+
+    <div class="timeline">
+
+        <div class="filters">
+
+            <input type="text" placeholder="Buscar actividad..." (input)="onSearchChange($event.target.value)" />
+
+            <div class="filter-buttons">
+                <button (click)="toggleFilter('gain')">💰 Ganados</button>
+                <button (click)="toggleFilter('spent')">💸 Gastados</button>
+                <button (click)="toggleFilter('trade')">🔁 Intercambios</button>
+                <button (click)="toggleFilter('achievement')">🏆 Logros</button>
+            </div>
+
+        </div>
+
+        @for (group of groupedActivities; track group.date) {
+
+        <div class="day-group">
+
+            <div class="date-header">
+                {{ group.date }}
+            </div>
+
+            <div class="day-items">
+
+                @for (e of group.items; track $index) {
+
+                <div class="activity-item">
+
+                    <div class="icon">
+                        {{ getIcon(e.type) }}
+                    </div>
+
+                    <div class="content">
+                        <div class="title">{{ e.title }}</div>
+
+                        <div class="subtitle" *ngIf="e.title">
+                            {{ e.title }}
+                        </div>
+
+                        <div class="meta" *ngIf="e.amount">
+                            <span [class.gain]="e.type === 'gain'" [class.spent]="e.type === 'spent'">
+                                {{ e.type === 'gain' ? '+' : '-' }}{{ e.amount }} moneda
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="time">
+                        {{ e.date | date:'shortTime' }}
+                    </div>
+
+                </div><br><br>
+
+                }
+
+            </div>
+        </div>
+
+        }
+
+    </div>
+</div>

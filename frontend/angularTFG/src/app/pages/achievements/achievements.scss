@@ -50,10 +50,28 @@
   box-shadow: var(--shadow);
 }
 
+.lock-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 5em;
+  color: white;
+  z-index: 2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+}
+
 .achievement-card.locked {
   border-color: #9aa0a6;
   opacity: 0.8;
   filter: grayscale(0.35);
+}
+
+.achievement-card.locked .achievement-img {
+  filter: brightness(0.6);
 }
 
 .achievement-info h3 {
@@ -71,4 +89,11 @@
 .achievement-status.unlocked {
   background: var(--accent-green);
   color: #355b2d;
+}
+
+.achievement-image-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

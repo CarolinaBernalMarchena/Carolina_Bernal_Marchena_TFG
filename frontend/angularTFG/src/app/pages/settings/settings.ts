@@ -20,6 +20,7 @@ export class Settings {
   selectedProfilePicture: string = '';
   tempProfilePicture: string = '';
   showAvatarModal: boolean = false;
+  isDrakTheme: boolean = false;
   profilePictures: string[] = [
     'profile1',
     'profile2',
@@ -105,5 +106,10 @@ export class Settings {
 
   goBackToProfile() {
     this.router.navigate(['/profile']);
+  }
+
+  toggleTheme(): void {
+    this.isDrakTheme = !this.isDrakTheme;
+    document.documentElement.classList.toggle('dark-theme', this.isDrakTheme);
   }
 }

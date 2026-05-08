@@ -12,18 +12,25 @@
 }
 
 .logout {
-  position: fixed;
-  top: 20px;
+  position: absolute;
+  top: 24px;
   right: 20px;
-  border: none;
+  background: var(--card-bg);
+  border: 2px solid var(--border-soft);
   border-radius: 999px;
-  padding: 8px 14px;
-  background: var(--card-bg-strong);
-  color: var(--danger);
-  font-size: 13px;
+  padding: 10px 16px;
+  font-size: 14px;
   font-weight: 600;
+  color: var(--text-primary);
   cursor: pointer;
+  backdrop-filter: blur(6px);
   box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+
+.logout:hover {
+  transform: translateY(-2px);
+  background: var(--card-bg-strong);
 }
 
 .title {
@@ -37,12 +44,10 @@
   background: var(--surface);
   border: 2px solid var(--border-soft);
   border-radius: 22px;
-
   padding: 18px 22px;
   display: flex;
   align-items: center;
   gap: 18px;
-
   margin-bottom: 25px;
   backdrop-filter: blur(6px);
 }

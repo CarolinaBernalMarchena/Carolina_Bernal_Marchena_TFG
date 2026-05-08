@@ -269,6 +269,14 @@ const TokenHistory = sequelize.define("TokenHistory", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  boxName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  resultBoxName: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   date: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
@@ -636,15 +644,7 @@ app.post(
       tokenData.numTokens -= 1;
       await tokenData.save();
 
-      //historial de tokens
-      await TokenHistory.create({
-        userId,
-        amount: 1,
-        type: "spent",
-        reason: `Compra de caja de ${collection}`,
-      });
-
-      //Obtenemos todas las cajas de esa colección
+      // Obtenemos todas las cajas de esa colección
       const boxes = await Box.findAll({
         where: {
           collection,
@@ -662,7 +662,7 @@ app.post(
       const specialBoxes = boxes.filter((b) => b.hasSpecial);
       const normalBoxes = boxes.filter((b) => !b.hasSpecial);
 
-      const isSpecial = Math.random() < 0.05; //5% probabilidad
+      const isSpecial = Math.random() < 0.05;
 
       let selectedBox;
 
@@ -674,7 +674,17 @@ app.post(
           normalBoxes[Math.floor(Math.random() * normalBoxes.length)];
       }
 
-      //Buscamos si el usuario ya la tiene
+      // 🔥 AHORA SÍ: historial correcto
+      await TokenHistory.create({
+        userId,
+        amount: 1,
+        type: "spent",
+        reason: `Compra de caja de ${collection} → ${selectedBox.type}`,
+        boxName: collection,
+        resultBoxName: selectedBox.type,
+      });
+
+      // Añadir caja al usuario
       let userBox = await UserBox.findOne({
         where: {
           UserId: userId,
@@ -698,8 +708,11 @@ app.post(
         box: selectedBox,
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Error al abrir la caja" });
+      console.error("OPEN BOX ERROR:", error);
+      res.status(500).json({
+        message: "Error al abrir la caja",
+        error: error?.message || error,
+      });
     }
   },
 );
@@ -746,7 +759,6 @@ app.get("/profile-stats", authenticateToken, async (req, res) => {
 app.get("/trades", authenticateToken, async (req, res) => {
   try {
     const trades = await Trade.findAll({
-      where: { status: false },
       include: [
         {
           model: Box,
@@ -757,6 +769,7 @@ app.get("/trades", authenticateToken, async (req, res) => {
           as: "requestedBox",
         },
       ],
+      order: [["date", "DESC"]],
     });
 
     res.json(trades);

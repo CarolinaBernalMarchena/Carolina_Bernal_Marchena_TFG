@@ -1,0 +1,151 @@
+.back-btn {
+  position: fixed;
+  top: 110px;
+  left: 25px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface-solid);
+  color: var(--danger);
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+  z-index: 20;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.08);
+    background: var(--surface-solid);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.stats-container h1 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.timeline {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.day-group {
+  margin-bottom: 25px;
+}
+
+.date-header {
+  font-weight: bold;
+  color: var(--text-primary);
+  margin: 15px 0;
+  text-align: left;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: var(--surface-solid);
+  padding: 12px;
+  border-radius: 10px;
+
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease;
+}
+
+.activity-item:hover {
+  transform: translateY(-2px);
+}
+
+.icon {
+  font-size: 20px;
+}
+
+.content {
+  flex: 1;
+  text-align: left;
+}
+
+.title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.meta {
+  font-size: 12px;
+}
+
+.time {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.gain {
+  color: var(--accent-green);
+  font-weight: bold;
+}
+
+.spent {
+  color: var(--danger);
+  font-weight: bold;
+}
+
+.filters {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.filters input {
+  padding: 10px;
+  border-radius: 10px;
+  border: 2px solid var(--border-soft);
+  width: 260px;
+  background: var(--surface-solid);
+  color: var(--text-primary);
+}
+
+.filters input::placeholder {
+  color: var(--text-muted);
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.filter-buttons button {
+  background: var(--surface-solid);
+  border: 2px solid var(--border-soft);
+  padding: 6px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.filter-buttons button:hover {
+  background: var(--surface);
+}
+
+.filter-buttons button.active {
+  background: var(--surface-strong);
+  border-color: var(--accent-blue);
+}

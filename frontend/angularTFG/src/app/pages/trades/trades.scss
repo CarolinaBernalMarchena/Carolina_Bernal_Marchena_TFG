@@ -16,7 +16,7 @@
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: var(--card-bg-strong);
+  background: var(--surface-solid);
   color: var(--danger);
   font-size: 28px;
   font-weight: bold;
@@ -28,8 +28,8 @@
 
   &:hover {
     transform: scale(1.08);
-    background: var(--card-bg-strong);
-    box-shadow: var(--shadow);
+    background: var(--surface-solid);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
 }
 
@@ -97,40 +97,42 @@ button:hover {
 }
 
 .filter-group select {
-  background-color: var(--card-bg-strong);
-  border: 2px solid var(--border-soft);
+  margin-top: 1em;
+  background-color: #fff;
+  border: 2px solid #e4b6d0;
   border-radius: 14px;
   padding: 8px 18px;
   font-size: 15px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #9b5c7c;
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    border-color: var(--danger);
+    border-color: #c96c9d;
+    transform: translateY(-1px);
   }
 
   &:focus {
-    border-color: var(--danger);
+    border-color: #c96c9d;
     box-shadow: 0 0 0 4px rgba(201, 108, 157, 0.15);
   }
 }
 
 .toggle-pill {
-  background-color: var(--card-bg-strong);
-  border: 2px solid var(--border-soft);
+  background-color: #fff;
+  border: 2px solid #e4b6d0;
   border-radius: 14px;
-  padding: 8px 18px;
+  padding: 12px 18px;
   font-size: 15px;
   font-weight: 500;
-  color: var(--text-secondary);
+  color: #9b5c7c;
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .toggle-pill.active {

@@ -8,18 +8,26 @@
         <img [src]="'images/' + selectedProfilePicture + '.png'" />
     </div>
 
-    <button type="button" class="change-avatar-btn" (click)="openAvatarModal()">
+    <button class="button" (click)="openAvatarModal()">
         Cambiar avatar
     </button>
 
     <form (ngSubmit)="saveChanges()">
 
-        <input type="text" [(ngModel)]="username" name="username" placeholder="Cambiar nombre de usuario" class="input"/>
-        <input type="email" [(ngModel)]="email" name="email" placeholder="Cambiar email" class="input"/>
-        <input type="password" [(ngModel)]="currentPassword" name="currentPassword" placeholder="Contraseña actual" class="input"/>
-        <input type="password" [(ngModel)]="password" name="password" placeholder="Nueva contraseña" class="input"/>
+        <input type="text" [(ngModel)]="username" name="username" placeholder="Cambiar nombre de usuario"
+            class="input" />
+        <input type="email" [(ngModel)]="email" name="email" placeholder="Cambiar email" class="input" />
+        <input type="password" [(ngModel)]="currentPassword" name="currentPassword" placeholder="Contraseña actual"
+            class="input" />
+        <input type="password" [(ngModel)]="password" name="password" placeholder="Nueva contraseña" class="input" />
 
-        <button type="submit" class="save-btn">
+        @if(!isDrakTheme){
+        <button class="button" (click)="toggleTheme()">Modo oscuro</button><br><br>
+        } @else {
+        <button class="button" (click)="toggleTheme()">Modo claro</button><br><br>
+        }
+
+        <button type="submit" class="button">
             Aceptar Cambios
         </button>
 
@@ -27,19 +35,16 @@
 
 </div>
 @if (showAvatarModal) {
-    <div class="modal-backdrop">
-            <div class="modal">
-                <h3>Selecciona un avatar</h3>
-                <div class="avatar-grid">
-                    @for (profilePicture of profilePictures; track profilePicture) {
-                    <img 
-                        [src]="'images/' + profilePicture + '.png'"
-                        (click)="selectProfilePicture(profilePicture)"
-                        [class.selected]="tempProfilePicture === profilePicture"
-                    />
-                    }
-                </div>
-            </div>
-        
+<div class="modal-backdrop">
+    <div class="modal">
+        <h3>Selecciona un avatar</h3>
+        <div class="avatar-grid">
+            @for (profilePicture of profilePictures; track profilePicture) {
+            <img [src]="'images/' + profilePicture + '.png'" (click)="selectProfilePicture(profilePicture)"
+                [class.selected]="tempProfilePicture === profilePicture" />
+            }
+        </div>
     </div>
+
+</div>
 }

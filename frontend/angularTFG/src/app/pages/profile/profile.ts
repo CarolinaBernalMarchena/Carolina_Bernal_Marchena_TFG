@@ -66,7 +66,7 @@ export class Profile implements OnInit {
     this.router.navigate(['/achievements']);
   }
 
-  goToShop() {
-    this.router.navigate(['/shop']);
+  goToStatistics() {
+    this.router.navigate(['/statistics']);
   }
 }

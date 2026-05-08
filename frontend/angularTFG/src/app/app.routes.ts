@@ -12,6 +12,7 @@ import { Achievements } from './pages/achievements/achievements';
 import { Shop } from './pages/shop/shop';
 import { Trades } from './pages/trades/trades';
 import { CreateTrade } from './pages/create-trade/create-trade';
+import { UserStatistics } from './pages/user-statistics/user-statistics';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -34,4 +35,5 @@ export const routes: Routes = [
   { path: 'shop', component: Shop, canActivate: [authGuard] },
   { path: 'trades', component: Trades, canActivate: [authGuard] },
   { path: 'create-trade', component: CreateTrade, canActivate: [authGuard] },
+  { path: 'statistics', component: UserStatistics, canActivate: [authGuard] },
 ];
