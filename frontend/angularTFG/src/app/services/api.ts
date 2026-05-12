@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthService } from './auth';
 import { environment } from '../../environments/environment';
 
@@ -28,8 +28,8 @@ export interface User {
 }
 
 export interface Achievement {
-  id: number;
-  unlocked: boolean;
+  achievementId: number;
+  unlockedAt: string;
 }
 
 export interface Trade {
@@ -76,6 +76,7 @@ export interface ActivityItem {
 })
 export class Api {
   private apiUrl = environment.apiUrl;
+
   constructor(
     private http: HttpClient,
     private authService: AuthService,
@@ -131,9 +132,10 @@ export class Api {
 
   createTradeBackend(offeredBoxId: number, requestedBoxId: number) {
     const data = {
-      offeredBoxId: offeredBoxId,
-      requestedBoxId: requestedBoxId,
+      offeredBoxId,
+      requestedBoxId,
     };
+
     return this.http.post(`${this.apiUrl}/trades`, data, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
@@ -163,11 +165,6 @@ export class Api {
 
   getProfileStats() {
     return this.http.get<any>(`${this.apiUrl}/profile-stats`);
-    /*, {
-        headers: {
-          Authorization: `Bearer ${this.getToken()}`
-        }
-      }*/
   }
 
   getMyCollection(userId: number): Observable<any> {
@@ -195,31 +192,17 @@ export class Api {
   }
 
   // =========================
-  // BACKEND
+  // ACHIEVEMENTS (🔥 CAMBIO IMPORTANTE)
   // =========================
 
-  addCollectibleToUser(collectibleId: number, userId: number): Observable<any> {
-    return this.http.post(
-      `${this.apiUrl}/users/${userId}/collectibles/${collectibleId}`,
-      {},
-    );
-  }
-
-  removeCollectibleFromUser(
-    collectibleId: number,
-    userId: number,
-  ): Observable<any> {
-    return this.http.delete(
-      `${this.apiUrl}/users/${userId}/collectibles/${collectibleId}`,
-    );
-  }
-
-  // =========================
-  // ACHIEVEMENTS
-  // =========================
-
-  getAchievements(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/achievements`, {
+  getAchievements(): Observable<{
+    achievements: Achievement[];
+    newAchievements: number[];
+  }> {
+    return this.http.get<{
+      achievements: Achievement[];
+      newAchievements: number[];
+    }>(`${this.apiUrl}/achievements`, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },

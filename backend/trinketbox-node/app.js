@@ -184,6 +184,10 @@ const Achievement = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    unlockedAt: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
   },
   {
     indexes: [
@@ -1034,7 +1038,6 @@ app.get("/achievements", authenticateToken, async (req, res) => {
   try {
     const userId = req.user.id;
 
-    //Reutilizamos la lógica existente
     const userBoxes = await UserBox.findAll({
       where: { UserId: userId },
       include: [Box],
@@ -1060,10 +1063,9 @@ app.get("/achievements", authenticateToken, async (req, res) => {
 
     const stats = { boxesCount, specialCount, tradesCount };
 
-    //Desbloqueamos nuevos logros automáticamente
     const newAchievements = await checkAndUnlockAchievements(userId, stats);
 
-    //Añadimos 1 token al usuario por cada nuevo logro desbloqueado
+    //Tokens por logros nuevos
     if (newAchievements.length > 0) {
       await TokenHistory.create({
         userId,
@@ -1072,22 +1074,24 @@ app.get("/achievements", authenticateToken, async (req, res) => {
         reason: "Logro desbloqueado",
       });
 
-      let tokenData = await Token.findOne({ where: { userId } });
+      const tokenData = await Token.findOne({ where: { userId } });
 
-      if (!tokenData) return; //Añadimos esto por si ocurriera el caso de que el usuario no tiene tabla de tokens (no debería de pasar nunca pero por si acaso)
-
-      tokenData.numTokens += newAchievements.length;
-
-      await tokenData.save();
+      if (tokenData) {
+        tokenData.numTokens += newAchievements.length;
+        await tokenData.save();
+      }
     }
 
-    //Obtenemos todos los desbloqueados
     const userAchievements = await Achievement.findAll({
       where: { userId },
+      order: [["unlockedAt", "DESC"]],
     });
 
     res.json({
-      unlockedIds: userAchievements.map((a) => a.achievementId),
+      achievements: userAchievements.map((a) => ({
+        achievementId: a.achievementId,
+        unlockedAt: a.unlockedAt,
+      })),
       newAchievements,
     });
   } catch (error) {

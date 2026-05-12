@@ -25,6 +25,20 @@
 
         </div>
 
+        <div class="chart-card">
+
+            <div class="stats-header">
+                <h2>Estadísticas del usuario</h2>
+                <p>Actividad registrada durante la última semana</p>
+            </div>
+
+            <apx-chart [series]="chartOptions.series!" [chart]="chartOptions.chart!"
+                [dataLabels]="chartOptions.dataLabels!" [xaxis]="chartOptions.xaxis!" [title]="chartOptions.title!"
+                [grid]="chartOptions.grid!" [colors]="chartOptions.colors!">
+            </apx-chart>
+
+        </div>
+
         @for (group of groupedActivities; track group.date) {
 
         <div class="day-group">

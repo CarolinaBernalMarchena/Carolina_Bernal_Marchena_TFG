@@ -149,3 +149,29 @@
   background: var(--surface-strong);
   border-color: var(--accent-blue);
 }
+
+.chart-card {
+  background: var(--surface-solid);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+}
+
+.stats-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.stats-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.stats-header p {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
