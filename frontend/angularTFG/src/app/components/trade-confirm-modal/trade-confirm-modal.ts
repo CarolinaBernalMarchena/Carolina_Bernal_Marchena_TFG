@@ -12,7 +12,6 @@ export class TradeConfirmModal {
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
 
-  // opcional: si quieres click fuera = cancelar
   onBackdropClick(): void {
     this.cancel.emit();
   }

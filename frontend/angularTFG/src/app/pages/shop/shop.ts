@@ -5,11 +5,12 @@ import { Location } from '@angular/common';
 import { AchievementNotification } from '../../services/achievement-notification';
 import { ChatbotAvatar } from '../../components/chatbot-avatar/chatbot-avatar';
 import { Modal } from '../../components/modal/modal';
+import { TradeConfirmModal } from '../../components/trade-confirm-modal/trade-confirm-modal';
 
 @Component({
   selector: 'app-shop',
   standalone: true,
-  imports: [CommonModule, ChatbotAvatar, Modal],
+  imports: [CommonModule, ChatbotAvatar, Modal, TradeConfirmModal],
   providers: [],
   templateUrl: './shop.html',
   styleUrl: './shop.scss',
@@ -23,6 +24,8 @@ export class Shop implements OnInit, OnDestroy {
   tokens: number = 0;
   boxes: any[] = [];
   showHistory = false;
+  showPurchaseModal = false;
+  selectedBox: any = null;
   tokenHistory: any[] = [];
 
   constructor(
@@ -47,19 +50,25 @@ export class Shop implements OnInit, OnDestroy {
   }
 
   openBox(box: any): void {
-    //Si el usuario no tiene tokens, mostramos un mensaje y no permitimos abrir la caja
     if (this.tokens <= 0) {
       this.modalMessage = 'Tienes 0 tokens, no puedes hacer ninguna compra';
       this.showModal = true;
       return;
     }
 
-    this.api.openRandomBox(box.collection).subscribe({
+    this.selectedBox = box;
+    this.showPurchaseModal = true;
+  }
+
+  confirmPurchase(): void {
+    if (!this.selectedBox) return;
+
+    this.api.openRandomBox(this.selectedBox.collection).subscribe({
       next: (res: any) => {
-        console.log(res);
         this.modalImage = res.box.imageUrl;
         this.modalMessage = `Has abierto la caja de ${res.box.type}`;
         this.showModal = true;
+
         this.refreshTokensData();
 
         this.api.getAchievements().subscribe((achRes: any) => {
@@ -68,10 +77,19 @@ export class Shop implements OnInit, OnDestroy {
               this.achievementNotification.showAchievements(id);
             }
           }
+
           this.loadTokenHistory();
         });
       },
     });
+
+    this.showPurchaseModal = false;
+    this.selectedBox = null;
+  }
+
+  cancelPurchase(): void {
+    this.showPurchaseModal = false;
+    this.selectedBox = null;
   }
 
   private getSpainTime(): Date {
