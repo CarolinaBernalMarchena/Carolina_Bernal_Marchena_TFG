@@ -28,7 +28,22 @@ export class Login {
             this.authService.setToken(response.token);
             this.authService.setUser(response.user);
 
-            this.router.navigate(['/home']);
+            const role = response.user.role;
+
+            switch (role) {
+              case 'admin':
+                this.router.navigate(['/admin-home']);
+                break;
+
+              case 'user':
+                this.router.navigate(['/home']);
+                break;
+
+              //Si llegara un nuevo role desconocido distinto de user o admin, se le redirige a home por defecto
+              default:
+                this.router.navigate(['/home']);
+                break;
+            }
           } else {
             alert('Usuario o contraseña incorrectos');
           }

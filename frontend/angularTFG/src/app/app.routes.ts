@@ -13,6 +13,8 @@ import { Shop } from './pages/shop/shop';
 import { Trades } from './pages/trades/trades';
 import { CreateTrade } from './pages/create-trade/create-trade';
 import { UserStatistics } from './pages/user-statistics/user-statistics';
+import { adminGuard } from './guards/admin-guard';
+import { AdminHome } from './pages/admin-home/admin-home';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -23,6 +25,7 @@ export const routes: Routes = [
 
   //Usuarios logueados
   { path: 'home', component: Home, canActivate: [authGuard] },
+  { path: 'admin-home', component: AdminHome, canActivate: [adminGuard] },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: 'settings', component: Settings, canActivate: [authGuard] },
   { path: 'collection', component: Collection, canActivate: [authGuard] },
