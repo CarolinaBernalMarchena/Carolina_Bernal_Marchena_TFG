@@ -381,7 +381,8 @@ app.post("/login", async (req, res) => {
       { id: user.id, email: user.email, name: user.name },
       SECRET_KEY,
     ); //Generamos un token
-    res.json({ user, token });
+    const { password: _, ...safeUser } = user.toJSON();
+    res.json({ user: safeUser, token });
   } catch (error) {
     res.status(500).json({ message: "Error al iniciar sesión" });
   }
@@ -464,12 +465,14 @@ app.post("/seed-boxes", async (req, res) => {
       }
     }
 
+    const adminPassword = await bcrypt.hash("admin123", 10); //Hasheamos la contraseña del usuario admin
+
     await User.upsert({
       id: 0,
       email: "admin@gmail.com",
       name: "admin",
       role: "admin",
-      password: "x",
+      password: adminPassword,
     });
 
     const todayStr = new Date().toLocaleDateString("sv-SE", {

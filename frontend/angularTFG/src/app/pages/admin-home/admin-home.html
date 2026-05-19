@@ -1,1 +1,46 @@
-<p>admin-home works!</p>
+<body>
+
+    <button class="logout" (click)="logout()">
+        Cerrar sesión ✕
+    </button>
+
+    <div class="admin-container">
+
+        <div class="admin-header">
+            <div>
+                <h1>Panel de administración</h1>
+                <p>Gestiona el contenido de TrinketBox</p>
+            </div>
+
+            <div class="admin-badge">
+                Bienvenido ADMIN
+            </div>
+        </div>
+
+        <div class="admin-actions">
+
+            <div class="admin-card pink" (click)="goToCreateCollection()">
+                <h2>Crear colección</h2>
+                <p>Añade nuevas colecciones al sistema</p>
+            </div>
+
+            <div class="admin-card blue" (click)="goToProbabilities()">
+                <h2>Probabilidades</h2>
+                <p>Ajusta rarezas y porcentajes</p>
+            </div>
+
+            <div class="admin-card yellow" (click)="goToSpecialCost()">
+                <h2>Coste especialidad</h2>
+                <p>Gestiona costes de intercambio</p>
+            </div>
+
+            <div class="admin-card green" (click)="goToSpecialTrades()">
+                <h2>Intercambios especiales</h2>
+                <p>Crea intercambios exclusivos</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>

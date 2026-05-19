@@ -25,7 +25,11 @@ export const routes: Routes = [
 
   //Usuarios logueados
   { path: 'home', component: Home, canActivate: [authGuard] },
-  { path: 'admin-home', component: AdminHome, canActivate: [adminGuard] },
+  {
+    path: 'admin-home',
+    component: AdminHome,
+    canActivate: [authGuard, adminGuard],
+  },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: 'settings', component: Settings, canActivate: [authGuard] },
   { path: 'collection', component: Collection, canActivate: [authGuard] },
