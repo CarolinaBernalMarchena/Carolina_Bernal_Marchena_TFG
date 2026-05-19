@@ -1,0 +1,227 @@
+:host {
+    display: block;
+    min-height: 100vh;
+    background: var(--bg-primary);
+    font-family: 'Poppins', sans-serif;
+}
+
+.back-btn {
+    position: fixed;
+    top: 110px;
+    left: 25px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-solid);
+    color: var(--danger);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(6px);
+    z-index: 20;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: scale(1.08);
+        background: var(--surface-solid);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.wizard-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 20px;
+}
+
+h1 {
+    text-align: center;
+    color: var(--text-primary);
+    font-size: 40px;
+    margin-bottom: 20px;
+}
+
+/* =========================
+    SELECTOR
+========================= */
+.selects-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 100px;
+}
+
+.selects-container select {
+    background-color: #fff;
+    border: 2px solid #e4b6d0;
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #9b5c7c;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+        border-color: #c96c9d;
+        transform: translateY(-1px);
+    }
+
+    &:focus {
+        border-color: #c96c9d;
+        box-shadow: 0 0 0 4px rgba(201, 108, 157, 0.15);
+    }
+}
+
+/* =========================
+    STEPS
+========================= */
+
+.steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 25px;
+}
+
+.steps div {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 2px solid var(--border-soft);
+    color: var(--text-secondary);
+    margin: 0 5px;
+}
+
+.steps .active {
+    background: var(--accent-pink);
+    color: white;
+    font-weight: bold;
+}
+
+/* =========================
+    CARD
+========================= */
+
+.step-card {
+    background: var(--surface);
+    border: 2px solid var(--border-soft);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+}
+
+/* =========================
+    INPUTS
+========================= */
+
+input {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 12px;
+    border: 2px solid var(--border-soft);
+    background: var(--card-bg);
+    color: var(--text-primary);
+}
+
+/* =========================
+    BOXES
+========================= */
+
+.boxes {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.box-card {
+    padding: 15px;
+    border-radius: 16px;
+    border: 2px solid var(--border-soft);
+    background: var(--card-bg);
+}
+
+/* =========================
+    BUTTONS
+========================= */
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+button {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+    background: var(--accent-blue);
+    color: white;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+.save {
+    background: var(--accent-pink);
+}
+
+/* =========================
+    CHECKBOXES
+========================= */
+
+.checkbox-grid {
+    display: flex;
+    flex-direction: column; 
+    gap: 16px;              
+    width: 100%;
+}
+
+.checkbox-item {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    width: max-content;
+
+    input[type="checkbox"] {
+        margin: 0;                 
+        cursor: pointer;
+        flex-shrink: 0;            
+    }
+
+    span {
+        font-size: 14px;       
+        line-height: 1;      
+        white-space: nowrap;
+        user-select: none;     
+    }
+}
+
+/* =========================
+    REVIEW
+========================= */
+
+.review-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}

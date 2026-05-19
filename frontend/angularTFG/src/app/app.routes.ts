@@ -15,6 +15,7 @@ import { CreateTrade } from './pages/create-trade/create-trade';
 import { UserStatistics } from './pages/user-statistics/user-statistics';
 import { adminGuard } from './guards/admin-guard';
 import { AdminHome } from './pages/admin-home/admin-home';
+import { AdminCreateCollection } from './pages/admin-create-collection/admin-create-collection';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -25,11 +26,6 @@ export const routes: Routes = [
 
   //Usuarios logueados
   { path: 'home', component: Home, canActivate: [authGuard] },
-  {
-    path: 'admin-home',
-    component: AdminHome,
-    canActivate: [authGuard, adminGuard],
-  },
   { path: 'profile', component: Profile, canActivate: [authGuard] },
   { path: 'settings', component: Settings, canActivate: [authGuard] },
   { path: 'collection', component: Collection, canActivate: [authGuard] },
@@ -43,4 +39,16 @@ export const routes: Routes = [
   { path: 'trades', component: Trades, canActivate: [authGuard] },
   { path: 'create-trade', component: CreateTrade, canActivate: [authGuard] },
   { path: 'statistics', component: UserStatistics, canActivate: [authGuard] },
+
+  //Usuarios administradores logueados
+  {
+    path: 'admin-home',
+    component: AdminHome,
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'admin-collections',
+    component: AdminCreateCollection,
+    canActivate: [authGuard, adminGuard],
+  },
 ];

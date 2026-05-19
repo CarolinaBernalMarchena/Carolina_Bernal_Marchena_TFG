@@ -1,0 +1,160 @@
+<div class="wizard-container">
+
+    <button class="back-btn" (click)="goBack()">←</button>
+
+    <h1>Crear colección (Admin)</h1>
+
+    <div class="steps">
+        <div [class.active]="step === 1">1. Colección</div>
+        <div [class.active]="step === 2">2. Cajas</div>
+        <div [class.active]="step === 3">3. Revisión</div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- PASO 1 -->
+    <!-- ========================= -->
+
+    @if (step === 1) {
+    <div class="card">
+        <h2>Datos de la colección</h2>
+
+        <!-- SELECT EXISTENTE -->
+        <label>Seleccione una colección existente</label>
+        <div class="selects-container">
+            <select (change)="onCollectionChange($any($event.target).value)">
+                <option value="">Nueva colección</option>
+
+                @for (col of collections; track col) {
+                <option [value]="col">{{ col }}</option>
+                }
+            </select>
+        </div>
+
+        <!-- INPUT NOMBRE -->
+        <label> Revise los datos o añadádalos si está creando una nueva colección</label>
+        <input type="text" placeholder="Nombre colección" [(ngModel)]="collectionName" />
+
+        <!-- URL -->
+        <input type="text" placeholder="URL imagen colección" [(ngModel)]="collectionUrl" />
+
+        <button (click)="nextStep()">Siguiente</button>
+    </div>
+    }
+
+    <!-- ========================= -->
+    <!-- PASO 2 -->
+    <!-- ========================= -->
+
+    @if (step === 2) {
+    <div class="card">
+
+        <h2>Añadir cajas a la colección</h2>
+        <h5>En este paso puede añadir tantas cajas como desee a la colección antes de pasar al siguiente paso</h5>
+
+        <div class="form-grid">
+
+            <div class="field">
+                <label>Número *</label>
+                <input type="number" [(ngModel)]="currentBox.number" />
+            </div>
+
+            <div class="field">
+                <label>Tipo *</label>
+                <input type="text" [(ngModel)]="currentBox.type" placeholder="Nombre de la caja" />
+            </div>
+
+            <div class="field full">
+                <label>Descripción</label>
+                <input type="text" [(ngModel)]="currentBox.description" />
+            </div>
+
+            <div class="field full">
+                <label>Imagen URL</label>
+                <input type="text" [(ngModel)]="currentBox.imageUrl" />
+            </div>
+
+        </div>
+
+        <div class="checkbox-grid">
+
+            <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="currentBox.hasSpecial" />
+                <span>Al marcar esta casilla, creará un coleccionable especial</span>
+            </label>
+
+            <label class="checkbox-item">
+                <input type="checkbox" [(ngModel)]="currentBox.noForBuying" />
+                <span>Al marcar esta casilla, el coleccionable no estará disponible en la tienda</span>
+            </label>
+
+        </div>
+
+        <div class="actions-row">
+            <br>
+            <button class="btn primary" (click)="addBox()">
+                Añadir caja
+            </button>
+            <br><br>
+        </div>
+
+        <div class="box-list">
+
+            @for (box of createdBoxes; track box.number) {
+            <div class="box-item">
+                <span>#{{ box.number }} - {{ box.type }}</span>
+                <button (click)="removeBox($index)">✕</button>
+            </div>
+            }
+
+        </div>
+
+        <div class="nav-buttons">
+            <button (click)="prevStep()">Atrás</button>
+            <button (click)="nextStep()">Siguiente</button>
+        </div>
+
+    </div>
+    }
+
+    <!-- ========================= -->
+    <!-- PASO 3 -->
+    <!-- ========================= -->
+
+    @if (step === 3) {
+    <div class="card">
+
+        <h2>Revisión final</h2>
+
+        <p><b>Colección:</b> {{ collectionName }}</p>
+        <p><b>Cajas:</b> {{ createdBoxes.length }}</p>
+
+        @for (box of createdBoxes; track box.number) {
+        <div class="review-box">
+            #{{ box.number }} - {{ box.type }}
+        </div>
+        }
+
+        <div class="nav-buttons">
+            <button (click)="prevStep()">Atrás</button>
+            <button (click)="saveCollection()">Guardar colección</button>
+        </div>
+
+    </div>
+    }
+
+    <!-- ========================= -->
+    <!-- MODALES -->
+    <!-- ========================= -->
+
+    @if (showErrorModal) {
+    <app-modal [message]="modalMessage" (closed)="showErrorModal = false">
+    </app-modal>
+    }
+
+    @if (showSuccessModal) {
+    <app-modal [message]="modalMessage" (closed)="closeSuccessModal()">
+    </app-modal>
+    }
+
+
+</div>

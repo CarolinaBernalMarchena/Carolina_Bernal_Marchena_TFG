@@ -159,6 +159,14 @@ export class Api {
     });
   }
 
+  createOrUpdateBoxes(data: any) {
+    return this.http.post(`${this.apiUrl}/seed-boxes`, data, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
+  }
+
   // =========================
   // USERS
   // =========================
