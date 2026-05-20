@@ -1,11 +1,36 @@
 <div class="modal-backdrop" (click)="close()">
-  <div class="modal-content" (click)="$event.stopPropagation()">
-    @if (imageUrl) {
+
+  <div class="modal-content" [class.error]="type === 'error'" (click)="$event.stopPropagation()">
+
+    @if (type === 'success' && imageUrl) {
+
     <img class="modalImage" [src]="imageUrl" />
-    <ngx-confetti-explosion></ngx-confetti-explosion>
+
+    <ngx-confetti-explosion>
+    </ngx-confetti-explosion>
+
     }
+
+    <div class="icon">
+
+      @if (type === 'success') {
+
+      <span>✅</span>
+
+      } @else {
+
+      <span>❌</span>
+
+      }
+
+    </div>
+
     <p>{{ message }}</p>
 
-    <button (click)="close()">Aceptar</button>
+    <button (click)="close()">
+      Aceptar
+    </button>
+
   </div>
+
 </div>

@@ -36,8 +36,8 @@ export class AdminHome {
     this.router.navigate(['/admin-probabilities']);
   }
 
-  goToSpecialCost() {
-    this.router.navigate(['/admin-special-cost']);
+  goToCollectionCosts() {
+    this.router.navigate(['/admin-costs']);
   }
 
   goToSpecialTrades() {

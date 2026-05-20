@@ -308,6 +308,21 @@ const CollectionProbability = sequelize.define("CollectionProbability", {
   },
 });
 
+// Modelo coste de cajas por colección
+const CollectionCost = sequelize.define("CollectionCost", {
+  collection: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+
+  tokenCost: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1,
+  },
+});
+
 //Relaciones
 User.belongsToMany(Box, { through: UserBox });
 Box.belongsToMany(User, { through: UserBox });
@@ -573,11 +588,22 @@ app.get("/shop-boxes", authenticateToken, async (req, res) => {
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
 
-    const result = shuffled.slice(0, 3).map((box) => ({
-      collection: box.collection,
-      name: box.type,
-      collectionUrl: box.collectionUrl,
-    }));
+    const result = [];
+
+    for (const box of shuffled.slice(0, 3)) {
+      const costConfig = await CollectionCost.findOne({
+        where: {
+          collection: box.collection,
+        },
+      });
+
+      result.push({
+        collection: box.collection,
+        name: box.type,
+        collectionUrl: box.collectionUrl,
+        tokenCost: costConfig?.tokenCost ?? 1,
+      });
+    }
 
     res.json(result);
   } catch (error) {
@@ -733,9 +759,22 @@ app.post(
       const { collection } = req.params;
 
       let tokenData = await Token.findOne({ where: { userId } });
-      if (!tokenData || tokenData.numTokens <= 0) {
-        return res.status(400).json({ message: "No tokens" });
+      const costConfig = await CollectionCost.findOne({
+        where: { collection },
+      });
+
+      const tokenCost = costConfig?.tokenCost ?? 1;
+
+      if (!tokenData || tokenData.numTokens < tokenCost) {
+        return res.status(400).json({
+          message: "No tienes suficientes tokens",
+        });
       }
+
+      // Consumimos tokens
+      tokenData.numTokens -= tokenCost;
+
+      await tokenData.save();
 
       // Consumir 1 token
       tokenData.numTokens -= 1;
@@ -780,7 +819,7 @@ app.post(
 
       await TokenHistory.create({
         userId,
-        amount: 1,
+        amount: tokenCost,
         type: "spent",
         reason: `Compra de caja de ${collection} → ${selectedBox.type}`,
         boxName: collection,
@@ -1261,6 +1300,70 @@ app.get("/token-history", authenticateToken, async (req, res) => {
     res.json(history);
   } catch (error) {
     res.status(500).json({ message: "Error obteniendo historial" });
+  }
+});
+
+// Obtener costes por colección
+app.get("/collection-costs", authenticateToken, async (req, res) => {
+  try {
+    const boxes = await Box.findAll({
+      attributes: ["collection"],
+    });
+
+    const uniqueCollections = [...new Set(boxes.map((b) => b.collection))];
+
+    const costs = [];
+
+    for (const collection of uniqueCollections) {
+      const existing = await CollectionCost.findOne({
+        where: { collection },
+      });
+
+      costs.push({
+        collection,
+        tokenCost: existing?.tokenCost ?? 1,
+      });
+    }
+
+    costs.sort((a, b) => a.collection.localeCompare(b.collection));
+
+    res.json(costs);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error obteniendo costes",
+    });
+  }
+});
+
+// Guardar coste
+app.post("/collection-costs", authenticateToken, async (req, res) => {
+  try {
+    const { collection } = req.body;
+
+    const tokenCost = Number(req.body.tokenCost);
+
+    if (tokenCost < 1) {
+      return res.status(400).json({
+        message: "El coste mínimo es 1",
+      });
+    }
+
+    await CollectionCost.upsert({
+      collection,
+      tokenCost,
+    });
+
+    res.json({
+      message: "Coste guardado correctamente",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error guardando coste",
+    });
   }
 });
 

@@ -8,6 +8,7 @@ import { NgxConfettiExplosionComponent } from '@jjmhalew/ngx-confetti-explosion'
   styleUrl: './modal.scss',
 })
 export class Modal {
+  @Input() type: 'success' | 'error' = 'success';
   @Input() message = '';
   @Input() imageUrl = '';
   @Output() closed = new EventEmitter<void>();

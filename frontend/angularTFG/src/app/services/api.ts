@@ -78,6 +78,11 @@ export interface CollectionProbability {
   specialProbability: number;
 }
 
+export interface CollectionCost {
+  collection: string;
+  tokenCost: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -261,6 +266,26 @@ export class Api {
 
   saveCollectionProbability(data: CollectionProbability) {
     return this.http.post(`${this.apiUrl}/collection-probabilities`, data, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
+  }
+
+  // =========================
+  // COLLECTION COSTS
+  // =========================
+
+  getCollectionCosts(): Observable<CollectionCost[]> {
+    return this.http.get<CollectionCost[]>(`${this.apiUrl}/collection-costs`, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
+  }
+
+  saveCollectionCost(data: CollectionCost) {
+    return this.http.post(`${this.apiUrl}/collection-costs`, data, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },

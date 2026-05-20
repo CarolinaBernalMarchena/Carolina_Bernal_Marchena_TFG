@@ -1,0 +1,59 @@
+<div class="page">
+
+    <button class="back-btn" (click)="goBack()">←</button>
+
+    <h1>Costes de cajas</h1>
+
+    <p class="subtitle">
+        Configura el coste en tokens de cada colección.
+    </p>
+
+    @if (loading) {
+
+    <div class="loading">
+        Cargando costes...
+    </div>
+
+    } @else {
+
+    <div class="cost-list">
+
+        @for (cost of costs; track cost.collection) {
+
+        <div class="cost-card">
+
+            <div class="info">
+
+                <h2>{{ cost.collection }}</h2>
+
+                <p>
+                    Coste actual:
+                    {{ cost.tokenCost }}
+                    token(s)
+                </p>
+
+            </div>
+
+            <div class="actions">
+
+                <input type="number" min="1" max="99" step="1" [(ngModel)]="cost.tokenCost" />
+
+                <button (click)="saveCost(cost)" [disabled]="savingCollection === cost.collection">
+                    Guardar
+                </button>
+
+            </div>
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+    @if (showModal) {
+    <app-modal [message]="modalMessage" (closed)="closeModal()" />
+    }
+
+</div>
