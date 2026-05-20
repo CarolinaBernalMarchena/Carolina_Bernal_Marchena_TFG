@@ -287,6 +287,27 @@ const TokenHistory = sequelize.define("TokenHistory", {
   },
 });
 
+// Modelo probabilidades por colección
+const CollectionProbability = sequelize.define("CollectionProbability", {
+  collection: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+
+  normalProbability: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 95,
+  },
+
+  specialProbability: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 5,
+  },
+});
+
 //Relaciones
 User.belongsToMany(Box, { through: UserBox });
 Box.belongsToMany(User, { through: UserBox });
@@ -619,6 +640,75 @@ app.get("/boxes", authenticateToken, async (req, res) => {
   }
 });
 
+//Obtener probabilidades
+app.get("/collection-probabilities", authenticateToken, async (req, res) => {
+  try {
+    // Obtener colecciones existentes
+    const boxes = await Box.findAll({
+      attributes: ["collection"],
+    });
+
+    const uniqueCollections = [...new Set(boxes.map((b) => b.collection))];
+
+    const probabilities = [];
+
+    for (const collection of uniqueCollections) {
+      const existing = await CollectionProbability.findOne({
+        where: { collection },
+      });
+
+      probabilities.push({
+        collection,
+        normalProbability: existing?.normalProbability ?? 95,
+
+        specialProbability: existing?.specialProbability ?? 5,
+      });
+    }
+
+    probabilities.sort((a, b) => a.collection.localeCompare(b.collection));
+
+    res.json(probabilities);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error obteniendo probabilidades",
+    });
+  }
+});
+
+// Crear o actualizar probabilidades
+app.post("/collection-probabilities", authenticateToken, async (req, res) => {
+  try {
+    const collection = req.body.collection;
+
+    const normalProbability = Number(req.body.normalProbability);
+    const specialProbability = Number(req.body.specialProbability);
+
+    if (normalProbability + specialProbability !== 100) {
+      return res.status(400).json({
+        message: "Las probabilidades deben sumar 100",
+      });
+    }
+
+    await CollectionProbability.upsert({
+      collection,
+      normalProbability,
+      specialProbability,
+    });
+
+    res.json({
+      message: "Probabilidades guardadas correctamente",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error guardando probabilidades",
+    });
+  }
+});
+
 app.get("/my-collection/:userId", authenticateToken, async (req, res) => {
   try {
     const userId = req.params.userId;
@@ -665,11 +755,18 @@ app.post(
           .json({ message: "No hay cajas en esta colección" });
       }
 
-      // Se elige una aleatoria
+      //Se elige una aleatoria
       const specialBoxes = boxes.filter((b) => b.hasSpecial);
       const normalBoxes = boxes.filter((b) => !b.hasSpecial);
 
-      const isSpecial = Math.random() < 0.05;
+      //Buscamos las probabilidades configuradas
+      const probabilityConfig = await CollectionProbability.findOne({
+        where: { collection },
+      });
+
+      const specialProbability = probabilityConfig?.specialProbability || 5;
+
+      const isSpecial = Math.random() < specialProbability / 100;
 
       let selectedBox;
 
@@ -681,7 +778,6 @@ app.post(
           normalBoxes[Math.floor(Math.random() * normalBoxes.length)];
       }
 
-      // 🔥 AHORA SÍ: historial correcto
       await TokenHistory.create({
         userId,
         amount: 1,
@@ -691,7 +787,7 @@ app.post(
         resultBoxName: selectedBox.type,
       });
 
-      // Añadir caja al usuario
+      //Añadimos la caja al usuario
       let userBox = await UserBox.findOne({
         where: {
           UserId: userId,
@@ -873,7 +969,6 @@ app.put("/trades/:id/accept", authenticateToken, async (req, res) => {
 
     const isGlobalTrade = offeredBox.noForBuying;
 
-    //
     const ownerOffered = await UserBox.findOne({
       where: { UserId: ownerId, BoxId: trade.offeredBoxId },
       transaction: t,
@@ -978,7 +1073,7 @@ app.put("/trades/:id/accept", authenticateToken, async (req, res) => {
         );
       }
 
-      // Accepter recibe offeredBox
+      //La persona que acepta el intercambio recibe offeredBox
       const accepterGets = await UserBox.findOne({
         where: {
           UserId: accepterId,
@@ -1002,7 +1097,7 @@ app.put("/trades/:id/accept", authenticateToken, async (req, res) => {
         );
       }
 
-      // Marcar trade como completado
+      //Marcamos trade como completado
       trade.status = true;
       trade.acceptedBy = accepterId;
 

@@ -1,0 +1,171 @@
+:host {
+    display: block;
+    min-height: 100vh;
+    background: var(--bg-primary);
+    font-family: 'Poppins', sans-serif;
+}
+
+.page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 20px 120px;
+}
+
+.header {
+    margin-bottom: 35px;
+
+    h1 {
+        font-size: 42px;
+        color: var(--text-primary);
+        margin: 0 0 10px;
+        text-align: center;
+    }
+
+    p {
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 16px;
+        margin: 0;
+    }
+}
+
+.back-btn {
+    position: fixed;
+    top: 110px;
+    left: 25px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-solid);
+    color: var(--danger);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(6px);
+    z-index: 20;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: scale(1.08);
+        background: var(--surface-solid);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.loading {
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: 2rem;
+}
+
+.collectionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 22px;
+}
+
+$card-colors: (
+    0: var(--accent-pink),
+    1: var(--accent-blue),
+    2: var(--accent-green),
+    3: var(--accent-yellow),
+);
+
+.collectionCard {
+    border-radius: 24px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+    background: var(--accent-blue);
+
+    &:hover {
+        transform: translateY(-4px);
+    }
+
+    h2 {
+        font-size: 22px;
+        margin: 0;
+        color: var(--text-primary);
+    }
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    label {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-weight: 600;
+    }
+
+    input {
+        padding: 0.75rem 1rem;
+        border-radius: 12px;
+        border: 2px solid var(--border-soft);
+        background: var(--surface-solid);
+        color: var(--text-primary);
+        font-size: 1rem;
+        font-family: 'Poppins', sans-serif;
+        outline: none;
+        transition: border-color 0.2s;
+
+        &:focus {
+            border-color: var(--text-primary);
+        }
+
+        &[readonly] {
+            opacity: 0.6;
+            cursor: default;
+        }
+    }
+}
+
+.preview {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+
+    b {
+        color: var(--text-primary);
+    }
+}
+
+.saveButton {
+    margin-top: auto;
+    border: none;
+    padding: 0.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.95rem;
+    font-family: 'Poppins', sans-serif;
+    background: var(--surface-solid);
+    color: var(--text-primary);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+    }
+}
+
+@media (max-width: 768px) {
+    .collectionsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .back-btn {
+        top: 70px;
+        left: 15px;
+    }
+}

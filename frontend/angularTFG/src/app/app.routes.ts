@@ -16,6 +16,7 @@ import { UserStatistics } from './pages/user-statistics/user-statistics';
 import { adminGuard } from './guards/admin-guard';
 import { AdminHome } from './pages/admin-home/admin-home';
 import { AdminCreateCollection } from './pages/admin-create-collection/admin-create-collection';
+import { AdminProbabilities } from './pages/admin-probabilities/admin-probabilities';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -49,6 +50,11 @@ export const routes: Routes = [
   {
     path: 'admin-collections',
     component: AdminCreateCollection,
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'admin-probabilities',
+    component: AdminProbabilities,
     canActivate: [authGuard, adminGuard],
   },
 ];

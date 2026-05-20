@@ -71,6 +71,13 @@ export interface ActivityItem {
   positive?: boolean;
 }
 
+export interface CollectionProbability {
+  id?: number;
+  collection: string;
+  normalProbability: number;
+  specialProbability: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -200,7 +207,7 @@ export class Api {
   }
 
   // =========================
-  // ACHIEVEMENTS (🔥 CAMBIO IMPORTANTE)
+  // ACHIEVEMENTS
   // =========================
 
   getAchievements(): Observable<{
@@ -231,6 +238,29 @@ export class Api {
 
   getTokenHistory(): Observable<TokenHistory[]> {
     return this.http.get<TokenHistory[]>(`${this.apiUrl}/token-history`, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
+  }
+
+  // =========================
+  // PROBABILITIES
+  // =========================
+
+  getCollectionProbabilities(): Observable<CollectionProbability[]> {
+    return this.http.get<CollectionProbability[]>(
+      `${this.apiUrl}/collection-probabilities`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.authService.getToken()}`,
+        },
+      },
+    );
+  }
+
+  saveCollectionProbability(data: CollectionProbability) {
+    return this.http.post(`${this.apiUrl}/collection-probabilities`, data, {
       headers: {
         Authorization: `Bearer ${this.authService.getToken()}`,
       },

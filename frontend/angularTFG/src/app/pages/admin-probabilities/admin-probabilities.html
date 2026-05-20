@@ -1,0 +1,106 @@
+<div class="page">
+
+    <div class="header">
+        <button class="back-btn" (click)="goBack()">
+            ←
+        </button>
+
+        <h1>Probabilidades especiales</h1>
+
+        <p>
+            Configura la probabilidad de aparición de cajas especiales
+            para cada colección.
+        </p>
+    </div>
+
+    @if (loading) {
+    <p>Cargando colecciones...</p>
+    }
+
+    @if (!loading) {
+
+    <div class="collectionsGrid">
+
+        @for (
+        probability of probabilities;
+        track probability.collection
+        ) {
+
+        <div class="collectionCard">
+
+            <h2>{{ probability.collection }}</h2>
+
+            <div class="inputGroup">
+
+                <label>
+                    Probabilidad cajas especiales (%)
+                </label>
+
+                <input type="number" min="0" max="100" [(ngModel)]="probability.specialProbability"
+                    probability.normalProbability=100 - probability.specialProbability />
+
+                <label>
+                    Probabilidad cajas normales (%)
+                </label>
+
+                <input type="number" [value]="100 - probability.specialProbability" readonly />
+
+            </div>
+
+
+
+            <div class="preview">
+
+                @if (
+                probability.specialProbability === 0
+                ) {
+
+                <span>
+                    Nunca aparecerán cajas especiales
+                </span>
+
+                }
+
+                @if (
+                probability.specialProbability > 0 &&
+                probability.specialProbability < 100 ) { <span>
+                    Aproximadamente
+                    <b>
+                        {{ probability.specialProbability }}%
+                    </b>
+                    de aperturas serán especiales
+                    </span>
+
+                    }
+
+                    @if (
+                    probability.specialProbability === 100
+                    ) {
+
+                    <span>
+                        Todas las aperturas serán especiales
+                    </span>
+
+                    }
+
+            </div>
+
+            <button class="saveButton" (click)="saveProbability(probability)">
+                Guardar cambios
+            </button>
+
+        </div>
+
+        }
+
+    </div>
+
+    }
+
+</div>
+
+@if (showModal) {
+
+<app-modal [message]="modalMessage" (closed)="closeModal()" />
+
+}
