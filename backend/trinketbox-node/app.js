@@ -390,7 +390,7 @@ app.post("/register", async (req, res) => {
       password: hashedPassword,
     });
     const token = jwt.sign(
-      { id: user.id, email: user.email, name: user.name },
+      { id: user.id, email: user.email, name: user.name, role: user.role },
       SECRET_KEY,
       { expiresIn: "1h" },
     ); //Generamos un token
@@ -414,7 +414,7 @@ app.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, name: user.name },
+      { id: user.id, email: user.email, name: user.name, role: user.role },
       SECRET_KEY,
     ); //Generamos un token
     const { password: _, ...safeUser } = user.toJSON();

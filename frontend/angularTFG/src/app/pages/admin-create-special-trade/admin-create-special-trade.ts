@@ -54,6 +54,11 @@ export class AdminCreateSpecialTrade implements OnInit {
           this.modalMessage = 'Intercambio especial creado';
           this.showModal = true;
         },
+        error: (err) => {
+          this.modalMessage =
+            err.error?.message || 'Error creando el intercambio';
+          this.showModal = true;
+        },
       });
   }
 

@@ -160,10 +160,18 @@ export class Api {
   }
 
   createSpecialTrade(offeredBoxId: number, requestedBoxId: number) {
-    return this.http.post(`${this.apiUrl}/trades/special`, {
-      offeredBoxId,
-      requestedBoxId,
-    });
+    return this.http.post(
+      `${this.apiUrl}/trades/special`,
+      {
+        offeredBoxId,
+        requestedBoxId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${this.authService.getToken()}`,
+        },
+      },
+    );
   }
 
   deleteSpecialTrade(id: number) {
