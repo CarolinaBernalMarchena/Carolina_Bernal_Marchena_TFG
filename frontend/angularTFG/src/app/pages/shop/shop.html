@@ -92,7 +92,7 @@
               }">
 
             <div class="box-cost">
-              Esta caja cuesta 1 moneda 🪙
+              Esta caja cuesta {{ box.tokenCost }} moneda{{ box.tokenCost !== 1 ? 's' : '' }} 🪙
             </div>
 
           </div>
@@ -111,9 +111,13 @@
 
   @if (showPurchaseModal && selectedBox) {
 
-  <app-trade-confirm-modal [title]="'Confirmar compra'"
-    [message]="'Estás a punto de comprar la caja ' + selectedBox.collection + ' a cambio de 1 moneda 🪙'"
-    (confirm)="confirmPurchase()" (cancel)="cancelPurchase()">
+  <app-trade-confirm-modal [title]="'Confirmar compra'" [message]="'Estás a punto de comprar la caja ' 
+    + selectedBox.collection 
+    + ' a cambio de ' 
+    + selectedBox.tokenCost 
+    + ' moneda' 
+    + (selectedBox.tokenCost !== 1 ? 's' : '') 
+    + ' 🪙'" (confirm)="confirmPurchase()" (cancel)="cancelPurchase()">
   </app-trade-confirm-modal>
 
   }

@@ -25,9 +25,11 @@
         </div>
     </div>
 
+    @if (showAcceptButton) {
     <button (click)="openAcceptModal()" class="btn ok">
         Aceptar intercambio
     </button>
+    }
 
     @if (showModal) {
     <app-trade-confirm-modal [message]="modalMessage" (confirm)="onModalConfirm()" (cancel)="onModalCancel()" />

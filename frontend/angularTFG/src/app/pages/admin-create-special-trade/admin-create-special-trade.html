@@ -1,0 +1,65 @@
+<div class="trade-wrapper">
+
+    <button class="back-btn" (click)="goBack()">←</button>
+
+    <h1>Crear intercambio especial</h1>
+
+    <div class="columns">
+
+        <div class="column">
+
+            <h2>Coleccionable ofrecido</h2>
+
+            <div class="grid">
+
+                @for (box of allBoxes; track box.id) {
+
+                <div class="card" [class.selected]="selectedOfferedBox === box" (click)="selectedOfferedBox = box">
+
+                    <img [src]="box.imageUrl">
+
+                    <p>{{ box.type }}</p>
+
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+        <div class="column">
+
+            <h2>Coleccionable solicitado</h2>
+
+            <div class="grid">
+
+                @for (box of allBoxes; track box.id) {
+
+                <div class="card" [class.selected]="selectedRequestedBox === box" (click)="selectedRequestedBox = box">
+
+                    <img [src]="box.imageUrl">
+
+                    <p>{{ box.type }}</p>
+
+                </div>
+
+                }
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <button class="trade-button" [disabled]="!selectedOfferedBox || !selectedRequestedBox" (click)="createTrade()">
+
+        Crear intercambio
+
+    </button>
+
+    @if (showModal) {
+    <app-modal [message]="modalMessage" (closed)="onModalClose()" />
+    }
+
+</div>

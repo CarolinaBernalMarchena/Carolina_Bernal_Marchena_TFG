@@ -17,9 +17,7 @@ import { SpecialTradeCard } from '../../components/special-trade-card/special-tr
 export class Trades implements OnInit {
   allTrades: Trade[] = [];
   filteredTrades: Trade[] = [];
-
   collections: { name: string; count: number }[] = [];
-
   selectedCollection: string = 'all';
 
   //SOLO cajas especiales (hasSpecial)

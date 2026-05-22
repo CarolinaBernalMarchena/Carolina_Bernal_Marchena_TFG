@@ -12,6 +12,7 @@ import { AchievementNotification } from '../../services/achievement-notification
 })
 export class SpecialTradeCard {
   @Input({ required: true }) trade!: Trade;
+  @Input() showAcceptButton: boolean = true;
   @Output() tradeEnded = new EventEmitter<void>();
 
   currentUser: User | null = null;

@@ -1,0 +1,41 @@
+<div class="market-wrapper">
+
+    <button class="back-btn" (click)="goBack()">←</button>
+
+    <h1>Gestión de intercambios especiales</h1>
+
+    <form class="filters-form">
+        <div class="filter-group select-group">
+            <label class="filter-label">Filtrar por colección ofrecida</label>
+            <select [(ngModel)]="selectedCollection" name="collection" (ngModelChange)="applyFilters()">
+                <option value="all">Todas las colecciones</option>
+                @for (col of collections; track col.name) {
+                <option [value]="col.name" [disabled]="col.count === 0">
+                    {{ col.name }} ({{ col.count }})
+                </option>
+                }
+            </select>
+        </div>
+    </form>
+
+    <button (click)="createTrade()" class="create-trade">
+        Crear nuevo intercambio
+    </button>
+
+    @if (filteredTrades.length === 0) {
+    <div class="empty">
+        No hay intercambios disponibles.
+    </div>
+    }
+
+    @for (trade of filteredTrades; track trade.id) {
+    <div class="trade-container">
+        <app-special-trade-card [trade]="trade" [showAcceptButton]="false" (tradeEnded)="loadTrades()">
+        </app-special-trade-card>
+        <button class="delete-btn" (click)="deleteTrade(trade.id)">
+            Eliminar intercambio
+        </button>
+    </div>
+    }
+
+</div>

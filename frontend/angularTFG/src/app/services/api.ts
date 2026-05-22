@@ -155,6 +155,21 @@ export class Api {
     });
   }
 
+  getSpecialTrades() {
+    return this.http.get(`${this.apiUrl}/trades/special`);
+  }
+
+  createSpecialTrade(offeredBoxId: number, requestedBoxId: number) {
+    return this.http.post(`${this.apiUrl}/trades/special`, {
+      offeredBoxId,
+      requestedBoxId,
+    });
+  }
+
+  deleteSpecialTrade(id: number) {
+    return this.http.delete(`${this.apiUrl}/trades/special/${id}`);
+  }
+
   // =========================
   // BOXES
   // =========================

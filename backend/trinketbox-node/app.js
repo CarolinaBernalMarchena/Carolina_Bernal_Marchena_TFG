@@ -565,7 +565,7 @@ app.get("/shop-boxes", authenticateToken, async (req, res) => {
       timeZone: "Europe/Madrid",
     });
 
-    //Generamos una semilla diaria basada en la fecha
+    // Generamos semilla diaria
     const daySeed = [...today].reduce(
       (acc, char) => acc + char.charCodeAt(0),
       0,
@@ -576,6 +576,7 @@ app.get("/shop-boxes", authenticateToken, async (req, res) => {
         let t = (a += 0x6d2b79f5);
         t = Math.imul(t ^ (t >>> 15), t | 1);
         t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+
         return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
       };
     }
@@ -585,23 +586,24 @@ app.get("/shop-boxes", authenticateToken, async (req, res) => {
 
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(random() * (i + 1));
+
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
 
+    const selectedBoxes = shuffled.slice(0, 3);
+
     const result = [];
 
-    for (const box of shuffled.slice(0, 3)) {
-      const costConfig = await CollectionCost.findOne({
-        where: {
-          collection: box.collection,
-        },
+    for (const box of selectedBoxes) {
+      const existingCost = await CollectionCost.findOne({
+        where: { collection: box.collection },
       });
 
       result.push({
         collection: box.collection,
         name: box.type,
         collectionUrl: box.collectionUrl,
-        tokenCost: costConfig?.tokenCost ?? 1,
+        tokenCost: existingCost?.tokenCost ?? 1,
       });
     }
 
@@ -901,45 +903,32 @@ app.get("/profile-stats", authenticateToken, async (req, res) => {
 app.get("/trades", authenticateToken, async (req, res) => {
   try {
     const trades = await Trade.findAll({
+      where: { status: false },
       include: [
-        {
-          model: Box,
-          as: "offeredBox",
-        },
-        {
-          model: Box,
-          as: "requestedBox",
-        },
+        { model: Box, as: "offeredBox" },
+        { model: Box, as: "requestedBox" },
       ],
       order: [["date", "DESC"]],
     });
-
     res.json(trades);
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: error.message });
   }
 });
 
 //Crear un nuevo intercambio
 app.post("/trades", authenticateToken, async (req, res) => {
   try {
-    const requestedBox = await Box.findOne({
-      where: { id: req.body.requestedBoxId },
-    });
+    const [offeredBox, requestedBox] = await Promise.all([
+      Box.findByPk(req.body.offeredBoxId),
+      Box.findByPk(req.body.requestedBoxId),
+    ]);
 
-    const offeredBox = await Box.findOne({
-      where: { id: req.body.offeredBoxId },
-    });
-
-    //Validamos existencia de las cajas
-    if (!requestedBox || !offeredBox) {
-      return res.status(404).json({
-        message: "Caja no encontrada",
-      });
+    if (!offeredBox || !requestedBox) {
+      return res.status(404).json({ message: "Caja no encontrada" });
     }
 
-    //Bloqueamos las cajas especiales, no pueden usarse en los intercambios
-    if (requestedBox.noForBuying || offeredBox.noForBuying) {
+    if (offeredBox.noForBuying || requestedBox.noForBuying) {
       return res.status(400).json({
         message:
           "Las cajas especiales no pueden usarse en intercambios de usuarios",
@@ -947,28 +936,77 @@ app.post("/trades", authenticateToken, async (req, res) => {
     }
 
     const trade = await Trade.create({
-      offeredBoxId: req.body.offeredBoxId,
-      requestedBoxId: req.body.requestedBoxId,
-
+      offeredBoxId: offeredBox.id,
+      requestedBoxId: requestedBox.id,
       offeredBoxName: offeredBox.type,
       requestedBoxName: requestedBox.type,
-
       ownerId: req.user.id,
       ownerName: req.user.name,
-
       offeredBoxUrl: offeredBox.imageUrl,
       requestedBoxUrl: requestedBox.imageUrl,
-
       status: false,
     });
 
     res.json(trade);
   } catch (error) {
-    console.error(error);
+    res
+      .status(500)
+      .json({ message: error.message || "Error creando intercambio" });
+  }
+});
 
-    res.status(500).json({
-      message: error.message || "Error creando intercambio",
+//Obtener los intercambios especiales
+app.get("/trades/special", authenticateToken, async (req, res) => {
+  try {
+    const trades = await Trade.findAll({
+      where: { ownerId: 0 },
+      include: [
+        { model: Box, as: "offeredBox" },
+        { model: Box, as: "requestedBox" },
+      ],
+      order: [["date", "DESC"]],
     });
+    res.json(trades);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+//Creación de intercambios especiales por parte del usuario admin
+app.post("/trades/special", authenticateToken, async (req, res) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "No autorizado" });
+    }
+
+    const [offeredBox, requestedBox] = await Promise.all([
+      Box.findByPk(req.body.offeredBoxId),
+      Box.findByPk(req.body.requestedBoxId),
+    ]);
+
+    if (!offeredBox || !requestedBox) {
+      return res.status(404).json({ message: "Caja no encontrada" });
+    }
+
+    const trade = await Trade.create({
+      offeredBoxId: offeredBox.id,
+      requestedBoxId: requestedBox.id,
+      offeredBoxName: offeredBox.type,
+      requestedBoxName: requestedBox.type,
+      ownerId: 0,
+      ownerName: "Intercambio especial",
+      offeredBoxUrl: offeredBox.imageUrl,
+      requestedBoxUrl: requestedBox.imageUrl,
+      status: false,
+    });
+
+    await UserBox.upsert({ UserId: 0, BoxId: offeredBox.id, quantity: 1000 });
+
+    res.json(trade);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: error.message || "Error creando intercambio especial" });
   }
 });
 
