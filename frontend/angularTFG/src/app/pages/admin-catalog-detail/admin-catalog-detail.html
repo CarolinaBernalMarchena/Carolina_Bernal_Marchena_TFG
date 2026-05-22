@@ -1,0 +1,33 @@
+<div class="detail-container">
+
+    <button class="back-btn" (click)="goBack()">←</button>
+
+    <h2 class="title">Catálogo</h2>
+
+    @if (selectedBox) {
+
+    <div class="info-box">
+
+        <div class="image-container">
+            <img [src]="selectedBox.imageUrl" [alt]="selectedBox.type" />
+        </div>
+
+        <p>{{ selectedBox.type }}</p>
+
+        <p>{{ selectedBox.descripcion }}</p>
+
+        <p>Colección: {{ selectedBox.collection }}</p>
+
+        @if (selectedBox.hasSpecial) {
+        <p>⭐ Especial</p>
+        }
+
+    </div>
+
+    } @else {
+
+    <p class="empty" style="font-size: 150%">No se encontró el coleccionable.</p>
+
+    }
+
+</div>

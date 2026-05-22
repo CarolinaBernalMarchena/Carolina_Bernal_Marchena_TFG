@@ -33,6 +33,32 @@
     }
 }
 
+.catalog-btn {
+    position: fixed;
+    top: 110px;
+    right: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 20px;
+    background: var(--surface-solid);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    z-index: 20;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+}
+
 .wizard-container {
     max-width: 900px;
     margin: 0 auto;

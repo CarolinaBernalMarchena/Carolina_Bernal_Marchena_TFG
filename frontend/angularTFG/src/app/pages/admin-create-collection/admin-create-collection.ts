@@ -64,6 +64,10 @@ export class AdminCreateCollection {
     });
   }
 
+  openCatalog(): void {
+    this.router.navigate(['/admin-catalog']);
+  }
+
   nextStep() {
     if (this.step < 3) this.step++;
   }

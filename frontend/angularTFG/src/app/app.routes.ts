@@ -20,6 +20,8 @@ import { AdminProbabilities } from './pages/admin-probabilities/admin-probabilit
 import { AdminCosts } from './pages/admin-costs/admin-costs';
 import { AdminCreateSpecialTrade } from './pages/admin-create-special-trade/admin-create-special-trade';
 import { AdminSpecialTrades } from './pages/admin-special-trades/admin-special-trades';
+import { AdminCatalog } from './pages/admin-catalog/admin-catalog';
+import { AdminCatalogDetail } from './pages/admin-catalog-detail/admin-catalog-detail';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -73,6 +75,16 @@ export const routes: Routes = [
   {
     path: 'admin-create-special-trade',
     component: AdminCreateSpecialTrade,
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'admin-catalog',
+    component: AdminCatalog,
+    canActivate: [authGuard, adminGuard],
+  },
+  {
+    path: 'admin-catalog-detail/:type',
+    component: AdminCatalogDetail,
     canActivate: [authGuard, adminGuard],
   },
 ];

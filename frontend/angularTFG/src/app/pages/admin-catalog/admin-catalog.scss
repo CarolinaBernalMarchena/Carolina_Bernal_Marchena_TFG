@@ -1,0 +1,125 @@
+.collection-container {
+    background: var(--bg-primary);
+    min-height: 100vh;
+    padding: 24px;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.back-btn {
+    position: fixed;
+    top: 110px;
+    left: 25px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: var(--surface-solid);
+    color: var(--danger);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    z-index: 20;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: scale(1.08);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-primary);
+}
+
+.badge-counter {
+    font-size: 150%;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 30px 0;
+}
+
+.collection-selector {
+    background: var(--surface-solid);
+    border: 2px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 12px 18px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+    &:hover {
+        border-color: var(--danger);
+        transform: translateY(-1px);
+    }
+
+    &:focus {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 4px rgba(201, 108, 157, 0.15);
+    }
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 600px;
+    margin: 30px auto 0 auto;
+}
+
+.collectible {
+    aspect-ratio: 1 / 1;
+    background: var(--accent-green);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow);
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.special-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: gold;
+    padding: 4px 6px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: bold;
+    z-index: 3;
+}
+
+.empty-state {
+    margin-top: 40px;
+    font-size: 16px;
+    color: var(--text-muted);
+}

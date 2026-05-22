@@ -1,0 +1,39 @@
+<div class="collection-container">
+
+    <button class="back-btn" (click)="goBack()">←</button>
+
+    <h2 class="title">Catálogo de coleccionables</h2>
+
+    <div class="badge-counter">
+        {{ filteredBoxes.length }} coleccionables
+    </div>
+
+    <div class="filter-container">
+        <select class="collection-selector" (change)="onCollectionChange($event)">
+            <option value="all">Todas las colecciones</option>
+            @for (collection of collections; track collection) {
+            <option [value]="collection">{{ collection }}</option>
+            }
+        </select>
+    </div>
+
+    @if (filteredBoxes.length === 0) {
+    <div class="empty-state">
+        No hay coleccionables en esta colección 🥺
+    </div>
+    }
+
+    @if (filteredBoxes.length > 0) {
+    <div class="grid">
+        @for (box of filteredBoxes; track box.id) {
+        <div class="collectible" (click)="onBoxClick(box)">
+            <img [src]="box.imageUrl" [alt]="box.type" />
+            @if (box.hasSpecial) {
+            <div class="special-badge">⭐</div>
+            }
+        </div>
+        }
+    </div>
+    }
+
+</div>
