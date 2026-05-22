@@ -4,21 +4,23 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SpecialTradeCard } from '../../components/special-trade-card/special-trade-card';
+import { TradeConfirmModal } from '../../components/trade-confirm-modal/trade-confirm-modal';
 
 @Component({
   selector: 'app-admin-special-trades',
   standalone: true,
-  imports: [CommonModule, SpecialTradeCard, FormsModule],
+  imports: [CommonModule, SpecialTradeCard, FormsModule, TradeConfirmModal],
   templateUrl: './admin-special-trades.html',
   styleUrl: './admin-special-trades.scss',
 })
 export class AdminSpecialTrades implements OnInit {
   trades: Trade[] = [];
   filteredTrades: Trade[] = [];
-
   collections: { name: string; count: number }[] = [];
-
   selectedCollection: string = 'all';
+  showModal = false;
+  modalMessage = '';
+  pendingDeleteId: number | null = null;
 
   constructor(
     private api: Api,
@@ -33,11 +35,7 @@ export class AdminSpecialTrades implements OnInit {
     this.api.getSpecialTrades().subscribe({
       next: (data: any) => {
         this.trades = data;
-
-        // Extraer colecciones igual que en trades normales
         this.extractCollections();
-
-        // Aplicar filtros iniciales
         this.applyFilters();
       },
       error: (err) => {
@@ -74,8 +72,28 @@ export class AdminSpecialTrades implements OnInit {
     });
   }
 
+  openDeleteModal(id: number): void {
+    this.pendingDeleteId = id;
+    this.modalMessage =
+      '¿Seguro que quieres eliminar este intercambio? Esta acción no se puede deshacer.';
+    this.showModal = true;
+  }
+
+  onModalConfirm(): void {
+    if (this.pendingDeleteId !== null) {
+      this.deleteTrade(this.pendingDeleteId);
+    }
+    this.showModal = false;
+    this.pendingDeleteId = null;
+  }
+
+  onModalCancel(): void {
+    this.showModal = false;
+    this.pendingDeleteId = null;
+  }
+
   deleteTrade(id: number): void {
-    this.api.deleteSpecialTrade(id).subscribe({
+    this.api.deleteTradeBackend(id).subscribe({
       next: () => {
         this.loadTrades();
       },

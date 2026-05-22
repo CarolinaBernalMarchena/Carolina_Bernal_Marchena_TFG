@@ -32,10 +32,14 @@
     <div class="trade-container">
         <app-special-trade-card [trade]="trade" [showAcceptButton]="false" (tradeEnded)="loadTrades()">
         </app-special-trade-card>
-        <button class="delete-btn" (click)="deleteTrade(trade.id)">
+        <button class="delete-btn" (click)="openDeleteModal(trade.id)">
             Eliminar intercambio
         </button>
     </div>
+    }
+
+    @if (showModal) {
+    <app-trade-confirm-modal [message]="modalMessage" (confirm)="onModalConfirm()" (cancel)="onModalCancel()" />
     }
 
 </div>
