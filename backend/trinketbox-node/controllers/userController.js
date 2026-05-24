@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { Op } from "sequelize";
 import { User, UserBox, Box, Trade } from "../models/index.js";
 
 export async function register(req, res) {
@@ -115,6 +116,7 @@ export async function getUserStats(req, res) {
 
     res.json({ boxesCount, specialCount, tradesCount });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: error });
   }
 }

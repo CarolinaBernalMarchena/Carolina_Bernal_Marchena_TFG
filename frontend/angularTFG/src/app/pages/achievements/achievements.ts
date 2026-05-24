@@ -48,7 +48,9 @@ export class Achievements implements OnInit {
   loadAchievements(): void {
     this.api.getAchievements().subscribe({
       next: (res: any) => {
-        const unlockedIds: number[] = res.unlockedIds || [];
+        const unlockedIds: number[] = res.achievements.map(
+          (a: any) => a.achievementId,
+        );
 
         this.achievements = ALL_ACHIEVEMENTS.map((a: any) => ({
           id: a.id,

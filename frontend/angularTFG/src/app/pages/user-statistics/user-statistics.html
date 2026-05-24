@@ -60,15 +60,19 @@
                     <div class="content">
                         <div class="title">{{ e.title }}</div>
 
-                        <div class="subtitle" *ngIf="e.title">
+                        @if (e.title) {
+                        <div class="subtitle">
                             {{ e.title }}
                         </div>
+                        }
 
-                        <div class="meta" *ngIf="e.amount">
+                        @if (e.amount) {
+                        <div class="meta">
                             <span [class.gain]="e.type === 'gain'" [class.spent]="e.type === 'spent'">
                                 {{ e.type === 'gain' ? '+' : '-' }}{{ e.amount }} monedas
                             </span>
                         </div>
+                        }
                     </div>
 
                     <div class="time">
