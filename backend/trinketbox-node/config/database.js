@@ -5,4 +5,8 @@ const sequelize = new Sequelize({
   storage: "trinketbox-database/database.sqlite",
 });
 
+//Sincronización
+sequelize.sync();
+//sequelize.sync({ force: true });
+
 export default sequelize;

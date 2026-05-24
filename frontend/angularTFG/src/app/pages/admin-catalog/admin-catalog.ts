@@ -51,6 +51,6 @@ export class AdminCatalog implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/admin-home']);
+    this.router.navigate(['/admin-collections']);
   }
 }

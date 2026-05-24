@@ -1,5 +1,6 @@
 <div>
 
+    @if (trade.ownerId !== currentUser?.id) {
     <div class="special-trade-card">
 
         <p class="user">
@@ -24,6 +25,33 @@
 
         </div>
     </div>
+    } @else {
+    <div class="your-special-trade-card">
+
+        <p class="user">
+            Intercambio especial<br><br>(Éste intercambio lo estás proponiendo tú cómo intercambio especial)
+        </p>
+
+        <div class="trade-row">
+
+            <div>
+                <p>Tu coleccionable</p>
+                <img class="box" [src]="trade.offeredBoxUrl" alt="ofrecido" />
+                <p>{{ trade.offeredBoxName }}</p>
+            </div>
+
+            <div class="arrow">⇄</div>
+
+            <div>
+                <p>Coleccionable que vas a recibir</p>
+
+                <img class="box" [src]="trade.requestedBoxUrl" alt="buscado" />
+                <p>{{ trade.requestedBoxName }}</p>
+            </div>
+
+        </div>
+    </div>
+    }
 
     @if (showAcceptButton) {
     <button (click)="openAcceptModal()" class="btn ok">

@@ -156,7 +156,11 @@ export class Api {
   }
 
   getSpecialTrades() {
-    return this.http.get(`${this.apiUrl}/trades/special`);
+    return this.http.get(`${this.apiUrl}/trades/special`, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
   }
 
   createSpecialTrade(offeredBoxId: number, requestedBoxId: number) {
@@ -174,16 +178,20 @@ export class Api {
     );
   }
 
-  deleteSpecialTrade(id: number) {
+  /*deleteSpecialTrade(id: number) {
     return this.http.delete(`${this.apiUrl}/trades/special/${id}`);
-  }
+  }*/
 
   // =========================
   // BOXES
   // =========================
 
   getShopBoxes() {
-    return this.http.get(`${this.apiUrl}/shop-boxes`);
+    return this.http.get(`${this.apiUrl}/shop-boxes`, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
   }
 
   getAllBoxes() {
@@ -207,7 +215,11 @@ export class Api {
   // =========================
 
   getProfileStats() {
-    return this.http.get<any>(`${this.apiUrl}/profile-stats`);
+    return this.http.get<any>(`${this.apiUrl}/profile-stats`, {
+      headers: {
+        Authorization: `Bearer ${this.authService.getToken()}`,
+      },
+    });
   }
 
   getMyCollection(userId: number): Observable<any> {

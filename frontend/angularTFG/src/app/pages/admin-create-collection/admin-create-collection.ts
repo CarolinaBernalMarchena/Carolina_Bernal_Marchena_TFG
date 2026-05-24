@@ -169,7 +169,7 @@ export class AdminCreateCollection {
 
   closeSuccessModal() {
     this.showSuccessModal = false;
-    this.router.navigate(['/admin-home']);
+    this.router.navigate(['/admin-collections']);
   }
 
   goBack(): void {
