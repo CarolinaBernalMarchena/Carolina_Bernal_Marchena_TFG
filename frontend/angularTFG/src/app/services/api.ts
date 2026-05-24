@@ -178,10 +178,6 @@ export class Api {
     );
   }
 
-  /*deleteSpecialTrade(id: number) {
-    return this.http.delete(`${this.apiUrl}/trades/special/${id}`);
-  }*/
-
   // =========================
   // BOXES
   // =========================
