@@ -12,27 +12,27 @@
         <div class="input-group">
             <input type="text" placeholder="Nombre de usuario" formControlName="name" />
             @if (registerForm.controls['name'].touched && registerForm.controls['name'].invalid) {
-                <span>
-                    Mínimo 3 caracteres
-                </span>
+            <span>
+                Mínimo 3 caracteres
+            </span>
             }
         </div>
 
         <div class="input-group">
             <input type="email" placeholder="Email" formControlName="email" />
             @if (registerForm.controls['email'].touched && registerForm.controls['email'].invalid) {
-                <span>
-                    Email inválido
-                </span>
+            <span>
+                Email inválido
+            </span>
             }
         </div>
 
         <div class="input-group">
             <input type="password" placeholder="Contraseña" formControlName="password" />
             @if (registerForm.controls['password'].touched && registerForm.controls['password'].invalid) {
-                <span>
-                    Mínimo 6 caracteres
-                </span>
+            <span>
+                Mínimo 6 caracteres
+            </span>
             }
         </div>
 
@@ -42,7 +42,7 @@
 
     </form>
 
-    <a class="login-link" (click)="navigateToHome()">
+    <a class="login-link" (click)="navigateToLogin()">
         ¿Ya tienes cuenta? Inicia sesión
     </a>
 
