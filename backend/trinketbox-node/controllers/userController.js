@@ -18,6 +18,7 @@ export async function register(req, res) {
     ); //Generamos un token
     res.status(201).send({ user, token });
   } catch (error) {
+    console.error(error);
     return res.status(400).json({ message: error });
   }
 }
