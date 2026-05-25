@@ -9,6 +9,11 @@ Trinketbox is a web application for digital collecting. Trinketbox allows users 
 ## Prototype: 
 https://marvelapp.com/prototype/94h31h3
 
+## Deployment: 
+https://carolina-bernal-marchena-tfg-2.onrender.com
+
+*This application is deployed using Render’s free web service. It is important to note that the backend runs on a non-persistent environment, meaning that the filesystem is ephemeral. As a result, any locally stored data (including files such as SQLite databases) will not persist across deployments, restarts, or periods of inactivity. The application is designed with this constraint in mind, and data persistence is handled accordingly through stateless or externally managed mechanisms where required.*
+
 # Running the App Locally
 
 ## Prerequisites
