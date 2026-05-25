@@ -48,7 +48,7 @@ export class Register {
           this.authService.setToken(res.token);
         }
 
-        this.router.navigate(['/home']);
+        //this.router.navigate(['/login']);
       },
       error: (err) => {
         console.error('Error al registrar usuario', err);
