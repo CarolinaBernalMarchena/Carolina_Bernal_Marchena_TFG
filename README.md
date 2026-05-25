@@ -3,6 +3,8 @@ Trinketbox is a web application for digital collecting. Trinketbox allows users 
 ## Technologies: 
 - **Angular**
 - **Node.js**
+- **SCSS**
+- **HTML**
 
 ## Prototype: 
 https://marvelapp.com/prototype/94h31h3
