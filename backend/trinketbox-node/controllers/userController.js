@@ -11,12 +11,7 @@ export async function register(req, res) {
       ...req.body,
       password: hashedPassword,
     });
-    const token = jwt.sign(
-      { id: user.id, email: user.email, name: user.name, role: user.role },
-      process.env.SECRET_KEY,
-      { expiresIn: "1h" },
-    ); //Generamos un token
-    res.status(201).send({ user, token });
+    res.status(201).send({ user });
   } catch (error) {
     console.error(error);
     return res.status(400).json({ message: error });

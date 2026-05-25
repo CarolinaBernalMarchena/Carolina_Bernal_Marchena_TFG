@@ -46,4 +46,10 @@
         ¿Ya tienes cuenta? Inicia sesión
     </a>
 
+    @if (showModal) {
+
+    <app-modal [message]="modalMessage" (closed)="onModalClose()" />
+
+    }
+
 </div>
