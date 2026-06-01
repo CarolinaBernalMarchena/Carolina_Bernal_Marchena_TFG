@@ -72,6 +72,7 @@
     transition: 0.2s ease;
     box-shadow: var(--shadow);
     color: var(--text-primary);
+    background: var(--accent-blue);
 }
 
 .admin-card:hover {
@@ -87,22 +88,6 @@
 .admin-card p {
     margin: 0;
     color: var(--text-secondary);
-}
-
-.pink {
-    background: var(--accent-pink);
-}
-
-.blue {
-    background: var(--accent-blue);
-}
-
-.green {
-    background: var(--accent-green);
-}
-
-.yellow {
-    background: var(--accent-yellow);
 }
 
 @media (max-width: 768px) {

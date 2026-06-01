@@ -128,7 +128,7 @@ h1 {
 }
 
 .steps .active {
-    background: var(--accent-pink);
+    background: var(--danger);
     color: white;
     font-weight: bold;
 }
@@ -195,7 +195,7 @@ button {
     cursor: pointer;
     font-weight: bold;
     transition: 0.2s;
-    background: var(--accent-blue);
+    background-color: var(--danger);
     color: white;
 }
 
@@ -204,7 +204,7 @@ button:hover {
 }
 
 .save {
-    background: var(--accent-pink);
+    background: var(--danger);
 }
 
 /* =========================

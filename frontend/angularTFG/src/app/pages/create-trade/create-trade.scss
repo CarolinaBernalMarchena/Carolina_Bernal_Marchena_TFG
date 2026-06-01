@@ -108,7 +108,7 @@ h1 {
   right: 6px;
   width: 22px;
   height: 22px;
-  background: #6ecb63;
+  background:var(--border-soft);
   color: white;
   font-size: 14px;
   font-weight: bold;
@@ -133,7 +133,7 @@ input {
   margin-top: 35px;
   padding: 12px 28px;
   font-size: 16px;
-  background: var(--accent-green);
+  background-color: var(--danger);
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -141,11 +141,11 @@ input {
 }
 
 .trade-button:hover {
-  background: #8bc97a;
+  background: #e87c7c;
 }
 
 .trade-button:disabled {
-  background: #b9e1b0;
+  background: var(--border-soft);
   cursor: not-allowed;
 }
 

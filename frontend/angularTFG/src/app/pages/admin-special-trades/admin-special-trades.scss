@@ -111,17 +111,14 @@ h1 {
 }
 
 .delete-btn {
-    margin-top: 10px;
-    padding: 12px 24px;
-    border: 2px solid var(--border-soft);
-    border-radius: 999px;
+    background-color: #f8b6c1;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 2px solid;
+    border-color: #e77a94;
     cursor: pointer;
-    transition: transform 0.2s ease;
-    background: var(--surface-solid);
-    color: var(--danger);
-    font-weight: 700;
-    font-family: 'Poppins', sans-serif;
-    box-shadow: var(--shadow);
+    font-weight: bold;
+    transition: 0.2s;
 
     &:hover {
         transform: translateY(-2px);
