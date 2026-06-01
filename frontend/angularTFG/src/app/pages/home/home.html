@@ -17,13 +17,31 @@
         </div>
 
         <div class="intercambios" (click)="goToTrades()">
-            Intercambios
+            <span class="icon">🔄</span>
+            <div>
+                <h3>Intercambios</h3>
+                <p>Gestiona y consulta tus intercambios</p>
+            </div>
         </div>
 
         <div class="actions">
-            <div class="card tienda" (click)="goToShop()">Tienda</div>
-            <div class="card coleccion" (click)="goToCollection()">Mis colecciones</div>
-            <div class="card perfil" (click)="goToProfile()">Mi perfil</div>
+            <div class="card tienda" (click)="goToShop()">
+                <span class="icon">🛒</span>
+                <span class="card-title">Tienda</span>
+                <span class="card-subtitle">Compra nuevos coleccionables</span>
+            </div>
+
+            <div class="card coleccion" (click)="goToCollection()">
+                <span class="icon">📚</span>
+                <span class="card-title">Mis colecciones</span>
+                <span class="card-subtitle">Gestiona tu colección</span>
+            </div>
+
+            <div class="card perfil" (click)="goToProfile()">
+                <span class="icon">👤</span>
+                <span class="card-title">Mi perfil</span>
+                <span class="card-subtitle">Consulta tus estadísticas</span>
+            </div>
         </div>
 
     </div>
