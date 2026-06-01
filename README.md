@@ -54,7 +54,7 @@ npm install
 Start the server:
 
 ```bash
-node index.js
+npm star
 ```
 
 The API will run on **http://localhost:3001** by default.
@@ -97,7 +97,7 @@ src/app/services/api.ts
 
 ```bash
 # Terminal 1 — backend
-cd backend/trinketbox-node && npm install && node index.js
+cd backend/trinketbox-node && npm install && npm start
 
 # Terminal 2 — frontend
 cd frontend/angularTFG && npm install && ng serve
