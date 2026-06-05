@@ -15,16 +15,16 @@
     align-items: center;
     justify-content: center;
     border: none;
-    border-radius: 14px;
+    border-radius: 16px;
     background: var(--surface-solid);
     color: var(--danger);
     font-size: 26px;
     font-weight: bold;
     cursor: pointer;
     box-shadow: var(--shadow);
-    backdrop-filter: blur(6px);
     z-index: 20;
-    transition: all 0.2s ease;
+    transition: 0.2s ease;
+
     &:hover {
         transform: translateY(-2px) scale(1.05);
     }
@@ -32,219 +32,229 @@
 
 .catalog-btn {
     position: fixed;
-    top: 110px;
-    right: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    top: 100px;
+    right: 20px;
     border: none;
     border-radius: 999px;
-    padding: 12px 20px;
+    padding: 12px 18px;
     background: var(--surface-solid);
     color: var(--text-primary);
     font-size: 14px;
     font-weight: 700;
-    font-family: 'Poppins', sans-serif;
     cursor: pointer;
     box-shadow: var(--shadow);
-    z-index: 20;
-    transition: all 0.2s ease;
+    transition: 0.2s ease;
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
 }
 
 .wizard-container {
-    max-width: 900px;
+    max-width: 920px;
     margin: 0 auto;
-    padding: 80px 20px;
+    padding: 90px 20px 60px;
 }
 
 h1 {
     text-align: center;
     color: var(--text-primary);
-    font-size: 40px;
-    margin-bottom: 20px;
+    font-size: 42px;
+    margin-bottom: 18px;
 }
-
-/* =========================
-    SELECTOR
-========================= */
-.selects-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-height: 100px;
-}
-
-.selects-container select {
-    background-color: #fff;
-    border: 2px solid #e4b6d0;
-    border-radius: 14px;
-    padding: 12px 18px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #9b5c7c;
-    cursor: pointer;
-    outline: none;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-
-    &:hover {
-        border-color: #c96c9d;
-        transform: translateY(-1px);
-    }
-
-    &:focus {
-        border-color: #c96c9d;
-        box-shadow: 0 0 0 4px rgba(201, 108, 157, 0.15);
-    }
-}
-
-/* =========================
-    STEPS
-========================= */
 
 .steps {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 25px;
+    gap: 10px;
+    margin: 20px 0 30px;
 }
 
 .steps div {
     flex: 1;
     text-align: center;
-    padding: 10px;
-    border-radius: 12px;
+    padding: 12px;
+    border-radius: 14px;
     background: var(--surface);
-    border: 2px solid var(--border-soft);
+    border: 1px solid var(--border-soft);
     color: var(--text-secondary);
-    margin: 0 5px;
+    font-weight: 600;
+    transition: 0.2s ease;
 }
 
 .steps .active {
-    background: var(--danger);
-    color: white;
-    font-weight: bold;
-}
-
-/* =========================
-    CARD
-========================= */
-
-.step-card {
-    background: var(--surface);
-    border: 2px solid var(--border-soft);
-    border-radius: 20px;
-    padding: 25px;
-    box-shadow: var(--shadow);
-}
-
-/* =========================
-    INPUTS
-========================= */
-
-input {
-    width: 100%;
-    margin-bottom: 12px;
-    padding: 10px;
-    border-radius: 12px;
-    border: 2px solid var(--border-soft);
-    background: var(--card-bg);
+    background: var(--accent-blue);
     color: var(--text-primary);
-}
-
-/* =========================
-    BOXES
-========================= */
-
-.boxes {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-    margin-top: 15px;
-}
-
-.box-card {
-    padding: 15px;
-    border-radius: 16px;
-    border: 2px solid var(--border-soft);
-    background: var(--card-bg);
-}
-
-/* =========================
-    BUTTONS
-========================= */
-
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-    gap: 10px;
-}
-
-button {
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.2s;
-    background-color: var(--danger);
-    color: white;
-}
-
-button:hover {
     transform: translateY(-2px);
 }
 
-.save {
-    background: var(--danger);
+.card {
+    background: var(--surface);
+    border-radius: 22px;
+    padding: 28px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
-/* =========================
-    CHECKBOXES
-========================= */
+.card > * {
+    width: 100%;
+}
+
+.card h2 {
+    font-size: 22px;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.card h5 {
+    margin: 0;
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-top: 10px;
+}
+
+input {
+    width: 100%;
+    padding: 14px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border-soft);
+    background: var(--surface-solid);
+    color: var(--text-primary);
+    font-size: 15px;
+    transition: 0.2s ease;
+
+    &:focus {
+        outline: none;
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(120, 160, 255, 0.2);
+    }
+}
+
+input,
+select {
+    box-sizing: border-box;
+}
+
+.selects-container select {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border-soft);
+    background: var(--surface-solid);
+    font-size: 15px;
+    color: var(--text-primary);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 0 6px;
+}
+
+.form-grid,
+.checkbox-grid,
+.selects-container {
+    width: 100%;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.field label {
+    font-size: 13px;
+    opacity: 0.85;
+}
 
 .checkbox-grid {
     display: flex;
-    flex-direction: column; 
-    gap: 16px;              
-    width: 100%;
+    flex-direction: column;
+    gap: 14px;
 }
 
 .checkbox-item {
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
     align-items: center;
-    gap: 12px;
-    cursor: pointer;
-    width: max-content;
-
-    input[type="checkbox"] {
-        margin: 0;                 
-        cursor: pointer;
-        flex-shrink: 0;            
-    }
-
-    span {
-        font-size: 14px;       
-        line-height: 1;      
-        white-space: nowrap;
-        user-select: none;     
-    }
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: var(--surface-solid);
+    border: 1px solid var(--border-soft);
 }
 
-/* =========================
-    REVIEW
-========================= */
+.checkbox-item span {
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.3;
+    flex: 1;
+}
 
-.review-list {
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent-blue);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.box-list {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-top: 10px;
+    gap: 10px;
+}
+
+.box-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--surface-solid);
+    border: 1px solid var(--border-soft);
+    font-size: 14px;
+}
+
+button {
+    padding: 12px 18px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.2s ease;
+}
+
+button:not(.back-btn):not(.catalog-btn) {
+    background: var(--accent-blue);
+    color: var(--text-primary);
+}
+
+button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+}
+
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 12px;
+}
+
+.review-box {
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: var(--surface-solid);
+    border: 1px solid var(--border-soft);
+    margin-top: 8px;
+    font-size: 14px;
 }

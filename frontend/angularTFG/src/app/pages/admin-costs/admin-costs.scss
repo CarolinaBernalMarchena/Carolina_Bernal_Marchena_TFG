@@ -59,58 +59,70 @@ h1 {
 .cost-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 22px;
+    margin-top: 20px;
 }
 
 .cost-card {
-    background: var(--accent-blue);
-    border-radius: 24px;
-    padding: 24px 28px;
+    background: var(--surface);
+    border-radius: 28px;
+    padding: 32px 36px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: var(--shadow);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid var(--border-soft);
+    min-height: 110px;
+}
 
-    &:hover {
-        transform: translateY(-3px);
-    }
+.cost-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(0,0,0,0.12);
 }
 
 .info {
-    h2 {
-        font-size: 20px;
-        margin: 0 0 6px;
-        color: var(--text-primary);
-    }
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
 
-    p {
-        margin: 0;
-        font-size: 14px;
-        color: var(--text-secondary);
-    }
+.info h2 {
+    font-size: 24px;
+    margin: 0;
+    color: var(--text-primary);
+    font-weight: 800;
+}
+
+.info p {
+    margin: 0;
+    font-size: 15px;
+    color: var(--text-secondary);
 }
 
 .actions {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
 
     input {
-        width: 80px;
-        padding: 0.75rem;
-        border-radius: 12px;
-        border: 2px solid var(--border-soft);
+        width: 100px;
+        padding: 14px 12px;
+        border-radius: 14px;
+        border: none;
         background: var(--surface-solid);
         color: var(--text-primary);
-        font-size: 1rem;
+        font-size: 16px;
+        font-weight: 700;
+        text-align: center;
         font-family: 'Poppins', sans-serif;
         text-align: center;
         outline: none;
-        transition: border-color 0.2s;
+        transition: 0.2s ease;
 
         &:focus {
-            border-color: var(--text-primary);
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 3px rgba(120,160,255,0.2);
         }
     }
 
@@ -136,6 +148,35 @@ h1 {
             cursor: not-allowed;
         }
     }
+}
+
+.actions button {
+    padding: 14px 20px;
+    border-radius: 999px;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    background: var(--accent-blue);
+    color: var(--text-primary);
+
+    border: none;
+
+    cursor: pointer;
+
+    box-shadow: var(--shadow);
+
+    transition: 0.2s ease;
+}
+
+.actions button:hover:not(:disabled) {
+    transform: translateY(-3px);
+    filter: brightness(1.05);
+}
+
+.actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 @media (max-width: 600px) {

@@ -12,14 +12,23 @@
             <img [src]="selectedBox.imageUrl" [alt]="selectedBox.type" />
         </div>
 
-        <p>{{ selectedBox.type }}</p>
+        <h3 class="item-name">{{ selectedBox.type }}</h3>
 
-        <p>{{ selectedBox.descripcion }}</p>
+        <p class="item-description">{{ selectedBox.descripcion }}</p>
 
-        <p>Colección: {{ selectedBox.collection }}</p>
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <span class="stat-value">{{ selectedBox.collection }}</span>
+                <span class="stat-label">Colección</span>
+            </div>
+
+        </div>
 
         @if (selectedBox.hasSpecial) {
-        <p>⭐ Especial</p>
+        <div class="special-badge">
+            ⭐ Especial
+        </div>
         }
 
     </div>

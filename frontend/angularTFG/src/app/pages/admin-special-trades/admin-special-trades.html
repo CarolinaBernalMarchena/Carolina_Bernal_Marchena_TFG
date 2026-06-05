@@ -4,6 +4,10 @@
 
     <h1>Gestión de intercambios especiales</h1>
 
+    <button (click)="createTrade()" class="create-trade">
+        Crear nuevo intercambio
+    </button>
+
     <form class="filters-form">
         <div class="filter-group select-group">
             <label class="filter-label">Filtrar por colección ofrecida</label>
@@ -18,10 +22,6 @@
         </div>
     </form>
 
-    <button (click)="createTrade()" class="create-trade">
-        Crear nuevo intercambio
-    </button>
-
     @if (filteredTrades.length === 0) {
     <div class="empty">
         No hay intercambios disponibles.
@@ -32,9 +32,6 @@
     <div class="trade-container">
         <app-special-trade-card [trade]="trade" [showAcceptButton]="false" (tradeEnded)="loadTrades()">
         </app-special-trade-card>
-        <button class="delete-btn" (click)="openDeleteModal(trade.id)">
-            Eliminar intercambio
-        </button>
     </div>
     }
 

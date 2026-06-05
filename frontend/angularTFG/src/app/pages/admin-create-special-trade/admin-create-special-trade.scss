@@ -127,14 +127,28 @@ input {
 }
 
 .trade-button {
-  margin-top: 35px;
-  padding: 12px 28px;
+  margin: 0;
+  padding: 14px 28px;
   font-size: 16px;
-  background: var(--accent-green);
+  font-weight: 800;
+  background: var(--accent-blue);
+  color: var(--text-primary);
   border: none;
-  border-radius: 10px;
+  border-radius: 999px;
   cursor: pointer;
-  transition: 0.2s;
+  transition: 0.2s ease;
+  box-shadow: var(--shadow);
+}
+
+.trade-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.trade-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .trade-button:hover {
@@ -207,4 +221,28 @@ input {
 .preview {
   font-size: 150%;
   color: var(--text-primary);
+}
+
+.floating-action-bar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+  transition: 0.25s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.floating-action-bar:has(button:not(:disabled)) {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
