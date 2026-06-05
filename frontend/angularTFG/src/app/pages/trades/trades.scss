@@ -7,29 +7,26 @@
 
 .back-btn {
   position: fixed;
-  top: 110px;
-  left: 25px;
-  width: 52px;
-  height: 52px;
+  top: 100px;
+  left: 20px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 50%;
+  border-radius: 14px;
   background: var(--surface-solid);
   color: var(--danger);
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
   z-index: 20;
   transition: all 0.2s ease;
-
   &:hover {
-    transform: scale(1.08);
-    background: var(--surface-solid);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-2px) scale(1.05);
   }
 }
 
@@ -40,22 +37,17 @@ h1 {
 }
 
 .create-trade {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    border: none;
-    border-radius: 20px;
-    padding: 6px 14px;
-    cursor: pointer;
-    transition: 0.3s;
-    z-index: 1000;
-    background: var(--surface-solid);
-    color: var(--text-primary);
-    box-shadow: var(--shadow);
-
-    &:hover {
-        transform: translateY(-2px);
-    }
+  display: block;
+  margin: 25px auto 40px auto;
+  padding: 16px 28px;
+  border-radius: 18px;
+  font-size: 18px;
+  font-weight: 700;
+  background: var(--accent-blue);
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
 .arrow {
@@ -81,19 +73,22 @@ button:hover {
 .filters-form {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 40px;
-  row-gap: 10px;
+  gap: 32px;
   justify-content: center;
   align-items: start;
-  width: fit-content;
-  margin: 20px auto;
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 20px;
+  background: var(--surface);
+  border-radius: 22px;
+  box-shadow: var(--shadow);
 }
 
 .filter-group {
-  display: grid;
-  grid-template-rows: auto auto;
-  justify-items: center;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
 }
 
 .filter-label {
@@ -104,7 +99,7 @@ button:hover {
 .filter-group select {
   margin-top: 1em;
   background-color: #fff;
-  border: 2px solid #e4b6d0;
+  border: none;
   border-radius: 14px;
   padding: 8px 18px;
   font-size: 15px;
@@ -116,23 +111,28 @@ button:hover {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 
   &:hover {
-    border-color: #c96c9d;
     transform: translateY(-1px);
   }
 
   &:focus {
-    border-color: #c96c9d;
     box-shadow: 0 0 0 4px rgba(201, 108, 157, 0.15);
   }
 }
 
+.toggle-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
 .toggle-pill {
   background-color: #fff;
-  border: 2px solid #e4b6d0;
-  border-radius: 14px;
-  padding: 12px 18px;
+  border: none;
+  border-radius: 999px;
+  padding: 14px 18px;
   font-size: 15px;
-  font-weight: 500;
+  font-weight: 600;
   color: #9b5c7c;
   cursor: pointer;
   outline: none;
@@ -148,4 +148,10 @@ button:hover {
 
 select {
   height: 38px;
+}
+
+app-trade-card,
+app-special-trade-card {
+  display: block;
+  margin-bottom: 36px;
 }

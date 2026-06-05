@@ -1,6 +1,8 @@
 <div class="stats-container">
-    <button class="back-btn" (click)="goBack()">←</button>
-    <h1>Actividad del usuario</h1>
+    <div class="page-header">
+        <button class="back-btn" (click)="goBack()">←</button>
+        <h1 class="title">📊 Actividad del usuario</h1>
+    </div>
 
     @if (loading) {
     <div>Cargando...</div>

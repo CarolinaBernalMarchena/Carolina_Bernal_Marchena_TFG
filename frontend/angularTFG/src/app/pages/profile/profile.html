@@ -1,7 +1,14 @@
 <div class="profile-container">
 
-    <button class="back-btn" (click)="goBackHome()">←</button>
-    <button class="settings-btn" (click)="goToSettings()">Ajustes ⚙</button>
+    <div class="profile-header">
+
+        <button class="back-btn" (click)="goBackHome()">← Volver</button>
+
+        <h2 class="page-title">Perfil</h2>
+
+        <button class="settings-btn" (click)="goToSettings()">⚙ Ajustes</button>
+
+    </div>
 
     <div class="profile-content">
 
@@ -10,25 +17,48 @@
                 <img [src]="'images/' + profilePicture + '.png'" class="profilePicture" />
             </div>
 
-            <h2 class="username">{{username}}</h2>
+            <h2 class="username">{{ username }}</h2>
         </div>
 
         <div class="stats-box">
 
             @if (datosCargados == false) {
+
             <p>Cargando datos...</p>
+
             } @else {
-            <div class="stat">{{ boxesCount }} cajas abiertas</div>
-            <div class="stat">{{ specialCount }} especiales</div>
-            <div class="stat">{{ tradesCount }} intercambios</div>
+
+            <h3 class="stats-title">Estadísticas</h3>
+
+            <div class="stat-row">
+                <span>📦 Cajas abiertas</span>
+                <strong>{{ boxesCount }}</strong>
+            </div>
+
+            <div class="stat-row">
+                <span>⭐ Especiales</span>
+                <strong>{{ specialCount }}</strong>
+            </div>
+
+            <div class="stat-row">
+                <span>🔄 Intercambios</span>
+                <strong>{{ tradesCount }}</strong>
+            </div>
+
             }
 
         </div>
 
         <div class="actions">
-            <button class="btn tienda" (click)="goToStatistics()">Mi actividad</button>
-            <button class="btn coleccion" (click)="goToCollection()">Mis colecciones</button>
-            <button class="btn logros" (click)="goToAchievements()">Mis logros</button>
+            <button class="btn actividad" (click)="goToStatistics()">
+                📊
+                <span>Mi actividad</span>
+            </button>
+
+            <button class="btn logros" (click)="goToAchievements()">
+                🏆
+                <span>Mis logros</span>
+            </button>
         </div>
 
     </div>

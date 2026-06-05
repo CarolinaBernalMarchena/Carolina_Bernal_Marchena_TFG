@@ -25,7 +25,11 @@
 }
 
 .subtitle {
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .achievements-list {
@@ -74,16 +78,45 @@
   filter: brightness(0.6);
 }
 
+.achievement-info {
+  flex: 1;
+}
+
 .achievement-info h3 {
-  color: var(--text-secondary);
+  margin: 0 0 10px;
+
+  color: var(--text-primary);
+
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 .achievement-info p {
-  color: var(--text-muted);
+  margin: 0 0 14px;
+
+  color: var(--text-secondary);
+
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.achievement-reward {
+  font-size: 18px;
+  font-weight: 600;
+
+  margin-bottom: 14px;
+
+  color: var(--text-primary);
 }
 
 .achievement-status {
+  display: inline-block;
   background: #d0d0d0;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .achievement-status.unlocked {
@@ -96,4 +129,5 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 160px;
 }

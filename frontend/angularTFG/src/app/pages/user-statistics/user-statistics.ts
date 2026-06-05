@@ -243,7 +243,7 @@ export class UserStatistics implements OnInit {
         style: {
           fontSize: '18px',
           fontWeight: '700',
-          color: '#ffffff',
+          color: '#7c5a9e',
         },
       },
 

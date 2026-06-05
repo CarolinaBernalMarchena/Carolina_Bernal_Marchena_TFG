@@ -1,71 +1,74 @@
 .back-btn {
   position: fixed;
-  top: 110px;
-  left: 25px;
-  width: 52px;
-  height: 52px;
+  top: 100px;
+  left: 20px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
-  border-radius: 50%;
+  border-radius: 14px;
   background: var(--surface-solid);
   color: var(--danger);
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: var(--shadow);
   backdrop-filter: blur(6px);
   z-index: 20;
   transition: all 0.2s ease;
-
   &:hover {
-    transform: scale(1.08);
-    background: var(--surface-solid);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px) scale(1.05);
   }
 }
 
 .stats-container h1 {
   text-align: center;
-  margin: 20px 0;
+  margin: 18px 0 10px;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-primary);
 }
 
 .timeline {
-  max-width: 700px;
+  max-width: 760px;
   margin: 0 auto;
+  padding-bottom: 60px;
 }
 
 .day-group {
-  margin-bottom: 25px;
+  margin-bottom: 22px;
 }
 
 .date-header {
-  font-weight: bold;
-  color: var(--text-primary);
-  margin: 15px 0;
+  font-weight: 800;
+  color: var(--text-secondary);
+  margin: 18px 0 10px;
   text-align: left;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .activity-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-
-  background: var(--surface-solid);
-  padding: 12px;
-  border-radius: 10px;
-
+  gap: 14px;
+  background: var(--surface);
+  padding: 14px 16px;
+  border-radius: 16px;
   box-shadow: var(--shadow);
-  transition: transform 0.2s ease;
-}
+  transition: all 0.2s ease;
+  margin-bottom: 10px;
 
-.activity-item:hover {
-  transform: translateY(-2px);
+  &:hover {
+    transform: translateY(-3px);
+  }
 }
 
 .icon {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 .content {
@@ -74,23 +77,26 @@
 }
 
 .title {
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary);
+  font-size: 15px;
 }
 
 .subtitle {
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--text-primary);
   margin-top: 2px;
 }
 
 .meta {
   font-size: 12px;
+  margin-top: 4px;
 }
 
 .time {
   font-size: 11px;
   color: var(--text-muted);
+  opacity: 0.8;
 }
 
 .gain {
@@ -104,20 +110,21 @@
 }
 
 .filters {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
 }
 
 .filters input {
-  padding: 10px;
-  border-radius: 10px;
-  border: 2px solid var(--border-soft);
-  width: 260px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: none;
+  width: min(320px, 90%);
   background: var(--surface-solid);
   color: var(--text-primary);
+  font-size: 14px;
 }
 
 .filters input::placeholder {
@@ -132,40 +139,42 @@
 }
 
 .filter-buttons button {
-  background: var(--surface-solid);
-  border: 2px solid var(--border-soft);
-  padding: 6px 12px;
-  border-radius: 10px;
+  background: var(--surface);
+  border: none;
+  padding: 10px 14px;
+  border-radius: 14px;
   cursor: pointer;
   color: var(--text-primary);
+  font-weight: 600;
+  font-size: 13px;
   transition: all 0.2s ease;
 }
 
 .filter-buttons button:hover {
-  background: var(--surface);
+  transform: translateY(-2px);
 }
 
 .filter-buttons button.active {
-  background: var(--surface-strong);
+  background: var(--accent-blue);
   border-color: var(--accent-blue);
 }
 
 .chart-card {
-  background: var(--surface-solid);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 30px;
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 26px;
   box-shadow: var(--shadow);
 }
 
 .stats-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .stats-header h2 {
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-primary);
   margin: 0;
 }

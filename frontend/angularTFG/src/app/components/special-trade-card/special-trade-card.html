@@ -1,66 +1,78 @@
-<div>
+<div class="trade-card-wrapper">
 
     @if (trade.ownerId !== currentUser?.id) {
-    <div class="special-trade-card">
+
+    <div class="trade-card special">
 
         <p class="user">
-            Intercambio especial<br><br>(Éste intercambio ha sido propuesto por la plataforma)
+            Intercambio especial<br>
+            <span class="sub">Propuesto por la plataforma</span>
         </p>
 
         <div class="trade-row">
 
-            <div>
-                <p>Tu coleccionable</p>
-                <img class="box" [src]="trade.requestedBoxUrl" alt="buscado" />
-                <p>{{ trade.requestedBoxName }}</p>
+            <div class="box-column">
+                <p class="label">Tu coleccionable</p>
+                <img class="box" [src]="trade.requestedBoxUrl" />
+                <p class="name">{{ trade.requestedBoxName }}</p>
             </div>
 
             <div class="arrow">⇄</div>
 
-            <div>
-                <p>Coleccionable que vas a recibir</p>
-                <img class="box" [src]="trade.offeredBoxUrl" alt="ofrecido" />
-                <p>{{ trade.offeredBoxName }}</p>
+            <div class="box-column">
+                <p class="label">Recibirás</p>
+                <img class="box" [src]="trade.offeredBoxUrl" />
+                <p class="name">{{ trade.offeredBoxName }}</p>
             </div>
 
         </div>
+
+        @if (showAcceptButton) {
+        <button class="btn accept" (click)="openAcceptModal()">
+            Aceptar intercambio
+        </button>
+        }
+
     </div>
+
     } @else {
-    <div class="your-special-trade-card">
+
+    <div class="trade-card special own">
 
         <p class="user">
-            Intercambio especial<br><br>(Éste intercambio lo estás proponiendo tú cómo intercambio especial)
+            Intercambio especial<br>
+            <span class="sub">Propuesto por ti como especial</span>
         </p>
 
         <div class="trade-row">
 
-            <div>
-                <p>Tu coleccionable</p>
-                <img class="box" [src]="trade.offeredBoxUrl" alt="ofrecido" />
-                <p>{{ trade.offeredBoxName }}</p>
+            <div class="box-column">
+                <p class="label">Ofreces</p>
+                <img class="box" [src]="trade.offeredBoxUrl" />
+                <p class="name">{{ trade.offeredBoxName }}</p>
             </div>
 
             <div class="arrow">⇄</div>
 
-            <div>
-                <p>Coleccionable que vas a recibir</p>
-
-                <img class="box" [src]="trade.requestedBoxUrl" alt="buscado" />
-                <p>{{ trade.requestedBoxName }}</p>
+            <div class="box-column">
+                <p class="label">Buscas</p>
+                <img class="box" [src]="trade.requestedBoxUrl" />
+                <p class="name">{{ trade.requestedBoxName }}</p>
             </div>
 
         </div>
-    </div>
-    }
 
-    @if (showAcceptButton) {
-    <button (click)="openAcceptModal()" class="btn ok">
-        Aceptar intercambio
-    </button>
+        <button class="btn delete" (click)="openDeleteModal()">
+            Eliminar intercambio
+        </button>
+
+    </div>
+
     }
 
     @if (showModal) {
-    <app-trade-confirm-modal [message]="modalMessage" (confirm)="onModalConfirm()" (cancel)="onModalCancel()" />
+    <app-trade-confirm-modal [message]="modalMessage" (confirm)="onModalConfirm()" (cancel)="onModalCancel()">
+    </app-trade-confirm-modal>
     }
 
 </div>

@@ -56,6 +56,13 @@ export class SpecialTradeCard {
     this.showModal = true;
   }
 
+  openDeleteModal(): void {
+    this.modalMessage =
+      '¿Seguro que quieres eliminar este intercambio? Esta acción no se puede deshacer.';
+    this.pendingAction = 'delete';
+    this.showModal = true;
+  }
+
   onModalConfirm(): void {
     this.showModal = false;
 
