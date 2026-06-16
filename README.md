@@ -1,4 +1,4 @@
-<img width="1896" height="942" alt="image" src="https://github.com/user-attachments/assets/48c16d73-777c-40db-a556-09ddbae63627" /># TrinketBox
+# TrinketBox
 Trinketbox is a web application for digital collecting. Trinketbox allows users to open surprise boxes, complete collections and trade items.
 ## Technologies: 
 - **Angular**
